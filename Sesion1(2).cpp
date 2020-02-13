@@ -15,71 +15,75 @@
 using namespace std;
 
 HANDLE PuertoCOM;
-void choosePort(char PSerie[]){
+void choosePort(char PSerie[])
+{
 
- int puerto;
+    int puerto;
     printf("Seleccione el puerto que desea abrir: \n 0. Exit \n 1. COM1 \n 2. COM2 \n 3. COM3 \n 4. COM4 \n");
     cin >> puerto;
-    switch(puerto){
-        case 0:
-            printf("Saliendo...\n");
-            break;
-        case 1:
-            strcpy (PSerie,"COM1");
-            printf("Puerto elegido: %d\n",puerto);
-            break;
-        case 2:
-            strcpy (PSerie,"COM2");
-            printf("Puerto elegido: %d\n",puerto);
-            break;
-        case 3:
-            strcpy (PSerie,"COM3");
-            printf("Puerto elegido: %d\n",puerto);
-            break;
-        case 4:
-            strcpy (PSerie,"COM4");
-            printf("Puerto elegido: %d\n",puerto);
-            break;
-        default:
-            printf("Puerto elegido no válido...\n");
-            break;
+    switch(puerto)
+    {
+    case 0:
+        printf("Saliendo...\n");
+        break;
+    case 1:
+        strcpy (PSerie,"COM1");
+        printf("Puerto elegido: %d\n",puerto);
+        break;
+    case 2:
+        strcpy (PSerie,"COM2");
+        printf("Puerto elegido: %d\n",puerto);
+        break;
+    case 3:
+        strcpy (PSerie,"COM3");
+        printf("Puerto elegido: %d\n",puerto);
+        break;
+    case 4:
+        strcpy (PSerie,"COM4");
+        printf("Puerto elegido: %d\n",puerto);
+        break;
+    default:
+        printf("Puerto elegido no válido...\n");
+        break;
     }
 
 }
-int chooseVel(){
+int chooseVel()
+{
 
     int velocidad;
-    printf("Seleccione la velocidad que desea: \n 0. Exit \n 1. 1400 \n 2. 2400 \n 3. 4800 \n 4. 9600 \n 5. 19200 \n");
+    printf("Seleccione el puerto que desea abrir: \n 0. Exit \n 1. 1400 \n 2. 2400 \n 3. 4800 \n 4. 9600 \n 5. 19200 \n");
     cin >> velocidad;
-    switch(velocidad){
-        case 0:
-            printf("Saliendo....\n");
-            break;
-        case 1:
-            printf("Velocidad elegida: 1400\n");
-            return velocidad = 1400;
-            break;
-        case 2:
-            printf("Velocidad elegida: 2400\n");
-            return velocidad = 2400;
-            break;
-        case 3:
-            printf("Velocidad elegida: 4800\n");
-            return velocidad = 4800;
-            break;
-        case 4:
-            printf("Velocidad elegida: 9600\n");
-            return velocidad = 9600;
-            break;
-        case 5:
-            printf("Velocidad elegida: 19200\n");
-            return velocidad = 19200;
-            break;
+    switch(velocidad)
+    {
+    case 0:
+        printf("Saliendo....\n");
+        break;
+    case 1:
+        printf("Velocidad elegida: 1400\n");
+        return velocidad = 1400;
+        break;
+    case 2:
+        printf("Velocidad elegida: 2400\n");
+        return velocidad = 2400;
+        break;
+    case 3:
+        printf("Velocidad elegida: 4800\n");
+        return velocidad = 4800;
+        break;
+    case 4:
+        printf("Velocidad elegida: 9600\n");
+        return velocidad = 9600;
+        break;
+    case 5:
+        printf("Velocidad elegida: 19200\n");
+        return velocidad = 19200;
+        break;
 
-        default:
-            printf("Velocidad elegida no válido, saliendo...\n");
+    default:
+        printf("Velocidad elegida no válido, saliendo...\n");
 
-            break;
+        break;
     }
 }
 int main()
@@ -102,10 +106,12 @@ int main()
     // - Bits de stop: (0=1 bit, 1=1.5 bits, 2=2 bits).
 
     choosePort(PSerie);
+    printf(PSerie);
     int velocidadElegida = chooseVel();
+
     PuertoCOM = AbrirPuerto(PSerie,velocidadElegida,8,0,0);
 
-   // strcpy (PSerie,"COM2");
+    // strcpy (PSerie,"COM2");
     //PuertoCOM = AbrirPuerto(PSerie, 9600, 8, 0, 0);
     //Abrimos el puerto COM1 (en la sala siempre abrimos el COM1)
     if(PuertoCOM == NULL)
@@ -119,60 +125,73 @@ int main()
 
 
     // Lectura y escritura simultánea de caracteres:
-       int tamanio = 0;
+    int tamanio = 0;
 
     while(carE != 27)
     {
         carR = RecibirCaracter(PuertoCOM);
         if (carR != 0)
-            putch(carR);
+            printf("%c",carR);
         if (kbhit())
         {
             carE = getch();
-            if (carE == 13) {
-                carE = '\n';
-            }
+            if (carE != 27)
+            {
 
-            switch (carE) {
+                switch (carE)
+                {
 
-            // Escape to exit
-            case 27:
-                goto final;
+                case '\0':
 
-            // Function keys (like FN1) begin with a 0, and then the actual value
-            case 0:
-                switch (getch()) {
-                // FN1 to carE
-                case 112:
-                    EnviarCadena(PuertoCOM, cadena, tamanio);
-                    tamanio = 0;
+                    switch (getch())
+                    {
+                    case 59:
+                       cadena[tamanio+1] = '\n';
+                       cadena[tamanio+2] = '\0';
+
+                        EnviarCadena(PuertoCOM, cadena, tamanio);
+                        printf("\n");
+                        tamanio = 0;
+                        break;
+
+                    }
+
+
+
+                    break;
+
+                // Backspace to erase the last character
+                case 13:
+
+                    printf ("\n");
+                    //cadena[tamanio] = '\n';
+
+                case 8:
+
+                    if (tamanio > 0)
+                    {
+                        printf("\b \b");
+                        //fflush(stdout);
+                        tamanio = tamanio - 1;
+                    }
+                    break;
+
+                default:
+                    if (tamanio<800)
+                    {
+                        printf("%c",carE);
+                        cadena[tamanio] = carE;
+                        tamanio = tamanio + 1;
+
+
+                    }
                     break;
                 }
-                break;
-
-            // Backspace to erase the last character
-            case 8:
-                if (tamanio > 0) {
-                    printf("\b \b");
-                    fflush(stdout);
-                    tamanio = tamanio - 1;
-                }
-                break;
-
-            // Any other key goes into the message buffer
-            default:
-                if (tamanio < sizeof(cadena) / sizeof(cadena[0])) {
-                    _putch(carE);
-                    cadena[tamanio] = carE;
-                    tamanio = tamanio + 1;
-                }
-                break;
             }
         }
     }
 
     // We're done, cleanup and exit
-final:
     CerrarPuerto(PuertoCOM);
     return 0;
 }
