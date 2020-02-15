@@ -31,6 +31,9 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../PuertoSerie.cpp" />
+		<Unit filename="../PuertoSerie.h" />
+		<Unit filename="../Sesion1(2).cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
