@@ -100,19 +100,19 @@ int main()
     char carE, carR = 0;
     char PSerie[5];
     char msg[limit] ; //two more characters to the line end
-    //Encabezado
+    //Header
     printf("============================================================================\n");
     printf("----------- PRACTICAS DE FUNDAMENTOS DE REDES DE COMUNICACIONES ------------\n");
     printf("---------------------------- CURSO 2019/20 ---------------------------------\n");
     printf("----------------------------- SESION1.CPP ----------------------------------\n");
     printf("============================================================================\n\n");
 
-    //Abrimos el puerto. Para ello necesitamos indicar los siguientes parámetros:
-    // - Nombre del port a abrir: ("COM1", "COM2", "COM3", ...).
-    // - Velocidad: (1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200).
-    // - Número de bits en cada byte enviado o recibido: (4, 5, 6, 7, 8).
-    // - Paridad: (0=sin paridad, 1=impar, 2=par, 3=marca, 4=espacio).
-    // - Bits de stop: (0=1 bit, 1=1.5 bits, 2=2 bits).
+    //We will open the port. For it we need to define the following parameters:
+    // - Open port name: ("COM1", "COM2", "COM3", ...).
+    // - Velocity: (1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200).
+    // - Bits number in each sent or received byte: (4, 5, 6, 7, 8).
+    // - Parity: (0=sin parity, 1=odd, 2=even, 3=mark, 4=space).
+    // - Stop bits: (0=1 bit, 1=1.5 bits, 2=2 bits).
 
     choosePort(PSerie);
     printf(PSerie);
@@ -139,17 +139,20 @@ int main()
     while(carE != 27)
     {
         carR = RecibirCaracter(portCOM);
+        // If our string have any character, it will be shown
         if (carR != 0)
             printf("%c",carR);
         if (kbhit())
         {
+            //saving the input
             carE = getch();
+            //Esc key case, if it isn't pressed, the switch will be displayed
             if (carE != 27)
             {
 
                 switch (carE)
                 {
-
+                //if F1 key is pressed, the message will be sent
                 case '\0':
 
                     switch (getch())
@@ -170,16 +173,16 @@ int main()
 
                     break;
 
-                // Backspace to erase the last character
+                // If intro key is pressed, we will show and end line and continue the input in the next one
                 case 13:
+                    if (tamanio<limit-2)
 
                         msg[tamanio+1] = '\n';
-                                            tamanio += 1 ;
+                        tamanio += 1 ;
+                        printf ("\n");
+                    break;
 
-
-                    printf ("\n");
-                   break;
-
+                // If backspace key is pressed, we will delete the last character
                 case 8:
 
                     if (tamanio > 0)
@@ -189,6 +192,7 @@ int main()
                     }
                     break;
 
+                //default case will prevent the exceeding input in the array
                 default:
                     if (tamanio<limit-2)
                     {
@@ -204,7 +208,7 @@ int main()
             }
         }
     }
-
+    //Te port will be closed and the app will return
     CerrarPuerto(portCOM);
     return 0;
 }

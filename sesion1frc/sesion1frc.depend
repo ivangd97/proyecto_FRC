@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1581617751 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\puertoserie.cpp
+	"PuertoSerie.h"
+	<stdio.h>
+	<iostream>
+
+1581617751 c:\users\flequ\desktop\compartirredes\sesion1_frc\puertoserie.h
+	<windows.h>
+
