@@ -12,6 +12,14 @@
 #include <string.h>
 #include "PuertoSerie.h"
 
+
+#define ESC_KEY (27)
+#define RETURN_KEY (8)
+#define INTRO_KEY (13)
+#define F1 (59)
+
+static unsigned char ATK = 2;
+
 //We will define the limit as a variable
 int limit = 802;
 
@@ -136,7 +144,7 @@ int main()
     int tamanio = 0;
 
     //Esc key case to close the program, if esc is not pressed, continue forever
-    while(carE != 27)
+    while(carE != ESC_KEY)
     {
         carR = RecibirCaracter(portCOM);
         // If our string have any character, it will be shown
@@ -147,7 +155,7 @@ int main()
             //saving the input
             carE = getch();
             //Esc key case, if it isn't pressed, the switch will be displayed
-            if (carE != 27)
+            if (carE != ESC_KEY)
             {
 
                 switch (carE)
@@ -157,7 +165,7 @@ int main()
 
                     switch (getch())
                     {
-                    case 59:
+                    case F1:
                         msg[0]=NULL;
                         msg[tamanio+1] = '\n';
                         msg[tamanio+2] = '\0';
@@ -174,7 +182,7 @@ int main()
                     break;
 
                 // If intro key is pressed, we will show and end line and continue the input in the next one
-                case 13:
+                case INTRO_KEY:
                     if (tamanio<limit-2)
 
                         msg[tamanio+1] = '\n';
@@ -183,7 +191,7 @@ int main()
                     break;
 
                 // If backspace key is pressed, we will delete the last character
-                case 8:
+                case RETURN_KEY:
 
                     if (tamanio > 0)
                     {
