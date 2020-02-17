@@ -49,6 +49,8 @@ void choosePort(char PSerie[])
     int port;
     printf("Seleccione el puerto que desea abrir: \n 0. Exit \n 1. COM1 \n 2. COM2 \n 3. COM3 \n 4. COM4 \n");
     cin >> port;
+        system("cls");
+
     switch(port)
     {
     case 0:
@@ -56,19 +58,19 @@ void choosePort(char PSerie[])
         break;
     case 1:
         strcpy (PSerie,"COM1");
-        printf("Puerto elegido: %d\n",port);
+        printf("Puerto elegido: %d nombre: COM1 \n ",port);
         break;
     case 2:
         strcpy (PSerie,"COM2");
-        printf("Puerto elegido: %d\n",port);
+        printf("Puerto elegido: %d nombre: COM2 \n",port);
         break;
     case 3:
         strcpy (PSerie,"COM3");
-        printf("Puerto elegido: %d\n",port);
+        printf("Puerto elegido: %d nombre: COM3 \n",port);
         break;
     case 4:
         strcpy (PSerie,"COM4");
-        printf("Puerto elegido: %d\n",port);
+        printf("Puerto elegido: %d nombre: COM4 \n",port);
         break;
     default:
         printf("Puerto elegido no válido...\n");
@@ -85,6 +87,7 @@ int chooseVel()
     int velocity;
     printf("Seleccione la velocidad de transmisión : \n 0. Exit \n 1. 1400 \n 2. 2400 \n 3. 4800 \n 4. 9600 \n 5. 19200 \n");
     cin >> velocity;
+    system("cls");
     switch(velocity)
     {
     case 0:
