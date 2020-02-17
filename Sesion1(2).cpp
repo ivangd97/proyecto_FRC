@@ -17,8 +17,22 @@
 #define RETURN_KEY (8)
 #define INTRO_KEY (13)
 #define F1 (59)
+#define F2 (60)
 
-static unsigned char ATK = 2;
+static unsigned char ACK = 06;
+static unsigned char NACK = 21;
+static unsigned char ENQ = 05;
+static unsigned char EOT = 04;
+
+
+struct TramaControl
+{
+    unsigned char S =22;
+    unsigned char D ='T';
+    unsigned char C ;
+    unsigned char NT = '0';
+
+} ;
 
 //We will define the limit as a variable
 int limit = 802;
@@ -103,6 +117,50 @@ int chooseVel()
         break;
     }
 }
+
+char sendControlFrame()
+{
+    int controlFrame;
+    bool exit = false;
+
+    while(!exit)
+    {
+          printf("Trama de control a enviar : \n 1: Trama ENQ. \n 2: Trama EOT. \n 3: Trama ACK. \n 4: Trama NACK. \n");
+            cin>>controlFrame;
+
+        switch (controlFrame)
+        {
+        case 1:
+            printf("Trama ENQ \n");
+            exit = true;
+            return ENQ;
+            break;
+
+        case 2:
+            printf("Trama EOT \n");
+            exit = true;
+
+            return EOT;
+            break;
+        case 3:
+            printf("Trama ACK \n");
+            exit = true;
+
+            return ACK;
+            break;
+        case 4:
+            printf("Trama NACK \n");
+            exit = true;
+
+            return NACK;
+            break;
+        default:
+            printf("Trama incorrecta, seleccione de nuevo.\n");
+            break;
+        }
+}
+
+}
 int main()
 {
     char carE, carR = 0;
@@ -125,6 +183,7 @@ int main()
     choosePort(PSerie);
     printf(PSerie);
     int choosedVel = chooseVel();
+    char control;
 
     // Here we will open the port choosed by the user
     portCOM = AbrirPuerto(PSerie,choosedVel,8,0,0);
@@ -175,19 +234,27 @@ int main()
                         tamanio = 0;
                         break;
 
+                    case F2:
+                        control = sendControlFrame();
+                        EnviarCaracter(portCOM,control);
+                        break;
+
+
+
                     }
 
 
 
                     break;
 
+
                 // If intro key is pressed, we will show and end line and continue the input in the next one
                 case INTRO_KEY:
                     if (tamanio<limit-2)
 
                         msg[tamanio+1] = '\n';
-                        tamanio += 1 ;
-                        printf ("\n");
+                    tamanio += 1 ;
+                    printf ("\n");
                     break;
 
                 // If backspace key is pressed, we will delete the last character
