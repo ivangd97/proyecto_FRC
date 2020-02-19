@@ -8,7 +8,7 @@ ControlFrame::ControlFrame()
 	 C  = ' ';
 	 NT = '0';
 }
-
+//Revisar
 //Constructor which have the C attribute set by the user
 ControlFrame::ControlFrame(char value)
 {
