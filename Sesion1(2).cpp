@@ -49,6 +49,7 @@ void choosePort(char PSerie[])
     int port;
     printf("Seleccione el puerto que desea abrir: \n 0. Exit \n 1. COM1 \n 2. COM2 \n 3. COM3 \n 4. COM4 \n");
     cin >> port;
+    //Screen will be cleaned
         system("cls");
 
     switch(port)
@@ -87,6 +88,8 @@ int chooseVel()
     int velocity;
     printf("Seleccione la velocidad de transmisión : \n 0. Exit \n 1. 1400 \n 2. 2400 \n 3. 4800 \n 4. 9600 \n 5. 19200 \n");
     cin >> velocity;
+
+    //Screen will be cleaned
     system("cls");
     switch(velocity)
     {
