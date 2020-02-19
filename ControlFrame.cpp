@@ -1,7 +1,7 @@
 #include "ControlFrame.h"
 #include <iostream>
 
-//Defaukt constructor where C attribute is set as NULL
+//Default constructor where C attribute is set as NULL
 ControlFrame::ControlFrame()
 {
     S  = 22;
@@ -11,7 +11,7 @@ ControlFrame::ControlFrame()
 }
 //Revisar
 //Constructor which have the C attribute set by the user
-ControlFrame::ControlFrame(char value)
+ControlFrame::ControlFrame(int value)
 {
     S  = 22;
     D  = 'T';
@@ -19,29 +19,28 @@ ControlFrame::ControlFrame(char value)
     switch(value)
     {
     case 1:
-        C = 05;
+        C = '05';
         printf("Trama ENQ \n");
 
         break;
 
     case 2:
         printf("Trama EOT \n");
-        C=04;
+        C='04';
         break;
 
     case 3:
         printf("Trama ACK \n");
-        C=06;
+        C='06';
         break;
 
     case 4:
         printf("Trama NACK \n");
-        C=21;
+        C='21';
         break;
 
     default:
         printf("Trama incorrecta, seleccione de nuevo.\n");
-        break;
     }
 }
 /*unsigned char ControlFrame::getAtribute()
@@ -92,7 +91,7 @@ unsigned char ControlFrame::getNT()
     return this->NT;
 }
 
-
+/*
 void ControlFrame::setAtribute(char value,int atribute)
 {
     switch(atribute)
@@ -113,3 +112,4 @@ void ControlFrame::setAtribute(char value,int atribute)
 }
 
 
+*/

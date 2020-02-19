@@ -27,7 +27,6 @@ int limit = 802;
 using namespace std;
 
 HANDLE portCOM;
-ControlFrame controlF = new ControlFrame();
 
 //First of all, we will choose the port that will be opened, we will let the user choose
 //from a list of ports and will open it
@@ -112,107 +111,156 @@ int chooseVel()
     }
 }
 
-char sendControlFrame()
+void sendControlFrame(ControlFrame *controlFSend)
 {
     int controlFrame;
     bool exit = false;
-
     while(!exit)
     {
         printf("Trama de control a enviar : \n 1: Trama ENQ. \n 2: Trama EOT. \n 3: Trama ACK. \n 4: Trama NACK. \n");
         cin>>controlFrame;
-
         switch (controlFrame)
         {
         case 1:
-            printf("Trama ENQ \n");
+            printf("Has enviado Trama ENQ \n");
             exit = true;
-            return ENQ;
+            controlFSend->setC('05');
+            EnviarCaracter(portCOM,controlFSend->getS());
+            EnviarCaracter(portCOM,controlFSend->getD());
+            EnviarCaracter(portCOM,controlFSend->getC());
+            EnviarCaracter(portCOM,controlFSend->getNT());
             break;
 
         case 2:
-            printf("Trama EOT \n");
+            printf("Has enviado Trama EOT \n");
             exit = true;
 
-            return EOT;
+            controlFSend->setC('04');
+
+            EnviarCaracter(portCOM,controlFSend->getS());
+            EnviarCaracter(portCOM,controlFSend->getD());
+            EnviarCaracter(portCOM,controlFSend->getC());
+            EnviarCaracter(portCOM,controlFSend->getNT());
             break;
         case 3:
-            printf("Trama ACK \n");
+            printf("Has enviado Trama ACK \n");
             exit = true;
 
-            return ACK;
+            controlFSend->setC('06');
+
+            EnviarCaracter(portCOM,controlFSend->getS());
+            EnviarCaracter(portCOM,controlFSend->getD());
+            EnviarCaracter(portCOM,controlFSend->getC());
+            EnviarCaracter(portCOM,controlFSend->getNT());
             break;
         case 4:
-            printf("Trama NACK \n");
+            printf("Has enviado Trama NACK \n");
             exit = true;
+            controlFSend->setC('21');
 
-            return NACK;
+            EnviarCaracter(portCOM,controlFSend->getS());
+            EnviarCaracter(portCOM,controlFSend->getD());
+            EnviarCaracter(portCOM,controlFSend->getC());
+            EnviarCaracter(portCOM,controlFSend->getNT());
             break;
         default:
             printf("Trama incorrecta, seleccione de nuevo.\n");
             break;
         }
     }
-
 }
-int campo=0;
-void receiveControlFrame(campo,controlF){
+
+void receiveControlFrame(int campo,ControlFrame *controlFReceive,char carR)
+{
+    char extra;
+    while(carR!= '27')
+    {
+        carR = RecibirCaracter(portCOM);
+        if(carR!='0')
+        {
+            switch(campo)
+            {
+            case 1:
+                if (carR=='22')
+                {
+                    controlFReceive->setS(carR);
+                    campo++;
 
 
-    carR = RecibirCaracter(portCOM);
-    if(carR!=0){
-        switch(campo){
-    case 1:
-        if (carR==22){
-         controlF.setS(carR);
-         campo++;
+                }
+                else
+                {
 
 
-        }else{
+                    printf("%c",carR);
+                }
+                break;
+
+            case 2:
+                controlFReceive->setD(carR);
+                campo++;
+                break;
+
+            case 3:
+                controlFReceive->setC(carR);
+                extra = carR;
+                campo++;
+                break;
+
+            case 4:
+                controlFReceive->setNT(carR);
+                campo = 1;
+                break;
 
 
-        printf(("%C",carR);
+
+
             }
-        break;
-
-    case 2:
-        controlF.setD(carR);
-        campo++;
-        break;
-
-    case 3:
-        controlF.setC(carR);
-        campo++;
-        break;
-
-    case 4:
-        controlF.setNT(carR);
-        campo = 1;
-        break;
 
 
-        //mensajes print f
+            if(controlFReceive->getC() == '05')
+            {
+                printf("Se ha recibido una trama ENQ\n");
 
-               }
+            }
+            else if (extra=='04')
+            {
+                printf("Se ha recibido una trama EOT\n");
+            }
+            else if (extra=='06')
+            {
+                printf("Se ha recibido una trama ACK\n");
+            }
+            else if  (extra=='21')
+            {
+                printf("Se ha recibido una trama NACK\n");
+            }
 
 
 
 
         }
-    }
 
+
+    }
 }
+
+
 int main()
 {
-  //  ControFrame controlF = new ControlFrame();
+    //  ControFrame controlF = new ControlFrame();
     char carE, carR = 0;
     char PSerie[5];
     char msg[limit] ; //two more characters to the line end
+    int campo=1;
+
+
     //Header
     printf("============================================================================\n");
     printf("----------- PRACTICAS DE FUNDAMENTOS DE REDES DE COMUNICACIONES ------------\n");
     printf("---------------------------- CURSO 2019/20 ---------------------------------\n");
     printf("----------------------------- SESION1.CPP ----------------------------------\n");
+    printf("--------Autores: Rubén Costa Barriga e Iván Gonzalez Dominguez--------------\n");
     printf("============================================================================\n\n");
 
     //We will open the port. For it we need to define the following parameters:
@@ -225,7 +273,6 @@ int main()
     choosePort(PSerie);
     printf(PSerie);
     int choosedVel = chooseVel();
-    char control;
 
     // Here we will open the port choosed by the user
     portCOM = AbrirPuerto(PSerie,choosedVel,8,0,0);
@@ -267,7 +314,7 @@ int main()
                     switch (getch())
                     {
                     case F1:
-                        msg[0]=NULL;
+                        msg[0]= NULL;
                         msg[tamanio+1] = '\n';
                         msg[tamanio+2] = '\0';
 
@@ -277,8 +324,10 @@ int main()
                         break;
 
                     case F2:
-                        control = sendControlFrame();
-                        EnviarCaracter(portCOM,control);
+
+                        ControlFrame *controlFSend = new ControlFrame();
+                        sendControlFrame(controlFSend);
+                        receiveControlFrame(campo,controlFSend,carR);
                         break;
 
 

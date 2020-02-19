@@ -7,7 +7,7 @@
 1581617751 c:\users\flequ\desktop\compartirredes\sesion1_frc\puertoserie.h
 	<windows.h>
 
-1582128268 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\sesion1(2).cpp
+1582141616 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\sesion1(2).cpp
 	<stdio.h>
 	<conio.h>
 	<windows.h>
@@ -16,9 +16,9 @@
 	"PuertoSerie.h"
 	"ControlFrame.h"
 
-1582128328 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\controlframe.cpp
+1582139395 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\controlframe.cpp
 	"ControlFrame.h"
 	<iostream>
 
-1582128124 c:\users\flequ\desktop\compartirredes\sesion1_frc\controlframe.h
+1582139175 c:\users\flequ\desktop\compartirredes\sesion1_frc\controlframe.h
 

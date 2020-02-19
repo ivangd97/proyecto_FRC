@@ -31,6 +31,8 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../ControlFrame.cpp" />
+		<Unit filename="../ControlFrame.h" />
 		<Unit filename="../PuertoSerie.cpp" />
 		<Unit filename="../PuertoSerie.h" />
 		<Unit filename="../Sesion1(2).cpp" />

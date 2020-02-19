@@ -4,6 +4,7 @@
 
 class ControlFrame
 {
+protected:
     unsigned char S;
     unsigned char D;
     unsigned char C;
@@ -11,9 +12,9 @@ class ControlFrame
 
 public:
     ControlFrame();
-    ControlFrame(char value);
-    void setAtribute(char value, int attribute);
-    char getAtribute(int attribute);
+    ControlFrame(int value);
+    //void setAtribute(char value, int attribute);
+   // char getAtribute(int attribute);
 
     void setC(char value);
     void setD(char value);
