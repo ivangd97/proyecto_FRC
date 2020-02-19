@@ -11,6 +11,7 @@
 #include <iostream>
 #include <string.h>
 #include "PuertoSerie.h"
+#include "ControlFrame.h"
 
 
 #define ESC_KEY (27)
@@ -19,20 +20,6 @@
 #define F1 (59)
 #define F2 (60)
 
-static unsigned char ACK = 06;
-static unsigned char NACK = 21;
-static unsigned char ENQ = 05;
-static unsigned char EOT = 04;
-
-
-struct TramaControl
-{
-    unsigned char S =22;
-    unsigned char D ='T';
-    unsigned char C ;
-    unsigned char NT = '0';
-
-} ;
 
 //We will define the limit as a variable
 int limit = 802;
@@ -40,6 +27,7 @@ int limit = 802;
 using namespace std;
 
 HANDLE portCOM;
+ControlFrame controlF = new ControlFrame();
 
 //First of all, we will choose the port that will be opened, we will let the user choose
 //from a list of ports and will open it
@@ -50,7 +38,7 @@ void choosePort(char PSerie[])
     printf("Seleccione el puerto que desea abrir: \n 0. Exit \n 1. COM1 \n 2. COM2 \n 3. COM3 \n 4. COM4 \n");
     cin >> port;
     //Screen will be cleaned
-        system("cls");
+    system("cls");
 
     switch(port)
     {
@@ -131,8 +119,8 @@ char sendControlFrame()
 
     while(!exit)
     {
-          printf("Trama de control a enviar : \n 1: Trama ENQ. \n 2: Trama EOT. \n 3: Trama ACK. \n 4: Trama NACK. \n");
-            cin>>controlFrame;
+        printf("Trama de control a enviar : \n 1: Trama ENQ. \n 2: Trama EOT. \n 3: Trama ACK. \n 4: Trama NACK. \n");
+        cin>>controlFrame;
 
         switch (controlFrame)
         {
@@ -164,11 +152,59 @@ char sendControlFrame()
             printf("Trama incorrecta, seleccione de nuevo.\n");
             break;
         }
+    }
+
 }
+int campo=0;
+void receiveControlFrame(campo,controlF){
+
+
+    carR = RecibirCaracter(portCOM);
+    if(carR!=0){
+        switch(campo){
+    case 1:
+        if (carR==22){
+         controlF.setS(carR);
+         campo++;
+
+
+        }else{
+
+
+        printf(("%C",carR);
+            }
+        break;
+
+    case 2:
+        controlF.setD(carR);
+        campo++;
+        break;
+
+    case 3:
+        controlF.setC(carR);
+        campo++;
+        break;
+
+    case 4:
+        controlF.setNT(carR);
+        campo = 1;
+        break;
+
+
+        //mensajes print f
+
+               }
+
+
+
+
+        }
+    }
 
 }
 int main()
 {
+  //  ControFrame controlF = new ControlFrame();
     char carE, carR = 0;
     char PSerie[5];
     char msg[limit] ; //two more characters to the line end

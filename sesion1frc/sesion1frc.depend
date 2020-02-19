@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1581617751 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\puertoserie.cpp
+1582128124 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\puertoserie.cpp
 	"PuertoSerie.h"
 	<stdio.h>
 	<iostream>
@@ -7,16 +7,18 @@
 1581617751 c:\users\flequ\desktop\compartirredes\sesion1_frc\puertoserie.h
 	<windows.h>
 
-1582056089 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\sesion1(2).cpp
+1582128268 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\sesion1(2).cpp
 	<stdio.h>
 	<conio.h>
 	<windows.h>
 	<iostream>
 	<string.h>
 	"PuertoSerie.h"
-
-1582056309 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\controlframe.cpp
 	"ControlFrame.h"
 
-1582056309 c:\users\flequ\desktop\compartirredes\sesion1_frc\controlframe.h
+1582128328 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\controlframe.cpp
+	"ControlFrame.h"
+	<iostream>
+
+1582128124 c:\users\flequ\desktop\compartirredes\sesion1_frc\controlframe.h
 

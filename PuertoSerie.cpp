@@ -26,12 +26,12 @@ HANDLE AbrirPuerto(LPCSTR NombrePuerto, DWORD Velocidad, BYTE NumBitsXByte, BYTE
     DWORD   EstadoError;   // Estado del error
     // Abrir el puerto serie:
     COMAux = CreateFile (NombrePuerto, // Puerto serie a abrir
-        GENERIC_READ | GENERIC_WRITE, // Se accederá en modo lectura/escritura
-        0,              // Abrir en modo compartido (siempre a 0)
-        NULL,           // Parámetro relacionado con la seguridad de las operaciones de I/O
-        OPEN_EXISTING,  // El puerto serie debe existir previamente en el SO (físico o virtual)
-        0,              // Atributos extra (siempre a 0)
-        NULL);          // Manejo síncrono del puerto
+                         GENERIC_READ | GENERIC_WRITE, // Se accederá en modo lectura/escritura
+                         0,              // Abrir en modo compartido (siempre a 0)
+                         NULL,           // Parámetro relacionado con la seguridad de las operaciones de I/O
+                         OPEN_EXISTING,  // El puerto serie debe existir previamente en el SO (físico o virtual)
+                         0,              // Atributos extra (siempre a 0)
+                         NULL);          // Manejo síncrono del puerto
     SetupComm(COMAux, 0, 0);
     // Inicializa la estructura de configuración del puerto serie:
     PuertoDCB.DCBlength = sizeof (DCB);
@@ -243,20 +243,20 @@ BOOL GetRI(HANDLE &PuertoCOM)
 }
 void ComprobarTamanoBuffers(HANDLE &PuertoCOM)
 {
-  COMMPROP PropiedadesPuerto;
-  COMSTAT  EstadoPuerto;
-  DWORD EstadoError;
-  GetCommProperties(PuertoCOM,&PropiedadesPuerto);
-  //Muestra el tamaño de los Buffers
-  printf("\n Tamaño BUFFER TX: %lu",PropiedadesPuerto.dwCurrentTxQueue);
-  printf("\n Tamaño BUFFER RX: %lu",PropiedadesPuerto.dwCurrentRxQueue);
+    COMMPROP PropiedadesPuerto;
+    COMSTAT  EstadoPuerto;
+    DWORD EstadoError;
+    GetCommProperties(PuertoCOM,&PropiedadesPuerto);
+    //Muestra el tamaño de los Buffers
+    printf("\n Tamaño BUFFER TX: %lu",PropiedadesPuerto.dwCurrentTxQueue);
+    printf("\n Tamaño BUFFER RX: %lu",PropiedadesPuerto.dwCurrentRxQueue);
 
-  // Leer estado del puerto
-  ClearCommError(PuertoCOM,&EstadoError,&EstadoPuerto);
+    // Leer estado del puerto
+    ClearCommError(PuertoCOM,&EstadoError,&EstadoPuerto);
 
-  //Mostrar tamaño ocupado
-  cout<<"\n Ocupado BUFFER TX:"<< EstadoPuerto.cbInQue;
-  cout<<"\n Ocupado BUFFER RX:"<< EstadoPuerto.cbOutQue;
+    //Mostrar tamaño ocupado
+    cout<<"\n Ocupado BUFFER TX:"<< EstadoPuerto.cbInQue;
+    cout<<"\n Ocupado BUFFER RX:"<< EstadoPuerto.cbOutQue;
 }
 
 
@@ -264,10 +264,10 @@ void ComprobarTamanoBuffers(HANDLE &PuertoCOM)
 //Cambiar el tamaño de los buffers
 int CambiarTamanoBuffers(HANDLE &PuertoCOM, int TamBufferEntrada, int TamBufferSalida)
 {
-  int sal=0;
-  COMSTAT  EstadoPuerto;
-  sal=SetupComm(PuertoCOM, TamBufferEntrada, TamBufferSalida);
-  return(sal);
+    int sal=0;
+    COMSTAT  EstadoPuerto;
+    sal=SetupComm(PuertoCOM, TamBufferEntrada, TamBufferSalida);
+    return(sal);
 }
 
 //Vacía el buffer de entrada.
