@@ -16,10 +16,10 @@ public:
     //void setAtribute(char value, int attribute);
    // char getAtribute(int attribute);
 
-    void setC(char value);
-    void setD(char value);
-    void setS(char value);
-    void setNT(char value);
+    void setC(unsigned char value);
+    void setD(unsigned char value);
+    void setS(unsigned char value);
+    void setNT(unsigned char value);
 
 
     unsigned char getC();

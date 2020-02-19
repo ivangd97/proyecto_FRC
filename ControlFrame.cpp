@@ -6,10 +6,10 @@ ControlFrame::ControlFrame()
 {
     S  = 22;
     D  = 'T';
-    C  = ' ';
+    C  = 02;
     NT = '0';
 }
-//Revisar
+
 //Constructor which have the C attribute set by the user
 ControlFrame::ControlFrame(int value)
 {
@@ -19,54 +19,48 @@ ControlFrame::ControlFrame(int value)
     switch(value)
     {
     case 1:
-        C = '05';
+        C = 05;
         printf("Trama ENQ \n");
 
         break;
 
     case 2:
         printf("Trama EOT \n");
-        C='04';
+        C= 04  ;
         break;
 
     case 3:
         printf("Trama ACK \n");
-        C='06';
+        C= 06;
         break;
 
     case 4:
         printf("Trama NACK \n");
-        C='21';
+        C= 21;
         break;
 
     default:
         printf("Trama incorrecta, seleccione de nuevo.\n");
     }
 }
-/*unsigned char ControlFrame::getAtribute()
-{
 
-    return this->C;
-
-
-}*/
-void ControlFrame::setC(char value)
+void ControlFrame::setC(unsigned char value)
 {
     this->C = value;
 
 }
-void ControlFrame::setD(char value)
+void ControlFrame::setD(unsigned char value)
 {
     this->D = value;
 
 
 }
-void ControlFrame::setS(char value)
+void ControlFrame::setS(unsigned char value)
 {
     this->S = value;
 
 }
-void ControlFrame::setNT(char value)
+void ControlFrame::setNT(unsigned char value)
 {
 
     this->NT = value;
@@ -91,25 +85,3 @@ unsigned char ControlFrame::getNT()
     return this->NT;
 }
 
-/*
-void ControlFrame::setAtribute(char value,int atribute)
-{
-    switch(atribute)
-    {
-    case 1:
-        this->S = value;
-        break;
-    case 2:
-        this->D = value;
-        break;
-    case 3:
-        this->C = value;
-        break;
-    case 4:
-        this->NT = value;
-        break;
-    }
-}
-
-
-*/

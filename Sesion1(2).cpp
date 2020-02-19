@@ -111,7 +111,7 @@ int chooseVel()
     }
 }
 
-void sendControlFrame(ControlFrame *controlFSend)
+void sendControlFrame(ControlFrame *&controlFSend)
 {
     int controlFrame;
     bool exit = false;
@@ -124,7 +124,7 @@ void sendControlFrame(ControlFrame *controlFSend)
         case 1:
             printf("Has enviado Trama ENQ \n");
             exit = true;
-            controlFSend->setC('05');
+            controlFSend->setC(05);
             EnviarCaracter(portCOM,controlFSend->getS());
             EnviarCaracter(portCOM,controlFSend->getD());
             EnviarCaracter(portCOM,controlFSend->getC());
@@ -135,7 +135,7 @@ void sendControlFrame(ControlFrame *controlFSend)
             printf("Has enviado Trama EOT \n");
             exit = true;
 
-            controlFSend->setC('04');
+            controlFSend->setC(04);
 
             EnviarCaracter(portCOM,controlFSend->getS());
             EnviarCaracter(portCOM,controlFSend->getD());
@@ -146,7 +146,7 @@ void sendControlFrame(ControlFrame *controlFSend)
             printf("Has enviado Trama ACK \n");
             exit = true;
 
-            controlFSend->setC('06');
+            controlFSend->setC(06);
 
             EnviarCaracter(portCOM,controlFSend->getS());
             EnviarCaracter(portCOM,controlFSend->getD());
@@ -156,7 +156,7 @@ void sendControlFrame(ControlFrame *controlFSend)
         case 4:
             printf("Has enviado Trama NACK \n");
             exit = true;
-            controlFSend->setC('21');
+            controlFSend->setC(21);
 
             EnviarCaracter(portCOM,controlFSend->getS());
             EnviarCaracter(portCOM,controlFSend->getD());
@@ -172,27 +172,23 @@ void sendControlFrame(ControlFrame *controlFSend)
 
 void receiveControlFrame(int campo,ControlFrame *controlFReceive,char carR)
 {
-    char extra;
-    while(carR!= '27')
-    {
-        carR = RecibirCaracter(portCOM);
-        if(carR!='0')
-        {
+
+
             switch(campo)
             {
             case 1:
-                if (carR=='22')
+                if (carR==22)
                 {
                     controlFReceive->setS(carR);
+
                     campo++;
 
 
                 }
                 else
                 {
-
-
                     printf("%c",carR);
+
                 }
                 break;
 
@@ -203,13 +199,32 @@ void receiveControlFrame(int campo,ControlFrame *controlFReceive,char carR)
 
             case 3:
                 controlFReceive->setC(carR);
-                extra = carR;
+
                 campo++;
                 break;
 
             case 4:
                 controlFReceive->setNT(carR);
+
                 campo = 1;
+                 if(controlFReceive->getC() == 05)
+            {
+                printf("Se ha recibido una trama ENQ\n");
+
+            }
+            else if (controlFReceive->getC()==04)
+            {
+                printf("Se ha recibido una trama EOT\n");
+            }
+            else if (controlFReceive->getC()==06)
+            {
+                printf("Se ha recibido una trama ACK\n");
+            }
+            else if  (controlFReceive->getC()==21)
+            {
+                printf("Se ha recibido una trama NACK\n");
+            }
+
                 break;
 
 
@@ -218,32 +233,15 @@ void receiveControlFrame(int campo,ControlFrame *controlFReceive,char carR)
             }
 
 
-            if(controlFReceive->getC() == '05')
-            {
-                printf("Se ha recibido una trama ENQ\n");
-
-            }
-            else if (extra=='04')
-            {
-                printf("Se ha recibido una trama EOT\n");
-            }
-            else if (extra=='06')
-            {
-                printf("Se ha recibido una trama ACK\n");
-            }
-            else if  (extra=='21')
-            {
-                printf("Se ha recibido una trama NACK\n");
-            }
 
 
 
 
-        }
+
 
 
     }
-}
+
 
 
 int main()
@@ -253,7 +251,7 @@ int main()
     char PSerie[5];
     char msg[limit] ; //two more characters to the line end
     int campo=1;
-
+    ControlFrame *controlFReceive = new ControlFrame();
 
     //Header
     printf("============================================================================\n");
@@ -296,8 +294,70 @@ int main()
     {
         carR = RecibirCaracter(portCOM);
         // If our string have any character, it will be shown
-        if (carR != 0)
-            printf("%c",carR);
+        if (carR != 0){
+               // receiveControlFrame(campo,controlFReceive,carR);
+
+          //  printf("%c",carR);
+             switch(campo)
+            {
+            case 1:
+                if (carR==22)
+                {
+                    controlFReceive->setS(carR);
+
+                    campo++;
+
+
+                }
+                else
+                {
+
+
+                    printf("%c",carR);
+                }
+                break;
+
+            case 2:
+                controlFReceive->setD(carR);
+                campo++;
+                break;
+
+            case 3:
+                controlFReceive->setC(carR);
+
+                campo++;
+                break;
+
+            case 4:
+                controlFReceive->setNT(carR);
+
+                campo = 1;
+            if(controlFReceive->getC() == 05)
+            {
+                printf("Se ha recibido una trama ENQ\n");
+
+            }
+            else if (controlFReceive->getC()==04)
+            {
+                printf("Se ha recibido una trama EOT\n");
+            }
+            else if (controlFReceive->getC()==06)
+            {
+                printf("Se ha recibido una trama ACK\n");
+            }
+            else if  (controlFReceive->getC()==21)
+            {
+                printf("Se ha recibido una trama NACK\n");
+            }
+            break;
+
+
+            }
+
+
+
+
+        }
         if (kbhit())
         {
             //saving the input
@@ -325,9 +385,8 @@ int main()
 
                     case F2:
 
-                        ControlFrame *controlFSend = new ControlFrame();
-                        sendControlFrame(controlFSend);
-                        receiveControlFrame(campo,controlFSend,carR);
+
+                        sendControlFrame(controlFReceive);
                         break;
 
 
