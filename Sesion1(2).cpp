@@ -117,10 +117,15 @@ void sendControlFrame(ControlFrame *&controlFSend)
     bool exit = false;
     while(!exit)
     {
-        printf("Trama de control a enviar : \n 1: Trama ENQ. \n 2: Trama EOT. \n 3: Trama ACK. \n 4: Trama NACK. \n");
+        printf("Trama de control a enviar :\n 0: Salir \n 1: Trama ENQ. \n 2: Trama EOT. \n 3: Trama ACK. \n 4: Trama NACK. \n");
         cin>>controlFrame;
         switch (controlFrame)
         {
+
+        case 0:
+            printf("Saliendo...\n");
+            exit=true;
+            break;
         case 1:
             printf("Has enviado Trama ENQ \n");
             exit = true;
@@ -170,77 +175,6 @@ void sendControlFrame(ControlFrame *&controlFSend)
     }
 }
 
-void receiveControlFrame(int campo,ControlFrame *controlFReceive,char carR)
-{
-
-
-            switch(campo)
-            {
-            case 1:
-                if (carR==22)
-                {
-                    controlFReceive->setS(carR);
-
-                    campo++;
-
-
-                }
-                else
-                {
-                    printf("%c",carR);
-
-                }
-                break;
-
-            case 2:
-                controlFReceive->setD(carR);
-                campo++;
-                break;
-
-            case 3:
-                controlFReceive->setC(carR);
-
-                campo++;
-                break;
-
-            case 4:
-                controlFReceive->setNT(carR);
-
-                campo = 1;
-                 if(controlFReceive->getC() == 05)
-            {
-                printf("Se ha recibido una trama ENQ\n");
-
-            }
-            else if (controlFReceive->getC()==04)
-            {
-                printf("Se ha recibido una trama EOT\n");
-            }
-            else if (controlFReceive->getC()==06)
-            {
-                printf("Se ha recibido una trama ACK\n");
-            }
-            else if  (controlFReceive->getC()==21)
-            {
-                printf("Se ha recibido una trama NACK\n");
-            }
-
-                break;
-
-
-
-
-            }
-
-
-
-
-
-
-
-
-
-    }
 
 
 
@@ -295,11 +229,13 @@ int main()
         carR = RecibirCaracter(portCOM);
         // If our string have any character, it will be shown
         if (carR != 0){
-               // receiveControlFrame(campo,controlFReceive,carR);
 
-          //  printf("%c",carR);
-             switch(campo)
+
+
+           switch(campo)
             {
+
+
             case 1:
                 if (carR==22)
                 {
