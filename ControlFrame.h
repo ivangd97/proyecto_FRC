@@ -1,7 +1,12 @@
 #ifndef CONTROLFRAME_H
 #define CONTROLFRAME_H
 
-
+//This class contains four attributes:
+// S: Synchronism
+// D: Direction
+// C: Control
+// NT: Frame number
+//It's used to send a control frame from an user to another one
 class ControlFrame
 {
 protected:
@@ -13,15 +18,14 @@ protected:
 public:
     ControlFrame();
     ControlFrame(int value);
-    //void setAtribute(char value, int attribute);
-   // char getAtribute(int attribute);
 
+    //Setters
     void setC(unsigned char value);
     void setD(unsigned char value);
     void setS(unsigned char value);
     void setNT(unsigned char value);
 
-
+    //Getters
     unsigned char getC();
     unsigned char getD();
     unsigned char getS();

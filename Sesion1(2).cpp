@@ -111,21 +111,24 @@ int chooseVel()
     }
 }
 
+//This procedure will send a control frame when the user press the F2 key
 void sendControlFrame(ControlFrame *&controlFSend)
 {
     int controlFrame;
     bool exit = false;
     while(!exit)
     {
+        //Interface to choose the type of control frame which the user will send
         printf("Trama de control a enviar :\n 0: Salir \n 1: Trama ENQ. \n 2: Trama EOT. \n 3: Trama ACK. \n 4: Trama NACK. \n");
         cin>>controlFrame;
         switch (controlFrame)
         {
-
+        //0 case will exit
         case 0:
             printf("Saliendo...\n");
-            exit=true;
+            //exit=true;
             break;
+
         case 1:
             printf("Has enviado Trama ENQ \n");
             exit = true;
@@ -147,6 +150,7 @@ void sendControlFrame(ControlFrame *&controlFSend)
             EnviarCaracter(portCOM,controlFSend->getC());
             EnviarCaracter(portCOM,controlFSend->getNT());
             break;
+
         case 3:
             printf("Has enviado Trama ACK \n");
             exit = true;
@@ -158,6 +162,7 @@ void sendControlFrame(ControlFrame *&controlFSend)
             EnviarCaracter(portCOM,controlFSend->getC());
             EnviarCaracter(portCOM,controlFSend->getNT());
             break;
+
         case 4:
             printf("Has enviado Trama NACK \n");
             exit = true;
@@ -168,6 +173,7 @@ void sendControlFrame(ControlFrame *&controlFSend)
             EnviarCaracter(portCOM,controlFSend->getC());
             EnviarCaracter(portCOM,controlFSend->getNT());
             break;
+
         default:
             printf("Trama incorrecta, seleccione de nuevo.\n");
             break;
@@ -229,26 +235,18 @@ int main()
         carR = RecibirCaracter(portCOM);
         // If our string have any character, it will be shown
         if (carR != 0){
-
-
-
+           //this switch will save the received attributes of a control frame and will build it
+           //it will print a message announcing the type of the control frame received
            switch(campo)
             {
-
-
             case 1:
                 if (carR==22)
                 {
                     controlFReceive->setS(carR);
-
                     campo++;
-
-
                 }
                 else
                 {
-
-
                     printf("%c",carR);
                 }
                 break;
@@ -286,8 +284,6 @@ int main()
                 printf("Se ha recibido una trama NACK\n");
             }
             break;
-
-
             }
 
 
@@ -301,7 +297,6 @@ int main()
             //Esc key case, if it isn't pressed, the switch will be displayed
             if (carE != ESC_KEY)
             {
-
                 switch (carE)
                 {
                 //if F1 key is pressed, the message will be sent
@@ -320,24 +315,13 @@ int main()
                         break;
 
                     case F2:
-
-
                         sendControlFrame(controlFReceive);
                         break;
-
-
-
                     }
-
-
-
                     break;
-
-
                 // If intro key is pressed, we will show and end line and continue the input in the next one
                 case INTRO_KEY:
                     if (tamanio<limit-2)
-
                         msg[tamanio+1] = '\n';
                     tamanio += 1 ;
                     printf ("\n");
@@ -357,12 +341,9 @@ int main()
                 default:
                     if (tamanio<limit-2)
                     {
-
                         tamanio = tamanio + 1;
                         printf("%c",carE);
                         msg[tamanio] = carE;
-
-
                     }
                     break;
                 }
