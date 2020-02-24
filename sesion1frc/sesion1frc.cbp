@@ -13,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="include" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -22,6 +23,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -36,6 +38,8 @@
 		<Unit filename="../PuertoSerie.cpp" />
 		<Unit filename="../PuertoSerie.h" />
 		<Unit filename="../Sesion1(2).cpp" />
+		<Unit filename="../include/DataFrame.h" />
+		<Unit filename="../src/DataFrame.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

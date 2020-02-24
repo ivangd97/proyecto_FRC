@@ -285,10 +285,6 @@ int main()
             }
             break;
             }
-
-
-
-
         }
         if (kbhit())
         {
