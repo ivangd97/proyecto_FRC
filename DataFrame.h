@@ -1,7 +1,7 @@
 #ifndef DATAFRAME_H
 #define DATAFRAME_H
 
-class DataFrame(){
+class DataFrame{
     protected:
         unsigned char S;
         unsigned char D;

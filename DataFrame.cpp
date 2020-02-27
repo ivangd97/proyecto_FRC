@@ -10,6 +10,5 @@ DataFrame::DataFrame()
     C  = 02;
     NT = '0';
     L = 0;
-    Data = [];
     BCE = 0;
 }

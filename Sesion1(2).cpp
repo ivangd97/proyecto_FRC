@@ -23,6 +23,8 @@
 
 //We will define the limit as a variable
 int limit = 802;
+ControlFrame controlFReceive;
+
 
 using namespace std;
 
@@ -112,7 +114,7 @@ int chooseVel()
 }
 
 //This procedure will send a control frame when the user press the F2 key
-void sendControlFrame(ControlFrame *&controlFSend)
+void sendControlFrame(ControlFrame &controlFSend)
 {
     int controlFrame;
     bool exit = false;
@@ -132,46 +134,46 @@ void sendControlFrame(ControlFrame *&controlFSend)
         case 1:
             printf("Has enviado Trama ENQ \n");
             exit = true;
-            controlFSend->setC(05);
-            EnviarCaracter(portCOM,controlFSend->getS());
-            EnviarCaracter(portCOM,controlFSend->getD());
-            EnviarCaracter(portCOM,controlFSend->getC());
-            EnviarCaracter(portCOM,controlFSend->getNT());
+            controlFSend.setC(05);
+            EnviarCaracter(portCOM,controlFSend.getS());
+            EnviarCaracter(portCOM,controlFSend.getD());
+            EnviarCaracter(portCOM,controlFSend.getC());
+            EnviarCaracter(portCOM,controlFSend.getNT());
             break;
 
         case 2:
             printf("Has enviado Trama EOT \n");
             exit = true;
 
-            controlFSend->setC(04);
+            controlFSend.setC(04);
 
-            EnviarCaracter(portCOM,controlFSend->getS());
-            EnviarCaracter(portCOM,controlFSend->getD());
-            EnviarCaracter(portCOM,controlFSend->getC());
-            EnviarCaracter(portCOM,controlFSend->getNT());
+            EnviarCaracter(portCOM,controlFSend.getS());
+            EnviarCaracter(portCOM,controlFSend.getD());
+            EnviarCaracter(portCOM,controlFSend.getC());
+            EnviarCaracter(portCOM,controlFSend.getNT());
             break;
 
         case 3:
             printf("Has enviado Trama ACK \n");
             exit = true;
 
-            controlFSend->setC(06);
+            controlFSend.setC(06);
 
-            EnviarCaracter(portCOM,controlFSend->getS());
-            EnviarCaracter(portCOM,controlFSend->getD());
-            EnviarCaracter(portCOM,controlFSend->getC());
-            EnviarCaracter(portCOM,controlFSend->getNT());
+            EnviarCaracter(portCOM,controlFSend.getS());
+            EnviarCaracter(portCOM,controlFSend.getD());
+            EnviarCaracter(portCOM,controlFSend.getC());
+            EnviarCaracter(portCOM,controlFSend.getNT());
             break;
 
         case 4:
             printf("Has enviado Trama NACK \n");
             exit = true;
-            controlFSend->setC(21);
+            controlFSend.setC(21);
 
-            EnviarCaracter(portCOM,controlFSend->getS());
-            EnviarCaracter(portCOM,controlFSend->getD());
-            EnviarCaracter(portCOM,controlFSend->getC());
-            EnviarCaracter(portCOM,controlFSend->getNT());
+            EnviarCaracter(portCOM,controlFSend.getS());
+            EnviarCaracter(portCOM,controlFSend.getD());
+            EnviarCaracter(portCOM,controlFSend.getC());
+            EnviarCaracter(portCOM,controlFSend.getNT());
             break;
 
         default:
@@ -182,57 +184,8 @@ void sendControlFrame(ControlFrame *&controlFSend)
 }
 
 
-
-
-int main()
-{
-    //  ControFrame controlF = new ControlFrame();
-    char carE, carR = 0;
-    char PSerie[5];
-    char msg[limit] ; //two more characters to the line end
-    int campo=1;
-    ControlFrame *controlFReceive = new ControlFrame();
-
-    //Header
-    printf("============================================================================\n");
-    printf("----------- PRACTICAS DE FUNDAMENTOS DE REDES DE COMUNICACIONES ------------\n");
-    printf("---------------------------- CURSO 2019/20 ---------------------------------\n");
-    printf("----------------------------- SESION1.CPP ----------------------------------\n");
-    printf("--------Autores: Rubén Costa Barriga e Iván Gonzalez Dominguez--------------\n");
-    printf("============================================================================\n\n");
-
-    //We will open the port. For it we need to define the following parameters:
-    // - Open port name: ("COM1", "COM2", "COM3", ...).
-    // - Velocity: (1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200).
-    // - Bits number in each sent or received byte: (4, 5, 6, 7, 8).
-    // - Parity: (0=sin parity, 1=odd, 2=even, 3=mark, 4=space).
-    // - Stop bits: (0=1 bit, 1=1.5 bits, 2=2 bits).
-
-    choosePort(PSerie);
-    printf(PSerie);
-    int choosedVel = chooseVel();
-
-    // Here we will open the port choosed by the user
-    portCOM = AbrirPuerto(PSerie,choosedVel,8,0,0);
-
-    //Check if the choosed port is valid or not
-    if(portCOM == NULL)
-    {
-        printf("Error al abrir el port %s\n",PSerie);
-        getch();
-        return (1);
-    }
-    else
-        printf("port %s abierto correctamente\n",PSerie);
-
-
-    // Simultaneous Read/Write of characters :
-    int tamanio = 0;
-
-    //Esc key case to close the program, if esc is not pressed, continue forever
-    while(carE != ESC_KEY)
-    {
-        carR = RecibirCaracter(portCOM);
+void receiveControlFrame(char carR,int &campo,HANDLE &portCOM){
+     carR = RecibirCaracter(portCOM);
         // If our string have any character, it will be shown
         if (carR != 0){
            //this switch will save the received attributes of a control frame and will build it
@@ -242,7 +195,8 @@ int main()
             case 1:
                 if (carR==22)
                 {
-                    controlFReceive->setS(carR);
+                    ControlFrame controlFReceive;
+                    controlFReceive.setS(carR);
                     campo++;
                 }
                 else
@@ -252,47 +206,42 @@ int main()
                 break;
 
             case 2:
-                controlFReceive->setD(carR);
+                controlFReceive.setD(carR);
                 campo++;
                 break;
 
             case 3:
-                controlFReceive->setC(carR);
+                controlFReceive.setC(carR);
 
                 campo++;
                 break;
 
             case 4:
-                controlFReceive->setNT(carR);
+                controlFReceive.setNT(carR);
 
                 campo = 1;
-            if(controlFReceive->getC() == 05)
+            if(controlFReceive.getC() == 05)
             {
                 printf("Se ha recibido una trama ENQ\n");
 
             }
-            else if (controlFReceive->getC()==04)
+            else if (controlFReceive.getC()==04)
             {
                 printf("Se ha recibido una trama EOT\n");
             }
-            else if (controlFReceive->getC()==06)
+            else if (controlFReceive.getC()==06)
             {
                 printf("Se ha recibido una trama ACK\n");
             }
-            else if  (controlFReceive->getC()==21)
+            else if  (controlFReceive.getC()==21)
             {
                 printf("Se ha recibido una trama NACK\n");
             }
             break;
             }
-        }
-        if (kbhit())
-        {
-            //saving the input
-            carE = getch();
-            //Esc key case, if it isn't pressed, the switch will be displayed
-            if (carE != ESC_KEY)
-            {
+}
+}
+void enviar(char carE,char msg[],int &tamanio,HANDLE portCOM){
                 switch (carE)
                 {
                 //if F1 key is pressed, the message will be sent
@@ -343,9 +292,71 @@ int main()
                     }
                     break;
                 }
+
+}
+
+int main()
+{
+    //  ControFrame controlF = new ControlFrame();
+    char carE, carR = 0;
+    char PSerie[5];
+    char msg[limit] ; //two more characters to the line end
+    int campo=1;
+    //ControlFrame *controlFReceive = new ControlFrame();
+
+    //Header
+    printf("============================================================================\n");
+    printf("----------- PRACTICAS DE FUNDAMENTOS DE REDES DE COMUNICACIONES ------------\n");
+    printf("---------------------------- CURSO 2019/20 ---------------------------------\n");
+    printf("----------------------------- SESION1.CPP ----------------------------------\n");
+    printf("--------Autores: Rubén Costa Barriga e Iván Gonzalez Dominguez--------------\n");
+    printf("============================================================================\n\n");
+
+    //We will open the port. For it we need to define the following parameters:
+    // - Open port name: ("COM1", "COM2", "COM3", ...).
+    // - Velocity: (1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200).
+    // - Bits number in each sent or received byte: (4, 5, 6, 7, 8).
+    // - Parity: (0=sin parity, 1=odd, 2=even, 3=mark, 4=space).
+    // - Stop bits: (0=1 bit, 1=1.5 bits, 2=2 bits).
+
+    choosePort(PSerie);
+    printf(PSerie);
+    int choosedVel = chooseVel();
+
+    // Here we will open the port choosed by the user
+    portCOM = AbrirPuerto(PSerie,choosedVel,8,0,0);
+
+    //Check if the choosed port is valid or not
+    if(portCOM == NULL)
+    {
+        printf("Error al abrir el port %s\n",PSerie);
+        getch();
+        return (1);
+    }
+    else
+        printf("port %s abierto correctamente\n",PSerie);
+
+
+    // Simultaneous Read/Write of characters :
+    int tamanio = 0;
+
+    //Esc key case to close the program, if esc is not pressed, continue forever
+    while(carE != ESC_KEY)
+    {
+        receiveControlFrame(carR,campo,portCOM);
+
+
+        if (kbhit())
+        {
+            //saving the input
+            carE = getch();
+            //Esc key case, if it isn't pressed, the switch will be displayed
+            if (carE != ESC_KEY)
+            {
+                enviar(carE,msg,tamanio,portCOM);
             }
         }
-    }
+}
     //Te port will be closed and the app will return
     CerrarPuerto(portCOM);
     return 0;

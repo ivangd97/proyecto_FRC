@@ -35,11 +35,11 @@
 		</Compiler>
 		<Unit filename="../ControlFrame.cpp" />
 		<Unit filename="../ControlFrame.h" />
+		<Unit filename="../DataFrame.cpp" />
+		<Unit filename="../DataFrame.h" />
 		<Unit filename="../PuertoSerie.cpp" />
 		<Unit filename="../PuertoSerie.h" />
 		<Unit filename="../Sesion1(2).cpp" />
-		<Unit filename="../include/DataFrame.h" />
-		<Unit filename="../src/DataFrame.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
