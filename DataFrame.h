@@ -13,6 +13,14 @@ class DataFrame{
 
     public:
         DataFrame();
+        unsigned char getS();
+        unsigned char getD();
+        unsigned char getC();
+        unsigned char getNT();
+        unsigned char getL();
+        char getData(int i);
+        unsigned char getBCE();
+        unsigned char calculateBCE(int x,char msg[]);
 };
 
 #endif // DATAFRAME_H

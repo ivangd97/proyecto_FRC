@@ -32,10 +32,11 @@ HANDLE portCOM;
 
 //First of all, we will choose the port that will be opened, we will let the user choose
 //from a list of ports and will open it
-void choosePort(char PSerie[])
+bool choosePort(char PSerie[])
 {
 
     int port;
+    bool puertobandera = true;
     printf("Seleccione el puerto que desea abrir: \n 0. Exit \n 1. COM1 \n 2. COM2 \n 3. COM3 \n 4. COM4 \n");
     cin >> port;
     //Screen will be cleaned
@@ -64,8 +65,10 @@ void choosePort(char PSerie[])
         break;
     default:
         printf("Puerto elegido no válido...\n");
+        puertobandera = false;
         break;
     }
+    return puertobandera;
 
 }
 
@@ -241,7 +244,7 @@ void receiveControlFrame(char carR,int &campo,HANDLE &portCOM){
             }
 }
 }
-void enviar(char carE,char msg[],int &tamanio,HANDLE portCOM){
+void send(char carE,char msg[],int &tamanio,HANDLE portCOM){
                 switch (carE)
                 {
                 //if F1 key is pressed, the message will be sent
@@ -320,7 +323,7 @@ int main()
     // - Stop bits: (0=1 bit, 1=1.5 bits, 2=2 bits).
 
     choosePort(PSerie);
-    printf(PSerie);
+        //goto doFinish;
     int choosedVel = chooseVel();
 
     // Here we will open the port choosed by the user
@@ -353,11 +356,12 @@ int main()
             //Esc key case, if it isn't pressed, the switch will be displayed
             if (carE != ESC_KEY)
             {
-                enviar(carE,msg,tamanio,portCOM);
+                send(carE,msg,tamanio,portCOM);
             }
         }
 }
     //Te port will be closed and the app will return
+    //doFinish:
     CerrarPuerto(portCOM);
     return 0;
 }
