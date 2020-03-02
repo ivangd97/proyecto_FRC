@@ -1,3 +1,9 @@
+//============================================================================
+//----------- PRACTICAS DE FUNDAMENTOS DE REDES DE COMUNICACIONES ------------
+//---------------------------- CURSO 2019/20 ---------------------------------
+//--------Autores: Rubén Costa Barriga e Iván Gonzalez Dominguez--------------
+//============================================================================
+
 #ifndef CONTROLFRAME_H
 #define CONTROLFRAME_H
 

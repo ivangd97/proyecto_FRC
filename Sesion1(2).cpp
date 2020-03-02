@@ -1,7 +1,7 @@
 //============================================================================
-// ----------- PRÁCTICAS DE FUNDAMENTOS DE REDES DE COMUNICACIONES -----------
-// ---------------------------- CURSO 2019/20 --------------------------------
-// ----------------------------- SESION1.CPP ---------------------------------
+//----------- PRACTICAS DE FUNDAMENTOS DE REDES DE COMUNICACIONES ------------
+//---------------------------- CURSO 2019/20 ---------------------------------
+//--------Autores: Rubén Costa Barriga e Iván Gonzalez Dominguez--------------
 //============================================================================
 
 
@@ -202,10 +202,7 @@ void receiveControlFrame(char carR,int &campo,HANDLE &portCOM){
                     controlFReceive.setS(carR);
                     campo++;
                 }
-                else
-                {
-                    printf("%c",carR);
-                }
+
                 break;
 
             case 2:
@@ -221,6 +218,7 @@ void receiveControlFrame(char carR,int &campo,HANDLE &portCOM){
 
             case 4:
                 controlFReceive.setNT(carR);
+                if(controlFReceive.getC() )
 
                 campo = 1;
             if(controlFReceive.getC() == 05)
@@ -244,7 +242,7 @@ void receiveControlFrame(char carR,int &campo,HANDLE &portCOM){
             }
 }
 }
-void send(char carE,char msg[],int &tamanio,HANDLE portCOM){
+void send(char carE,char msg[],int &tamanio,HANDLE &portCOM){
                 switch (carE)
                 {
                 //if F1 key is pressed, the message will be sent
@@ -311,7 +309,7 @@ int main()
     printf("============================================================================\n");
     printf("----------- PRACTICAS DE FUNDAMENTOS DE REDES DE COMUNICACIONES ------------\n");
     printf("---------------------------- CURSO 2019/20 ---------------------------------\n");
-    printf("----------------------------- SESION1.CPP ----------------------------------\n");
+    printf("----------------------------- SESION3.CPP ----------------------------------\n");
     printf("--------Autores: Rubén Costa Barriga e Iván Gonzalez Dominguez--------------\n");
     printf("============================================================================\n\n");
 
