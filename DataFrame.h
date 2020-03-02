@@ -6,6 +6,7 @@
 
 #ifndef DATAFRAME_H
 #define DATAFRAME_H
+#include "PuertoSerie.h"
 
 class DataFrame{
     protected:
@@ -19,6 +20,9 @@ class DataFrame{
 
     public:
         DataFrame();
+
+
+
         unsigned char getS();
         unsigned char getD();
         unsigned char getC();
@@ -26,6 +30,13 @@ class DataFrame{
         unsigned char getL();
         char getData(int i);
         unsigned char getBCE();
+
+        //This procedure will send a control frame when the user press the F2 key
+        void sendFrame(DataFrame &fSend,HANDLE &portCOM);
+        void manageTrame(HANDLE &portCOM,char msg[802],int tamanio);
+
+
+
         unsigned char calculateBCE(int x,char msg[]);
 
          //Setters
@@ -34,6 +45,8 @@ class DataFrame{
         void setS(unsigned char value);
         void setNT(unsigned char value);
         void setL(unsigned char value);
+
+
 
 };
 

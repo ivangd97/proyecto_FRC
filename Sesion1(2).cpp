@@ -130,69 +130,7 @@ int chooseVel() {
         }
 }
 
-//This procedure will send a control frame when the user press the F2 key
-void sendControlFrame(DataFrame &controlFSend) {
-    int controlFrame;
-    bool exit = false;
-    while(!exit) {
-        //Interface to choose the type of control frame which the user will send
-        printf("Trama de control a enviar :\n 0: Salir \n 1: Trama ENQ. \n 2: Trama EOT. \n 3: Trama ACK. \n 4: Trama NACK. \n");
-        cin>>controlFrame;
-        switch (controlFrame) {
-        //0 case will exit
-        case 0:
-            printf("Saliendo...\n");
-            //exit=true;
-            break;
 
-        case 1:
-            printf("Has enviado Trama ENQ \n");
-            exit = true;
-            controlFSend.setC(05);
-            EnviarCaracter(portCOM,controlFSend.getS());
-            EnviarCaracter(portCOM,controlFSend.getD());
-            EnviarCaracter(portCOM,controlFSend.getC());
-            EnviarCaracter(portCOM,controlFSend.getNT());
-            break;
-
-        case 2:
-            printf("Has enviado Trama EOT \n");
-            exit = true;
-
-            controlFSend.setC(04);
-
-            EnviarCaracter(portCOM,controlFSend.getS());
-            EnviarCaracter(portCOM,controlFSend.getD());
-            EnviarCaracter(portCOM,controlFSend.getC());
-            EnviarCaracter(portCOM,controlFSend.getNT());
-            break;
-
-        case 3:
-            printf("Has enviado Trama ACK \n");
-            exit = true;
-
-            controlFSend.setC(06);
-
-            EnviarCaracter(portCOM,controlFSend.getS());
-            EnviarCaracter(portCOM,controlFSend.getD());
-            EnviarCaracter(portCOM,controlFSend.getC());
-            EnviarCaracter(portCOM,controlFSend.getNT());
-            break;
-
-        case 4:
-            printf("Has enviado Trama NACK \n");
-            exit = true;
-            controlFSend.setC(21);
-
-            EnviarCaracter(portCOM,controlFSend.getS());
-            EnviarCaracter(portCOM,controlFSend.getD());
-            EnviarCaracter(portCOM,controlFSend.getC());
-            EnviarCaracter(portCOM,controlFSend.getNT());
-            break;
-
-        default:
-            printf("Trama incorrecta, seleccione de nuevo.\n");
-            break; } } }
 
 
 void receiveControlFrame(char carR,int &campo,HANDLE &portCOM) {
@@ -245,8 +183,9 @@ void receiveControlFrame(char carR,int &campo,HANDLE &portCOM) {
             fReceive.setL(carR);
             campo++;
             break;
-       // case 6:
-//            RecibirCadena(portCOM,fReceive.getData(),fReceive.getL());
+      //  case 6:
+
+      // RecibirCadena(portCOM,fReceive.getData(),fReceive.getL());
 
             }
         }
@@ -257,18 +196,20 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
     case '\0':
 
         switch (getch()) {
+
+            //Trocear trama 254 caracteres
         case F1:
             msg[0]= NULL;
             msg[tamanio+1] = '\n';
             msg[tamanio+2] = '\0';
-
+  //cambiar metodo (trama datos preparar trama)
             EnviarCadena(portCOM, msg, tamanio+2);
             printf("\n");
             tamanio = 0;
             break;
 
         case F2:
-            sendControlFrame(fReceive);
+            fReceive.sendFrame(fReceive,portCOM);
             break; }
         break;
     // If intro key is pressed, we will show and end line and continue the input in the next one
