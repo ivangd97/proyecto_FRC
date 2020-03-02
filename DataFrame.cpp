@@ -56,3 +56,35 @@ unsigned char calculateBCE(int x,char msg[]) {
     return BCE;
 
 }
+
+//Set C attribute
+void DataFrame::setC(unsigned char value)
+{
+    this->C = value;
+
+}
+
+//Set D attribute
+void DataFrame::setD(unsigned char value)
+{
+    this->D = value;
+
+
+}
+
+//Set S attribute
+void DataFrame::setS(unsigned char value)
+{
+    this->S = value;
+
+}
+
+//Set NT attribute
+void DataFrame::setNT(unsigned char value)
+{
+
+    this->NT = value;
+}
+void DataFrame::setL(unsigned char value){
+this->L=value;
+}

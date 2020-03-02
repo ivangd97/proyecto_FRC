@@ -27,6 +27,14 @@ class DataFrame{
         char getData(int i);
         unsigned char getBCE();
         unsigned char calculateBCE(int x,char msg[]);
+
+         //Setters
+        void setC(unsigned char value);
+        void setD(unsigned char value);
+        void setS(unsigned char value);
+        void setNT(unsigned char value);
+        void setL(unsigned char value);
+
 };
 
 #endif // DATAFRAME_H
