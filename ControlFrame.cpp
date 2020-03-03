@@ -105,3 +105,73 @@ unsigned char ControlFrame::getNT()
     return this->NT;
 }
 
+
+void ControlFrame::sendControlFrame(HANDLE &portCOM) {
+    int controlFrame;
+    bool exit = false;
+    while(!exit) {
+        //Interface to choose the type of control frame which the user will send
+        printf("Trama de control a enviar :\n 0: Salir \n 1: Trama ENQ. \n 2: Trama EOT. \n 3: Trama ACK. \n 4: Trama NACK. \n");
+        std::cin>>controlFrame;
+        switch (controlFrame) {
+        //0 case will exit
+        case 0:
+            printf("Saliendo...\n");
+            //exit=true;
+            break;
+
+        case 1:
+            printf("Has enviado Trama ENQ \n");
+            exit = true;
+            setC(05);
+            EnviarCaracter(portCOM,S);
+            EnviarCaracter(portCOM,D);
+            EnviarCaracter(portCOM,C);
+            EnviarCaracter(portCOM,NT);
+
+            break;
+
+        case 2:
+            printf("Has enviado Trama EOT \n");
+            exit = true;
+
+            setC(04);
+
+            EnviarCaracter(portCOM,S);
+            EnviarCaracter(portCOM,D);
+            EnviarCaracter(portCOM,C);
+            EnviarCaracter(portCOM,NT);
+
+            break;
+
+        case 3:
+            printf("Has enviado Trama ACK \n");
+            exit = true;
+
+            setC(06);
+
+            EnviarCaracter(portCOM,S);
+            EnviarCaracter(portCOM,D);
+            EnviarCaracter(portCOM,C);
+            EnviarCaracter(portCOM,NT);
+
+            break;
+
+        case 4:
+            printf("Has enviado Trama NACK \n");
+            exit = true;
+            setC(21);
+
+            EnviarCaracter(portCOM,S);
+            EnviarCaracter(portCOM,D);
+            EnviarCaracter(portCOM,C);
+            EnviarCaracter(portCOM,NT);
+
+            break;
+
+        default:
+            printf("Trama incorrecta, seleccione de nuevo.\n");
+            break; }
+
+    }
+}

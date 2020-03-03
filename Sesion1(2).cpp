@@ -25,6 +25,7 @@
 //We will define the limit as a variable
 int limit = 802;
 DataFrame fReceive;
+ControlFrame controlReceive;
 
 
 using namespace std;
@@ -133,48 +134,72 @@ int chooseVel() {
 
 
 
-void receiveControlFrame(char carR,int &campo,HANDLE &portCOM) {
+void receiveControlFrame(char carR,int &campo,HANDLE &portCOM,int &isControlFrame) {
     carR = RecibirCaracter(portCOM);
+
     // If our string have any character, it will be shown
     if (carR != 0) {
         //this switch will save the received attributes of a control frame and will build it
         //it will print a message announcing the type of the control frame received
-        switch(campo) {
+        switch(campo){
+
         case 1:
+
             if (carR==22) {
-                DataFrame fReceive;
+
+
+
+                controlReceive.setS(carR);
                 fReceive.setS(carR);
-                campo++; }
+                campo++;
+                }
 
             break;
 
         case 2:
+
+            controlReceive.setD(carR);
             fReceive.setD(carR);
             campo++;
             break;
 
         case 3:
+
+
+           if(carR == 02){
+
             fReceive.setC(carR);
+            isControlFrame = 0;
+           }
+           if(carR !=02){
+
+            controlReceive.setC(carR);
+            isControlFrame = 1;
+           }
 
             campo++;
             break;
 
         case 4:
-            fReceive.setNT(carR);
-            if(fReceive.getC() != 02) {
+            if(isControlFrame == 1) {
+
+                controlReceive.setNT(carR);
                 campo = 1;
 
+                if(controlReceive.getC() == 05) {
 
-                if(fReceive.getC() == 05) {
                     printf("Se ha recibido una trama ENQ\n");
                 }
-                else if (fReceive.getC()==04) {
+                else if (controlReceive.getC()==04) {
                     printf("Se ha recibido una trama EOT\n"); }
-                else if (fReceive.getC()==06) {
+                else if (controlReceive.getC()==06) {
                     printf("Se ha recibido una trama ACK\n"); }
-                else if  (fReceive.getC()==21) {
+                else if  (controlReceive.getC()==21) {
                     printf("Se ha recibido una trama NACK\n"); }
-            } else {
+            }
+
+            else {
+                fReceive.setNT(carR);
                 campo++;
 
 
@@ -199,17 +224,15 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
 
             //Trocear trama 254 caracteres
         case F1:
-            msg[0]= NULL;
-            msg[tamanio+1] = '\n';
-            msg[tamanio+2] = '\0';
+
   //cambiar metodo (trama datos preparar trama)
-            EnviarCadena(portCOM, msg, tamanio+2);
+           fReceive.manageFrame(portCOM,msg,tamanio);
             printf("\n");
             tamanio = 0;
             break;
 
         case F2:
-            fReceive.sendFrame(fReceive,portCOM);
+            controlReceive.sendControlFrame(portCOM);
             break; }
         break;
     // If intro key is pressed, we will show and end line and continue the input in the next one
@@ -244,6 +267,7 @@ int main() {
     char PSerie[5];
     char msg[limit] ; //two more characters to the line end
     int campo=1;
+    int isControlFrame;
     //ControlFrame *fReceive = new ControlFrame();
 
     //Header
@@ -282,7 +306,7 @@ int main() {
 
     //Esc key case to close the program, if esc is not pressed, continue forever
     while(carE != ESC_KEY) {
-        receiveControlFrame(carR,campo,portCOM);
+        receiveControlFrame(carR,campo,portCOM,isControlFrame);
 
 
         if (kbhit()) {

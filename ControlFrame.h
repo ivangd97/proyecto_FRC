@@ -6,6 +6,8 @@
 
 #ifndef CONTROLFRAME_H
 #define CONTROLFRAME_H
+#include "PuertoSerie.h"
+
 
 //This class contains four attributes:
 // S: Synchronism
@@ -30,7 +32,7 @@ public:
     void setD(unsigned char value);
     void setS(unsigned char value);
     void setNT(unsigned char value);
-
+    void sendControlFrame(HANDLE &portCOM);
     //Getters
     unsigned char getC();
     unsigned char getD();
