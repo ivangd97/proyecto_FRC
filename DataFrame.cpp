@@ -101,25 +101,21 @@ unsigned char DataFrame::getBCE() {
 
 unsigned char DataFrame::calculateBCE2() {
     unsigned char BCE = Data[0] ;
-
-
-        for(int i=1 ; i<this->L; i++) {
-            BCE = BCE ^ Data[i];
-        }
-        if(BCE ==255 || BCE == 0) {
-            BCE = 1; }
-
+    for(int i=1 ; i< L; i++) {
+        BCE = BCE ^ Data[i];
+    }
+    if(BCE ==255 || BCE == 0) {
+        BCE = 1;
+    }
     return BCE;
-
 }
 unsigned char DataFrame::calculateBCE(int x,char msg[]) {
-    unsigned char BCE = msg[0] ^ msg[1];
+    unsigned char BCE = msg[0];
     if(x ==1) {
         BCE = 1;
-
     }
     else {
-        for(int i=2; i<x; i++) {
+        for(int i=1; i<x; i++) {
             BCE = BCE ^ msg[i];
         }
         if(BCE ==255 || BCE == 0) {

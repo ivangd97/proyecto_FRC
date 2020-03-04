@@ -28,6 +28,8 @@ DataFrame fReceive;
 ControlFrame controlReceive;
 int i = 0;
 
+// Simultaneous Read/Write of characters :
+int tamanio = 0;
 
 using namespace std;
 
@@ -142,8 +144,6 @@ void receiveControlFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
         case 1:
 
             if (carR==22) {
-                ControlFrame controlReceive;
-                DataFrame fReceive;
                 controlReceive.setS(carR);
                 fReceive.setS(carR);
                 campo++; }
@@ -197,11 +197,11 @@ void receiveControlFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
 
             break;
         case 5:
-            fReceive.setL(carR);
+            fReceive.setL((unsigned char)carR);
             campo++;
         case 6:
             fReceive.insertData(i,carR);
-             if(i<fReceive.getL()-1){
+             if(i < (int)fReceive.getL()-1){
 
                 i++;
              printf("%d",i);
@@ -214,17 +214,18 @@ void receiveControlFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
             break;
 
         case 7:
-            fReceive.setBCE(carR);
+            fReceive.setBCE((unsigned char) carR);
             campo = 1;
 
-
             if(fReceive.comprobar()) {
-
             printf("aaa");
             fReceive.showData();
             }
             else {
                 printf("Error al enviar texto \n"); }
+            break;
+        default:
+            printf("Trama no recibida correctamente. \n");
             break;
         }
     }
@@ -316,10 +317,6 @@ int main() {
         return (1); }
     else
         printf("port %s abierto correctamente\n",PSerie);
-
-
-    // Simultaneous Read/Write of characters :
-    int tamanio = 0;
 
     //Esc key case to close the program, if esc is not pressed, continue forever
     while(carE != ESC_KEY) {
