@@ -26,6 +26,7 @@
 int limit = 802;
 DataFrame fReceive;
 ControlFrame controlReceive;
+int i = 0;
 
 
 using namespace std;
@@ -34,47 +35,45 @@ HANDLE portCOM;
 
 //First of all, we will choose the port that will be opened, we will let the user choose
 //from a list of ports and will open it
-bool choosePort(char PSerie[]) {
+void choosePort(char PSerie[]) {
 
     int port;
     bool puertoBandera = false;
-      while(!puertoBandera){
+    while(!puertoBandera) {
 
-    printf("Seleccione el puerto que desea abrir: \n 0. Exit \n 1. COM1 \n 2. COM2 \n 3. COM3 \n 4. COM4 \n");
-    cin >> port;
-    //Screen will be cleaned
-    system("cls");
-    switch(port) {
-    case 0:
-        printf("Saliendo...\n");
-        puertoBandera = true;
-        break;
-    case 1:
-        strcpy (PSerie,"COM1");
-        printf("Puerto elegido: %d nombre: COM1 \n ",port);
-        puertoBandera = true;
-        break;
-    case 2:
-        strcpy (PSerie,"COM2");
-        printf("Puerto elegido: %d nombre: COM2 \n",port);
-        puertoBandera = true;
-        break;
-    case 3:
-        strcpy (PSerie,"COM3");
-        printf("Puerto elegido: %d nombre: COM3 \n",port);
-        puertoBandera = true;
-        break;
-    case 4:
-        strcpy (PSerie,"COM4");
-        printf("Puerto elegido: %d nombre: COM4 \n",port);
-        puertoBandera = true;
-        break;
-    default:
-        printf("Puerto elegido no valido...\n");
-        break;
+        printf("Seleccione el puerto que desea abrir:\n 1. COM1 \n 2. COM2 \n 3. COM3 \n 4. COM4 \n");
+        cin >> port;
+        //Screen will be cleaned
+        system("cls");
+        switch(port) {
+
+        case 1:
+            strcpy (PSerie,"COM1");
+            printf("Puerto elegido: %d nombre: COM1 \n ",port);
+            puertoBandera = true;
+            break;
+        case 2:
+            strcpy (PSerie,"COM2");
+            printf("Puerto elegido: %d nombre: COM2 \n",port);
+            puertoBandera = true;
+            break;
+        case 3:
+            strcpy (PSerie,"COM3");
+            printf("Puerto elegido: %d nombre: COM3 \n",port);
+            puertoBandera = true;
+            break;
+        case 4:
+            strcpy (PSerie,"COM4");
+            printf("Puerto elegido: %d nombre: COM4 \n",port);
+            puertoBandera = true;
+            break;
+        default:
+            printf("Puerto elegido no valido...\n");
+            break;
+
         }
+
     }
-    return puertoBandera;
 
 
 }
@@ -85,75 +84,69 @@ int chooseVel() {
 
     int velocity;
     bool velocidadBandera = false;
-    while(!velocidadBandera){
+    while(!velocidadBandera) {
 
-    printf("Seleccione la velocidad de transmision : \n 0. Exit \n 1. 1400 \n 2. 2400 \n 3. 4800 \n 4. 9600 \n 5. 19200 \n");
-    cin >> velocity;
+        printf("Seleccione la velocidad de transmision :  \n 1. 1400 \n 2. 2400 \n 3. 4800 \n 4. 9600 \n 5. 19200 \n");
+        cin >> velocity;
 
-    //Screen will be cleaned
-    system("cls");
-    switch(velocity) {
-    case 0:
-        printf("Saliendo....\n");
-        velocidadBandera = true;
-        break;
-    case 1:
-        printf("Velocidad elegida: 1400\n");
-        velocidadBandera = true;
-        return velocity = 1400;
-        break;
-    case 2:
-        printf("Velocidad elegida: 2400\n");
-        velocidadBandera = true;
-        return velocity = 2400;
-        break;
-    case 3:
-        printf("Velocidad elegida: 4800\n");
-        velocidadBandera = true;
-        return velocity = 4800;
-        break;
-    case 4:
-        printf("Velocidad elegida: 9600\n");
-        velocidadBandera = true;
-        return velocity = 9600;
-        break;
-    case 5:
-        printf("Velocidad elegida: 19200\n");
-        velocidadBandera = true;
-        return velocity = 19200;
-        break;
+        //Screen will be cleaned
+        system("cls");
+        switch(velocity) {
 
-    default:
-        printf("Velocidad elegida no valido, saliendo...\n");
+        case 1:
+            printf("Velocidad elegida: 1400\n");
+            velocidadBandera = true;
+            return velocity = 1400;
+            break;
+        case 2:
+            printf("Velocidad elegida: 2400\n");
+            velocidadBandera = true;
+            return velocity = 2400;
+            break;
+        case 3:
+            printf("Velocidad elegida: 4800\n");
+            velocidadBandera = true;
+            return velocity = 4800;
+            break;
+        case 4:
+            printf("Velocidad elegida: 9600\n");
+            velocidadBandera = true;
+            return velocity = 9600;
+            break;
+        case 5:
+            printf("Velocidad elegida: 19200\n");
+            velocidadBandera = true;
+            return velocity = 19200;
+            break;
 
-        break; }
+        default:
+            printf("Velocidad elegida no valido, saliendo...\n");
 
-        }
-}
+            break; }
+
+    } }
 
 
 
 
-void receiveControlFrame(char carR,int &campo,HANDLE &portCOM,int &isControlFrame) {
-    carR = RecibirCaracter(portCOM);
+void receiveControlFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
+    char carR = RecibirCaracter(portCOM);
 
+    unsigned char bce;
     // If our string have any character, it will be shown
     if (carR != 0) {
         //this switch will save the received attributes of a control frame and will build it
         //it will print a message announcing the type of the control frame received
-        switch(campo){
+        switch(campo) {
 
         case 1:
 
             if (carR==22) {
-
-
-
+                ControlFrame controlReceive;
+                DataFrame fReceive;
                 controlReceive.setS(carR);
                 fReceive.setS(carR);
-                campo++;
-                }
-
+                campo++; }
             break;
 
         case 2:
@@ -166,16 +159,16 @@ void receiveControlFrame(char carR,int &campo,HANDLE &portCOM,int &isControlFram
         case 3:
 
 
-           if(carR == 02){
+            if(carR == 02) {
 
-            fReceive.setC(carR);
-            isControlFrame = 0;
-           }
-           if(carR !=02){
+                fReceive.setC(carR);
+                isControlFrame = 0;
+            }
+            if(carR !=02) {
 
-            controlReceive.setC(carR);
-            isControlFrame = 1;
-           }
+                controlReceive.setC(carR);
+                isControlFrame = 1;
+            }
 
             campo++;
             break;
@@ -187,33 +180,54 @@ void receiveControlFrame(char carR,int &campo,HANDLE &portCOM,int &isControlFram
                 campo = 1;
 
                 if(controlReceive.getC() == 05) {
-
-                    printf("Se ha recibido una trama ENQ\n");
-                }
+                    printf("Se ha recibido una trama ENQ\n"); }
                 else if (controlReceive.getC()==04) {
                     printf("Se ha recibido una trama EOT\n"); }
                 else if (controlReceive.getC()==06) {
                     printf("Se ha recibido una trama ACK\n"); }
                 else if  (controlReceive.getC()==21) {
                     printf("Se ha recibido una trama NACK\n"); }
-            }
 
+
+            }
             else {
                 fReceive.setNT(carR);
                 campo++;
+                 }
 
-
-            }break;
+            break;
         case 5:
             fReceive.setL(carR);
             campo++;
-            break;
-      //  case 6:
+        case 6:
+            fReceive.insertData(i,carR);
+             if(i<fReceive.getL()-1){
 
-      // RecibirCadena(portCOM,fReceive.getData(),fReceive.getL());
-
+                i++;
+             printf("%d",i);
+            }else{
+            fReceive.insertData(i+1,'\0');
+            i=0;
+            campo++;
             }
+
+            break;
+
+        case 7:
+            fReceive.setBCE(carR);
+            campo = 1;
+
+
+            if(fReceive.comprobar()) {
+
+            printf("aaa");
+            fReceive.showData();
+            }
+            else {
+                printf("Error al enviar texto \n"); }
+            break;
         }
+    }
 }
 void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
     switch (carE) {
@@ -222,11 +236,11 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
 
         switch (getch()) {
 
-            //Trocear trama 254 caracteres
+        //Trocear trama 254 caracteres
         case F1:
 
-  //cambiar metodo (trama datos preparar trama)
-           fReceive.manageFrame(portCOM,msg,tamanio);
+            //cambiar metodo (trama datos preparar trama)
+            fReceive.manageFrame(portCOM,msg,tamanio);
             printf("\n");
             tamanio = 0;
             break;
@@ -239,8 +253,8 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
     case INTRO_KEY:
         if (tamanio<limit-2)
             msg[tamanio+1] = '\n';
-        tamanio += 1 ;
-        printf ("\n");
+            tamanio += 1 ;
+            printf ("\n");
         break;
 
     // If backspace key is pressed, we will delete the last character
@@ -248,7 +262,8 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
 
         if (tamanio > 0) {
             printf("\b \b");
-            tamanio = tamanio - 1; }
+            tamanio = tamanio - 1;
+        }
         break;
 
     //default case will prevent the exceeding input in the array
@@ -256,14 +271,16 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
         if (tamanio<limit-2) {
             tamanio = tamanio + 1;
             printf("%c",carE);
-            msg[tamanio] = carE; }
-        break; }
+            msg[tamanio] = carE;
+        }
+        break;
+    }
 
 }
 
 int main() {
     //  ControFrame controlF = new ControlFrame();
-    char carE, carR = 0;
+    char carE = 0;
     char PSerie[5];
     char msg[limit] ; //two more characters to the line end
     int campo=1;
@@ -306,7 +323,7 @@ int main() {
 
     //Esc key case to close the program, if esc is not pressed, continue forever
     while(carE != ESC_KEY) {
-        receiveControlFrame(carR,campo,portCOM,isControlFrame);
+            receiveControlFrame(campo,portCOM,isControlFrame);
 
 
         if (kbhit()) {
@@ -314,7 +331,10 @@ int main() {
             carE = getch();
             //Esc key case, if it isn't pressed, the switch will be displayed
             if (carE != ESC_KEY) {
-                send(carE,msg,tamanio,portCOM); } } }
+                send(carE,msg,tamanio,portCOM);
+            }
+        }
+    }
     //Te port will be closed and the app will return
     //doFinish:
     CerrarPuerto(portCOM);

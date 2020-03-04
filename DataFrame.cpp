@@ -37,7 +37,7 @@ void DataFrame::manageFrame(HANDLE &portCOM,char msg[802],int tamanio){
 		if(tamanio!=0){
 		corte = corte + 254;
 		Data[tam] = '\0';
-		BCE = calculateBCE(tam,Data);
+		BCE = calculateBCE2();
 		sendFrameData(portCOM);
 		}
 	}
@@ -45,7 +45,7 @@ void DataFrame::manageFrame(HANDLE &portCOM,char msg[802],int tamanio){
 	L=(unsigned char) tam+1;
 	Data[tam]='\n';
 	Data[tam+1]='\0';
-	BCE=calculateBCE(tam,Data);
+	BCE=calculateBCE2();
 	sendFrameData(portCOM);
 
 }
@@ -53,7 +53,7 @@ void DataFrame::manageFrame(HANDLE &portCOM,char msg[802],int tamanio){
 
 
 
-//
+
 
 
 
@@ -91,13 +91,27 @@ unsigned char DataFrame::getL() {
     return this->L; }
 
 //Data vector size is undefined until the message is received
-char DataFrame::getData(int i) {
-    return this->Data[i]; }
+char *DataFrame::getData() {
+    return this->Data;
+}
+
 unsigned char DataFrame::getBCE() {
+    return this->BCE;
+}
+
+unsigned char DataFrame::calculateBCE2() {
+    unsigned char BCE = Data[0] ;
 
 
-    return this->BCE; }
+        for(int i=1 ; i<this->L; i++) {
+            BCE = BCE ^ Data[i];
+        }
+        if(BCE ==255 || BCE == 0) {
+            BCE = 1; }
 
+    return BCE;
+
+}
 unsigned char DataFrame::calculateBCE(int x,char msg[]) {
     unsigned char BCE = msg[0] ^ msg[1];
     if(x ==1) {
@@ -113,6 +127,11 @@ unsigned char DataFrame::calculateBCE(int x,char msg[]) {
         }
     return BCE;
 
+}
+void DataFrame::showData(){
+    for(int x=0;x<this->L;x++){
+            printf("%c",Data[x]);
+        }
 }
 
 //Set C attribute
@@ -144,5 +163,25 @@ void DataFrame::setNT(unsigned char value)
     this->NT = value;
 }
 void DataFrame::setL(unsigned char value){
-this->L=value;
+    this->L=value;
 }
+void DataFrame::insertData(int i,unsigned char value){
+    this->Data[i]= value;
+}
+        void DataFrame::setBCE(unsigned char value){
+        this->BCE = value;
+        }
+void DataFrame::setData(char msg[]){
+    strcpy(Data,msg);
+
+}
+bool DataFrame::comprobar(){
+    unsigned char BCEresultado = calculateBCE2();
+	if (BCEresultado == BCE) {
+		return true;
+	} else {
+		return false;
+	}
+
+}
+

@@ -28,8 +28,9 @@ class DataFrame{
         unsigned char getC();
         unsigned char getNT();
         unsigned char getL();
-        char getData(int i);
+        char *getData();
         unsigned char getBCE();
+
 
         //This procedure will send a control frame when the user press the F2 key
         void sendFrameData(HANDLE &portCOM);
@@ -38,13 +39,20 @@ class DataFrame{
 
 
         unsigned char calculateBCE(int x,char msg[]);
+                unsigned char calculateBCE2();
 
+        void showData();
          //Setters
         void setC(unsigned char value);
         void setD(unsigned char value);
         void setS(unsigned char value);
         void setNT(unsigned char value);
         void setL(unsigned char value);
+        void setBCE(unsigned char value);
+        void setData(char msg[]);
+
+        bool comprobar();
+        void insertData(int i,unsigned char value);
 
 
 
