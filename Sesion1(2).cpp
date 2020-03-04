@@ -216,14 +216,14 @@ void receiveControlFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
         case 7:
             fReceive.setBCE((unsigned char) carR);
             campo = 1;
+           // fReceive.showData();
 
             if(fReceive.comprobar()) {
-            printf("aaa");
+            //printf("aaa");
             fReceive.showData();
             }
-            else {
-                printf("Error al enviar texto \n"); }
             break;
+
         default:
             printf("Trama no recibida correctamente. \n");
             break;
@@ -253,9 +253,9 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
     // If intro key is pressed, we will show and end line and continue the input in the next one
     case INTRO_KEY:
         if (tamanio<limit-2)
-            msg[tamanio+1] = '\n';
-            tamanio += 1 ;
             printf ("\n");
+            msg[tamanio] = '\n';
+            tamanio += 1 ;
         break;
 
     // If backspace key is pressed, we will delete the last character
@@ -270,9 +270,10 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
     //default case will prevent the exceeding input in the array
     default:
         if (tamanio<limit-2) {
-            tamanio = tamanio + 1;
-            printf("%c",carE);
-            msg[tamanio] = carE;
+                msg[tamanio] = carE;
+                printf("%c",carE);
+                tamanio = tamanio + 1;
+
         }
         break;
     }

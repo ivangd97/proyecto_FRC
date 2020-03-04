@@ -100,8 +100,8 @@ unsigned char DataFrame::getBCE() {
 }
 
 unsigned char DataFrame::calculateBCE2() {
-    unsigned char BCE = Data[0] ;
-    for(int i=1 ; i< L; i++) {
+    unsigned char BCE = Data[1] ;
+    for(int i=2 ; i< L; i++) {
         BCE = BCE ^ Data[i];
     }
     if(BCE ==255 || BCE == 0) {
