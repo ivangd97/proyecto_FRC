@@ -16,10 +16,11 @@ DataFrame::DataFrame() {
     C  = 02;
     NT = '0';
     L = 0;
+    Data[0]=NULL;
     BCE = 0; }
 
 
-void DataFrame::manageFrame(HANDLE &portCOM,char msg[802],int tamanio){
+void DataFrame::manageFrame(HANDLE &portCOM,char msg[],int tamanio){
     int tam=0;
 	int corte = 0;
 	while (tamanio > 0) {
@@ -36,16 +37,17 @@ void DataFrame::manageFrame(HANDLE &portCOM,char msg[802],int tamanio){
 		}
 		if(tamanio!=0){
 		corte = corte + 254;
-		Data[tam] = '\0';
-		BCE = calculateBCE2();
+
+        Data[tam] = '\0';
+		BCE = calculateBCE();
 		sendFrameData(portCOM);
 		}
 	}
 
 	L=(unsigned char) tam+1;
-	Data[tam]='\n';
+    Data[tam]='\n';
 	Data[tam+1]='\0';
-	BCE=calculateBCE2();
+	BCE=calculateBCE();
 	sendFrameData(portCOM);
 
 }
@@ -100,8 +102,8 @@ unsigned char DataFrame::getBCE() {
 }
 
 unsigned char DataFrame::calculateBCE2() {
-    unsigned char BCE = Data[1] ;
-    for(int i=2 ; i< L; i++) {
+    unsigned char BCE = Data[0] ;
+    for(int i=1 ; i< L-1; i++) {
         BCE = BCE ^ Data[i];
     }
     if(BCE ==255 || BCE == 0) {
@@ -109,23 +111,23 @@ unsigned char DataFrame::calculateBCE2() {
     }
     return BCE;
 }
-unsigned char DataFrame::calculateBCE(int x,char msg[]) {
-    unsigned char BCE = msg[0];
-    if(x ==1) {
-        BCE = 1;
+unsigned char DataFrame::calculateBCE(){
+unsigned char bce = 0;
+    for (int i = 0;i < L-1;i++){
+        if(i == 0){
+            bce = Data[i+1]^Data[i];
+        }else{
+            bce = bce ^ Data[i+1];
+        }
     }
-    else {
-        for(int i=1; i<x; i++) {
-            BCE = BCE ^ msg[i];
-        }
-        if(BCE ==255 || BCE == 0) {
-            BCE = 1; }
-        }
-    return BCE;
+    if(bce == 255||bce == 0){
+        bce = 1;
+    }
+    return bce;
+    }
 
-}
 void DataFrame::showData(){
-    for(int x=0;x<this->L;x++){
+    for(int x=1;x<this->L-1;x++){
             printf("%c",Data[x]);
         }
 }
@@ -172,8 +174,8 @@ void DataFrame::setData(char msg[]){
 
 }
 bool DataFrame::comprobar(){
-    unsigned char BCEresultado = calculateBCE2();
-	if (BCEresultado == BCE) {
+    unsigned char bce = calculateBCE();
+	if (bce == getBCE()) {
 		return true;
 	} else {
 		return false;

@@ -204,7 +204,7 @@ void receiveControlFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
              if(i < (int)fReceive.getL()-1){
 
                 i++;
-             printf("%d",i);
+             printf("%d.",i);
             }else{
             fReceive.insertData(i+1,'\0');
             i=0;
@@ -216,11 +216,16 @@ void receiveControlFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
         case 7:
             fReceive.setBCE((unsigned char) carR);
             campo = 1;
-           // fReceive.showData();
 
-            if(fReceive.comprobar()) {
-            //printf("aaa");
+
+            bce = fReceive.calculateBCE2();
+
+            //if(fReceive.comprobar()){
+            if(bce = fReceive.getBCE()) {
+
             fReceive.showData();
+            }else{
+            printf("Error al comprobar BCE");
             }
             break;
 
@@ -240,7 +245,7 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
         //Trocear trama 254 caracteres
         case F1:
 
-            //cambiar metodo (trama datos preparar trama)
+            //cambiar metodo (trama datos preparar trama
             fReceive.manageFrame(portCOM,msg,tamanio);
             printf("\n");
             tamanio = 0;

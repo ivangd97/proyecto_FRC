@@ -34,11 +34,11 @@ class DataFrame{
 
         //This procedure will send a control frame when the user press the F2 key
         void sendFrameData(HANDLE &portCOM);
-        void manageFrame(HANDLE &portCOM,char msg[802],int tamanio);
+        void manageFrame(HANDLE &portCOM,char msg[],int tamanio);
 
 
 
-        unsigned char calculateBCE(int x,char msg[]);
+        unsigned char calculateBCE();
                 unsigned char calculateBCE2();
 
         void showData();
