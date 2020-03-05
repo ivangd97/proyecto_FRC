@@ -40,7 +40,7 @@ class DataFrame{
 
         unsigned char calculateBCE();
 
-        void showData();
+        void showData(HANDLE pantalla,int colour);
          //Setters
         void setC(unsigned char value);
         void setD(unsigned char value);

@@ -28,6 +28,8 @@ DataFrame fReceive;
 ControlFrame controlReceive;
 int i = 0;
 HANDLE pantalla;
+int colour = 0;
+
 // Simultaneous Read/Write of characters :
 int tamanio = 0;
 
@@ -224,7 +226,7 @@ void receiveControlFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
             bce = fReceive.calculateBCE();
             if(bce = fReceive.getBCE()) {
             //If bce is well calculated, the data has been received without issues, show data
-            fReceive.showData();
+            fReceive.showData(pantalla,colour);
             }else{
             printf("Error al comprobar BCE. \n");
             }
@@ -275,6 +277,9 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
     case RETURN_KEY:
 
         if (tamanio > 0) {
+            colour =0 + 0*16;
+            pantalla = GetStdHandle(STD_OUTPUT_HANDLE);
+            SetConsoleTextAttribute (pantalla, colour);
             printf("\b \b");
             tamanio = tamanio - 1;
         }
@@ -283,7 +288,9 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
     //default case will prevent the exceeding input in the array
     default:
         if (tamanio<limit-2) {
-                //poner color
+                colour =12 + 0*16;
+                pantalla = GetStdHandle(STD_OUTPUT_HANDLE);
+                SetConsoleTextAttribute (pantalla, colour);
                 msg[tamanio] = carE;
                 printf("%c",carE);
                 tamanio = tamanio + 1;

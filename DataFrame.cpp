@@ -116,8 +116,10 @@ unsigned char DataFrame::calculateBCE() {
 
 //Show in terminal the message in the frame
 //por parametro pantalla
-void DataFrame::showData(){
-    //poner color
+void DataFrame::showData(HANDLE pantalla,int colour){
+    colour =9 + 14*16;
+    pantalla = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute (pantalla, colour);
     for(int x=1;x<this->L;x++){
             printf("%c",Data[x]);
         }
