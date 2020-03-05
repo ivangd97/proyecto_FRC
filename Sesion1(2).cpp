@@ -27,7 +27,7 @@ int limit = 802;
 DataFrame fReceive;
 ControlFrame controlReceive;
 int i = 0;
-
+HANDLE pantalla;
 // Simultaneous Read/Write of characters :
 int tamanio = 0;
 
@@ -126,7 +126,10 @@ int chooseVel() {
 
             break; }
 
-    } }
+    }
+
+
+}
 
 
 
@@ -245,9 +248,14 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
         case F1:
             //Manage the Frame which will be sent, this topic will divide the Data if it is too long
             //And send several frames to complete the original message
+
+            msg[tamanio]='\n';
+            tamanio++;
+            msg[tamanio]='\0';
             fReceive.manageFrame(portCOM,msg,tamanio);
             printf("\n");
             tamanio = 0;
+
             break;
 
         case F2:
@@ -256,10 +264,11 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
         break;
     // If intro key is pressed, we will show and end line and continue the input in the next one
     case INTRO_KEY:
-        if (tamanio<limit-2)
+        if (tamanio<limit-2){
             printf ("\n");
             msg[tamanio] = '\n';
             tamanio += 1 ;
+            }
         break;
 
     // If backspace key is pressed, we will delete the last character
@@ -274,6 +283,7 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
     //default case will prevent the exceeding input in the array
     default:
         if (tamanio<limit-2) {
+                //poner color
                 msg[tamanio] = carE;
                 printf("%c",carE);
                 tamanio = tamanio + 1;

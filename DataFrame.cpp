@@ -115,7 +115,9 @@ unsigned char DataFrame::calculateBCE() {
 }
 
 //Show in terminal the message in the frame
+//por parametro pantalla
 void DataFrame::showData(){
+    //poner color
     for(int x=1;x<this->L;x++){
             printf("%c",Data[x]);
         }
