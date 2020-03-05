@@ -20,35 +20,40 @@ DataFrame::DataFrame() {
     BCE = 0; }
 
 
+//This topic will divide the message in a little ones which its length is 254
 void DataFrame::manageFrame(HANDLE &portCOM,char msg[],int tamanio){
-    int tam=0;
-	int corte = 0;
+    int tamanioAux=0;
+	int cutPoint = 0;
+
 	while (tamanio > 0) {
 		if (tamanio > 254) {
 			tamanio -= 254;
-			tam = 254;
+			tamanioAux = 254;
 		} else {
-			tam = tamanio;
+			tamanioAux = tamanio;
 			tamanio = 0;
 		}
-		L = (unsigned char) tam;
-		for (int j = 0; j < tam; j++) {
-			Data[j] = msg[j + corte];
+		L = (unsigned char) tamanioAux;
+		for (int j = 0; j < tamanioAux; j++) {
+			Data[j] = msg[j + cutPoint];
 		}
 		if(tamanio!=0){
-		corte = corte + 254;
+		cutPoint += 254;
 
-        Data[tam] = '\0';
+        Data[tamanioAux] = '\0';
+        //Calculate the bce associated to the new little frame
 		BCE = calculateBCE();
-		sendFrameData(portCOM);
+		//Send the little frame
+		sendDataFrame(portCOM);
 		}
 	}
 
-	L=(unsigned char) tam+1;
-    Data[tam]='\n';
-	Data[tam+1]='\0';
+    //Last frame char adding
+	L=(unsigned char) tamanioAux+1;
+    Data[tamanioAux]='\n';
+	Data[tamanioAux+1]='\0';
 	BCE=calculateBCE();
-	sendFrameData(portCOM);
+	sendDataFrame(portCOM);
 
 }
 
@@ -63,9 +68,7 @@ void DataFrame::manageFrame(HANDLE &portCOM,char msg[],int tamanio){
 
 
 //This procedure will send a control frame when the user press the F2 key
-void DataFrame::sendFrameData(HANDLE &portCOM) {
-
-
+void DataFrame::sendDataFrame(HANDLE &portCOM) {
             EnviarCaracter(portCOM,S);
             EnviarCaracter(portCOM,D);
             EnviarCaracter(portCOM,C);
@@ -74,8 +77,6 @@ void DataFrame::sendFrameData(HANDLE &portCOM) {
             EnviarCadena(portCOM,Data,strlen(Data));
             EnviarCaracter(portCOM,BCE);
 }
-
-
 
 unsigned char DataFrame::getS() {
     return this->S; }
@@ -101,7 +102,8 @@ unsigned char DataFrame::getBCE() {
     return this->BCE;
 }
 
-unsigned char DataFrame::calculateBCE2() {
+//After a given formula, we will calculate the bce associated to data.
+unsigned char DataFrame::calculateBCE() {
     unsigned char BCE = Data[0] ;
     for(int i=1 ; i< L-1; i++) {
         BCE = BCE ^ Data[i];
@@ -111,23 +113,10 @@ unsigned char DataFrame::calculateBCE2() {
     }
     return BCE;
 }
-unsigned char DataFrame::calculateBCE(){
-unsigned char bce = 0;
-    for (int i = 0;i < L-1;i++){
-        if(i == 0){
-            bce = Data[i+1]^Data[i];
-        }else{
-            bce = bce ^ Data[i+1];
-        }
-    }
-    if(bce == 255||bce == 0){
-        bce = 1;
-    }
-    return bce;
-    }
 
+//Show in terminal the message in the frame
 void DataFrame::showData(){
-    for(int x=1;x<this->L-1;x++){
+    for(int x=1;x<this->L;x++){
             printf("%c",Data[x]);
         }
 }
@@ -157,29 +146,23 @@ void DataFrame::setS(unsigned char value)
 //Set NT attribute
 void DataFrame::setNT(unsigned char value)
 {
-
     this->NT = value;
 }
+
 void DataFrame::setL(unsigned char value){
     this->L=value;
 }
+
 void DataFrame::insertData(int i,unsigned char value){
     this->Data[i]= value;
 }
-        void DataFrame::setBCE(unsigned char value){
-        this->BCE = value;
-        }
+
+void DataFrame::setBCE(unsigned char value){
+    this->BCE = value;
+}
+
 void DataFrame::setData(char msg[]){
     strcpy(Data,msg);
-
-}
-bool DataFrame::comprobar(){
-    unsigned char bce = calculateBCE();
-	if (bce == getBCE()) {
-		return true;
-	} else {
-		return false;
-	}
 
 }
 

@@ -40,8 +40,8 @@ HANDLE portCOM;
 void choosePort(char PSerie[]) {
 
     int port;
-    bool puertoBandera = false;
-    while(!puertoBandera) {
+    bool portFlag = false;
+    while(!portFlag) {
 
         printf("Seleccione el puerto que desea abrir:\n 1. COM1 \n 2. COM2 \n 3. COM3 \n 4. COM4 \n");
         cin >> port;
@@ -52,22 +52,22 @@ void choosePort(char PSerie[]) {
         case 1:
             strcpy (PSerie,"COM1");
             printf("Puerto elegido: %d nombre: COM1 \n ",port);
-            puertoBandera = true;
+            portFlag = true;
             break;
         case 2:
             strcpy (PSerie,"COM2");
             printf("Puerto elegido: %d nombre: COM2 \n",port);
-            puertoBandera = true;
+            portFlag = true;
             break;
         case 3:
             strcpy (PSerie,"COM3");
             printf("Puerto elegido: %d nombre: COM3 \n",port);
-            puertoBandera = true;
+            portFlag = true;
             break;
         case 4:
             strcpy (PSerie,"COM4");
             printf("Puerto elegido: %d nombre: COM4 \n",port);
-            puertoBandera = true;
+            portFlag = true;
             break;
         default:
             printf("Puerto elegido no valido...\n");
@@ -85,8 +85,8 @@ void choosePort(char PSerie[]) {
 int chooseVel() {
 
     int velocity;
-    bool velocidadBandera = false;
-    while(!velocidadBandera) {
+    bool velocityFlag = false;
+    while(!velocityFlag) {
 
         printf("Seleccione la velocidad de transmision :  \n 1. 1400 \n 2. 2400 \n 3. 4800 \n 4. 9600 \n 5. 19200 \n");
         cin >> velocity;
@@ -97,27 +97,27 @@ int chooseVel() {
 
         case 1:
             printf("Velocidad elegida: 1400\n");
-            velocidadBandera = true;
+            velocityFlag = true;
             return velocity = 1400;
             break;
         case 2:
             printf("Velocidad elegida: 2400\n");
-            velocidadBandera = true;
+            velocityFlag = true;
             return velocity = 2400;
             break;
         case 3:
             printf("Velocidad elegida: 4800\n");
-            velocidadBandera = true;
+            velocityFlag = true;
             return velocity = 4800;
             break;
         case 4:
             printf("Velocidad elegida: 9600\n");
-            velocidadBandera = true;
+            velocityFlag = true;
             return velocity = 9600;
             break;
         case 5:
             printf("Velocidad elegida: 19200\n");
-            velocidadBandera = true;
+            velocityFlag = true;
             return velocity = 19200;
             break;
 
@@ -139,6 +139,7 @@ void receiveControlFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
     if (carR != 0) {
         //this switch will save the received attributes of a control frame and will build it
         //it will print a message announcing the type of the control frame received
+        //With Data Frame modification, this switch will choose between control and data frame, building it to be sent
         switch(campo) {
 
         case 1:
@@ -173,6 +174,7 @@ void receiveControlFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
             campo++;
             break;
 
+        //Case 4 will print the kind of the control frame received (if it's a control frame, else continue)
         case 4:
             if(isControlFrame == 1) {
 
@@ -194,38 +196,34 @@ void receiveControlFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
                 fReceive.setNT(carR);
                 campo++;
                  }
-
             break;
+
         case 5:
             fReceive.setL((unsigned char)carR);
             campo++;
+
         case 6:
             fReceive.insertData(i,carR);
              if(i < (int)fReceive.getL()-1){
-
                 i++;
-             printf("%d.",i);
             }else{
             fReceive.insertData(i+1,'\0');
             i=0;
             campo++;
             }
-
             break;
 
         case 7:
             fReceive.setBCE((unsigned char) carR);
             campo = 1;
 
-
-            bce = fReceive.calculateBCE2();
-
-            //if(fReceive.comprobar()){
+            //Here, bce will be calculated based in the received data
+            bce = fReceive.calculateBCE();
             if(bce = fReceive.getBCE()) {
-
+            //If bce is well calculated, the data has been received without issues, show data
             fReceive.showData();
             }else{
-            printf("Error al comprobar BCE");
+            printf("Error al comprobar BCE. \n");
             }
             break;
 
@@ -235,6 +233,8 @@ void receiveControlFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
         }
     }
 }
+
+//Send topic, it will send a message msg with size tamanio through the port portCOM
 void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
     switch (carE) {
     //if F1 key is pressed, the message will be sent
@@ -242,10 +242,9 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
 
         switch (getch()) {
 
-        //Trocear trama 254 caracteres
         case F1:
-
-            //cambiar metodo (trama datos preparar trama
+            //Manage the Frame which will be sent, this topic will divide the Data if it is too long
+            //And send several frames to complete the original message
             fReceive.manageFrame(portCOM,msg,tamanio);
             printf("\n");
             tamanio = 0;
