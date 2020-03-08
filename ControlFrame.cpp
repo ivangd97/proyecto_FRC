@@ -3,7 +3,10 @@
 //---------------------------- CURSO 2019/20 ---------------------------------
 //--------Autores: Rubén Costa Barriga e Iván Gonzalez Dominguez--------------
 //============================================================================
-
+#include <stdio.h>
+#include <conio.h>
+#include <windows.h>
+#include <string.h>
 #include "ControlFrame.h"
 #include <iostream>
 #include <stdio.h>
@@ -107,20 +110,21 @@ unsigned char ControlFrame::getNT()
 
 
 void ControlFrame::sendControlFrame(HANDLE &portCOM) {
-    int controlFrame;
+    char controlFrame;
     bool exit = false;
+           printf("Trama de control a enviar :\n 0: Salir \n 1: Trama ENQ. \n 2: Trama EOT. \n 3: Trama ACK. \n 4: Trama NACK. \n");
+
     while(!exit) {
         //Interface to choose the type of control frame which the user will send
-        printf("Trama de control a enviar :\n 0: Salir \n 1: Trama ENQ. \n 2: Trama EOT. \n 3: Trama ACK. \n 4: Trama NACK. \n");
-        std::cin>>controlFrame;
+        controlFrame=getch();
         switch (controlFrame) {
         //0 case will exit
-        case 0:
+        case '0':
             printf("Saliendo...\n");
             exit=true;
             break;
 
-        case 1:
+        case '1':
             printf("Has enviado Trama ENQ \n");
             exit = true;
             setC(05);
@@ -131,7 +135,7 @@ void ControlFrame::sendControlFrame(HANDLE &portCOM) {
 
             break;
 
-        case 2:
+        case '2':
             printf("Has enviado Trama EOT \n");
             exit = true;
 
@@ -144,7 +148,7 @@ void ControlFrame::sendControlFrame(HANDLE &portCOM) {
 
             break;
 
-        case 3:
+        case '3':
             printf("Has enviado Trama ACK \n");
             exit = true;
 
@@ -157,7 +161,7 @@ void ControlFrame::sendControlFrame(HANDLE &portCOM) {
 
             break;
 
-        case 4:
+        case '4':
             printf("Has enviado Trama NACK \n");
             exit = true;
             setC(21);

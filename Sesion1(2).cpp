@@ -41,34 +41,34 @@ HANDLE portCOM;
 //from a list of ports and will open it
 void choosePort(char PSerie[]) {
 
-    int port;
+    char port;
     bool portFlag = false;
     while(!portFlag) {
 
         printf("Seleccione el puerto que desea abrir:\n 1. COM1 \n 2. COM2 \n 3. COM3 \n 4. COM4 \n");
-        cin >> port;
+        port= getch();
         //Screen will be cleaned
         system("cls");
         switch(port) {
 
-        case 1:
+        case '1':
             strcpy (PSerie,"COM1");
-            printf("Puerto elegido: %d nombre: COM1 \n ",port);
+            printf("Puerto elegido: %c nombre: COM1 \n ",port);
             portFlag = true;
             break;
-        case 2:
+        case '2':
             strcpy (PSerie,"COM2");
-            printf("Puerto elegido: %d nombre: COM2 \n",port);
+            printf("Puerto elegido: %c nombre: COM2 \n",port);
             portFlag = true;
             break;
-        case 3:
+        case '3':
             strcpy (PSerie,"COM3");
-            printf("Puerto elegido: %d nombre: COM3 \n",port);
+            printf("Puerto elegido: %c nombre: COM3 \n",port);
             portFlag = true;
             break;
-        case 4:
+        case '4':
             strcpy (PSerie,"COM4");
-            printf("Puerto elegido: %d nombre: COM4 \n",port);
+            printf("Puerto elegido: %c nombre: COM4 \n",port);
             portFlag = true;
             break;
         default:
@@ -88,38 +88,39 @@ void choosePort(char PSerie[]) {
 int chooseVel() {
 
     int velocity;
+    char option;
     bool velocityFlag = false;
     while(!velocityFlag) {
 
         printf("Seleccione la velocidad de transmision :  \n 1. 1400 \n 2. 2400 \n 3. 4800 \n 4. 9600 \n 5. 19200 \n");
-        cin >> velocity;
 
+        option = getch();
         //Screen will be cleaned
         system("cls");
-        switch(velocity) {
+        switch(option) {
 
-        case 1:
-            printf("Velocidad elegida: 1400\n");
+        case '1':
+            printf("Velocidad elegida 1: 1400\n");
             velocityFlag = true;
             return velocity = 1400;
             break;
-        case 2:
-            printf("Velocidad elegida: 2400\n");
+        case '2':
+            printf("Velocidad elegida 2: 2400\n");
             velocityFlag = true;
             return velocity = 2400;
             break;
-        case 3:
-            printf("Velocidad elegida: 4800\n");
+        case '3':
+            printf("Velocidad elegida 3: 4800\n");
             velocityFlag = true;
             return velocity = 4800;
             break;
-        case 4:
-            printf("Velocidad elegida: 9600\n");
+        case '4':
+            printf("Velocidad elegida 4: 9600\n");
             velocityFlag = true;
             return velocity = 9600;
             break;
-        case 5:
-            printf("Velocidad elegida: 19200\n");
+        case '5':
+            printf("Velocidad elegida 5: 19200\n");
             velocityFlag = true;
             return velocity = 19200;
             break;
