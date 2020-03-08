@@ -117,7 +117,7 @@ void ControlFrame::sendControlFrame(HANDLE &portCOM) {
         //0 case will exit
         case 0:
             printf("Saliendo...\n");
-            //exit=true;
+            exit=true;
             break;
 
         case 1:

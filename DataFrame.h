@@ -22,7 +22,7 @@ class DataFrame{
         DataFrame();
 
 
-
+        //Getters
         unsigned char getS();
         unsigned char getD();
         unsigned char getC();
@@ -31,16 +31,15 @@ class DataFrame{
         char *getData();
         unsigned char getBCE();
 
-
         //This procedure will send a control frame when the user press the F2 key
         void sendDataFrame(HANDLE &portCOM);
+        //This topic will divide the message in a little ones which its length is 254
         void manageFrame(HANDLE &portCOM,char msg[],int tamanio);
-
-
-
+        //After a given formula, we will calculate the bce associated to data.
         unsigned char calculateBCE();
-
+        //Show in terminal the message in the frame
         void showData(HANDLE pantalla,int colour);
+
          //Setters
         void setC(unsigned char value);
         void setD(unsigned char value);

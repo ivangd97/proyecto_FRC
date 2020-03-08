@@ -115,7 +115,6 @@ unsigned char DataFrame::calculateBCE() {
 }
 
 //Show in terminal the message in the frame
-//por parametro pantalla
 void DataFrame::showData(HANDLE pantalla,int colour){
     colour =9 + 14*16;
     pantalla = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -152,7 +151,7 @@ void DataFrame::setNT(unsigned char value)
 {
     this->NT = value;
 }
-
+//Set L attribute
 void DataFrame::setL(unsigned char value){
     this->L=value;
 }

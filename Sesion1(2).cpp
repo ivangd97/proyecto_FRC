@@ -73,6 +73,7 @@ void choosePort(char PSerie[]) {
             break;
         default:
             printf("Puerto elegido no valido...\n");
+
             break;
 
         }
@@ -135,8 +136,8 @@ int chooseVel() {
 
 
 
-
-void receiveControlFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
+//We receive the frame and manage it
+void receiveFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
     char carR = RecibirCaracter(portCOM);
 
     unsigned char bce;
@@ -342,7 +343,7 @@ int main() {
 
     //Esc key case to close the program, if esc is not pressed, continue forever
     while(carE != ESC_KEY) {
-            receiveControlFrame(campo,portCOM,isControlFrame);
+            receiveFrame(campo,portCOM,isControlFrame);
 
 
         if (kbhit()) {
