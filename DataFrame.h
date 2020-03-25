@@ -49,7 +49,7 @@ class DataFrame{
         void setBCE(unsigned char value);
         void setData(char msg[]);
 
-        void insertData(int i,unsigned char value);
+        void insertData(unsigned char value);
 
 
 

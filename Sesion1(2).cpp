@@ -210,14 +210,19 @@ void receiveFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
             campo++;
 
         case 6:
-            fReceive.insertData(i,carR);
+
+            RecibirCadena(portCOM,fReceive.getData(),(int)fReceive.getL());
+            fReceive.insertData('\0');
+            campo++;
+
+         /*   fReceive.insertData(i,carR);
              if(i < (int)fReceive.getL()-1){
                 i++;
             }else{
             fReceive.insertData(i+1,'\0');
             i=0;
             campo++;
-            }
+            }*/
             break;
 
         case 7:
@@ -252,7 +257,6 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
         case F1:
             //Manage the Frame which will be sent, this topic will divide the Data if it is too long
             //And send several frames to complete the original message
-
             msg[tamanio]='\n';
             tamanio++;
             msg[tamanio]='\0';

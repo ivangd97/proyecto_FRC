@@ -133,6 +133,7 @@ void ControlFrame::sendControlFrame(HANDLE &portCOM) {
             EnviarCaracter(portCOM,C);
             EnviarCaracter(portCOM,NT);
 
+
             break;
 
         case '2':

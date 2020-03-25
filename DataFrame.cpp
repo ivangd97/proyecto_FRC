@@ -16,7 +16,7 @@ DataFrame::DataFrame() {
     C  = 02;
     NT = '0';
     L = 0;
-    Data[0]=NULL;
+   // Data[]=NULL;
     BCE = 0; }
 
 
@@ -39,20 +39,16 @@ void DataFrame::manageFrame(HANDLE &portCOM,char msg[],int tamanio){
 		}
 		if(tamanio!=0){
 		cutPoint += 254;
-
-        Data[tamanioAux] = '\0';
         //Calculate the bce associated to the new little frame
-		BCE = calculateBCE();
+        BCE = calculateBCE();
 		//Send the little frame
-		sendDataFrame(portCOM);
+        sendDataFrame(portCOM);
 		}
 	}
 
     //Last frame char adding
-	L=(unsigned char) tamanioAux+1;
-    Data[tamanioAux]='\n';
-	Data[tamanioAux+1]='\0';
-	BCE=calculateBCE();
+	L=(unsigned char) tamanioAux;
+    BCE=calculateBCE();
 	sendDataFrame(portCOM);
 
 }
@@ -105,7 +101,7 @@ unsigned char DataFrame::getBCE() {
 //After a given formula, we will calculate the bce associated to data.
 unsigned char DataFrame::calculateBCE() {
     unsigned char BCE = Data[0] ;
-    for(int i=1 ; i< L-1; i++) {
+    for(int i=1 ; i< L; i++) {
         BCE = BCE ^ Data[i];
     }
     if(BCE ==255 || BCE == 0) {
@@ -119,7 +115,7 @@ void DataFrame::showData(HANDLE pantalla,int colour){
     colour =9 + 14*16;
     pantalla = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute (pantalla, colour);
-    for(int x=1;x<this->L;x++){
+    for(int x=0;x<this->L;x++){
             printf("%c",Data[x]);
         }
 }
@@ -156,8 +152,8 @@ void DataFrame::setL(unsigned char value){
     this->L=value;
 }
 
-void DataFrame::insertData(int i,unsigned char value){
-    this->Data[i]= value;
+void DataFrame::insertData(unsigned char value){
+    this->Data[this->L]= value;
 }
 
 void DataFrame::setBCE(unsigned char value){
