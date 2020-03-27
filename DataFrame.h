@@ -7,6 +7,7 @@
 #ifndef DATAFRAME_H
 #define DATAFRAME_H
 #include "PuertoSerie.h"
+#include <fstream>
 
 class DataFrame{
     protected:
@@ -39,6 +40,9 @@ class DataFrame{
         unsigned char calculateBCE();
         //Show in terminal the message in the frame
         void showData(HANDLE pantalla,int colour);
+
+        //Write Data in a new file
+        void writeFile(ofstream& of);
 
          //Setters
         void setC(unsigned char value);

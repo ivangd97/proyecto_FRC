@@ -10,6 +10,7 @@
 #include <windows.h>
 #include <iostream>
 #include <string.h>
+#include <fstream>
 #include "PuertoSerie.h"
 #include "ControlFrame.h"
 #include "DataFrame.h"
@@ -20,6 +21,7 @@
 #define INTRO_KEY (13)
 #define F1 (59)
 #define F2 (60)
+#define F3 (61)
 
 
 //We will define the limit as a variable
@@ -29,6 +31,7 @@ ControlFrame controlReceive;
 int i = 0;
 HANDLE pantalla;
 int colour = 0;
+ifstream inStream;
 
 // Simultaneous Read/Write of characters :
 int tamanio = 0;
@@ -268,8 +271,14 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
 
         case F2:
             controlReceive.sendControlFrame(portCOM);
-            break; }
+            break;
+
+        case F3:
+            processFile();
         break;
+        }
+        break;
+
     // If intro key is pressed, we will show and end line and continue the input in the next one
     case INTRO_KEY:
         if (tamanio<limit-2){
@@ -303,6 +312,38 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
 
         }
         break;
+    }
+
+}
+
+void processFile(){
+    char Data[254];
+    int numChar;
+
+    char key;
+    bool exit = false;
+    char character;
+    EnviarCaracter(portCOM, '$');
+
+    DataFrame fSend;
+    //Open the in stream
+    inStream.open(fichero-e.txt);
+    if (inStream.is_open()){
+        while(!inStream.eof() && !exit){
+            inStream.read(Data, 254);
+            numChar = inStream.gcount();
+            Data[numChar] = '\0';
+            if(numChar != 0){
+                fSend.setL(numChar);
+                fSend.setBCE(fSend.calculateBCE(Data));
+                //TODO: terminar
+            }
+        }
+        inStream.close();
+        EnviarCaracter(portCOM, '#');
+    }
+    else{
+        printf("No se ha encontrado el fichero.\n");
     }
 
 }

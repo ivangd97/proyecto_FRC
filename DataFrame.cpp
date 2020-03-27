@@ -120,6 +120,16 @@ void DataFrame::showData(HANDLE pantalla,int colour){
         }
 }
 
+//Write data in the output file with a of stream
+void DataFrame::writeFile(ofstream& of){
+    if(calculateBCE() == BCE){
+        of << Data;
+    }
+    else{
+        printf("No se pudo escribir en el fichero\n");
+    }
+}
+
 //Set C attribute
 void DataFrame::setC(unsigned char value)
 {
