@@ -323,7 +323,7 @@ void processFile(){
     char key;
     bool exit = false;
     char character;
-    EnviarCaracter(portCOM, '$');
+    EnviarCaracter(portCOM, '{');
 
     DataFrame fSend;
     //Open the in stream
@@ -340,7 +340,7 @@ void processFile(){
             }
         }
         inStream.close();
-        EnviarCaracter(portCOM, '#');
+        EnviarCaracter(portCOM, '}');
     }
     else{
         printf("No se ha encontrado el fichero.\n");
