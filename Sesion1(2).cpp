@@ -22,6 +22,7 @@
 #define F1 (59)
 #define F2 (60)
 #define F3 (61)
+ifstream inStream;
 
 
 //We will define the limit as a variable
@@ -31,7 +32,8 @@ ControlFrame controlReceive;
 int i = 0;
 HANDLE pantalla;
 int colour = 0;
-ifstream inStream;
+bool esFichero = false;
+bool finFichero = false;
 
 // Simultaneous Read/Write of characters :
 int tamanio = 0;
@@ -139,6 +141,84 @@ int chooseVel() {
 }
 
 
+void processFile(){
+   char cadena[254];
+	int numCar;
+    int cont=0;
+    int tamF;
+	char tecla;
+	bool exit = false;
+	char caracter;
+
+
+	bool recibiendo = false;
+
+	inStream.open("fichero-e.txt");
+	if (inStream.is_open()) {
+        EnviarCaracter(portCOM, '{');
+
+
+
+
+    while (!inStream.eof() || !exit) {
+               //Leemos autores
+        if(cont == 0 ){
+            inStream.getline(cadena,254,'\n');
+            printf("Enviando fichero por %s. \n",cadena);
+            fReceive.manageFrame(portCOM,cadena,strlen(cadena));
+            cont++;
+        }
+        //Color y fondo
+        if(cont ==1){
+            inStream.getline(cadena,254,'\n');
+            fReceive.manageFrame(portCOM,cadena,strlen(cadena));
+            cont++;
+
+        }
+        if(cont ==2){
+            inStream.getline(cadena,254,'\n');
+            fReceive.manageFrame(portCOM,cadena,strlen(cadena));
+            cont++;
+        }
+        if(cont ==3){
+
+            inStream.read(cadena, 254);
+			numCar = inStream.gcount();
+			cadena[numCar] = '\0';
+
+
+			if (numCar != 0) {
+				fReceive.setL(numCar);
+				fReceive.setBCE(fReceive.calculateBCE());
+                fReceive.sendDataFrame2(portCOM,cadena);
+			}
+
+
+
+
+
+			if (kbhit()) {
+				tecla = getch();
+				if (tecla == 27) {
+					exit = true;
+				}
+
+			}
+
+		}
+		inStream.close();
+		EnviarCaracter(portCOM, '}');
+		printf("Fichero enviado. \n");
+		exit = true;
+        }
+	} else {
+		printf("Fichero no encontrado \n");
+	}
+
+}
+
+
+
 
 //We receive the frame and manage it
 void receiveFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
@@ -158,6 +238,18 @@ void receiveFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
                 controlReceive.setS(carR);
                 fReceive.setS(carR);
                 campo++; }
+            else if(carR == '{'){
+                    esFichero = true;
+                    inStream.open("fichero-e.txt");
+            }else if(carR == '}'){
+                inStream.close();
+                esFichero = false;
+                finFichero = true;
+
+
+            }
+
+
             break;
 
         case 2:
@@ -217,15 +309,6 @@ void receiveFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
             RecibirCadena(portCOM,fReceive.getData(),(int)fReceive.getL());
             fReceive.insertData('\0');
             campo++;
-
-         /*   fReceive.insertData(i,carR);
-             if(i < (int)fReceive.getL()-1){
-                i++;
-            }else{
-            fReceive.insertData(i+1,'\0');
-            i=0;
-            campo++;
-            }*/
             break;
 
         case 7:
@@ -236,9 +319,22 @@ void receiveFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
             bce = fReceive.calculateBCE();
             if(bce = fReceive.getBCE()) {
             //If bce is well calculated, the data has been received without issues, show data
-            fReceive.showData(pantalla,colour);
+            if(esFichero){
+                processFile();
+            }else if (finFichero){
+                printf("El fichero recibido tiene un tamaño de %s bytes.\n", fReceive.getData());
+                finFichero = false;
             }else{
-            printf("Error al comprobar BCE. \n");
+                            fReceive.showData(pantalla,colour);
+
+
+            }
+            }else{
+                if(esFichero){
+                    printf("Error en la recepción de la trama del fichero. \n");
+                }else{
+            printf("Error en la trama recibida \n");
+                }
             }
             break;
 
@@ -275,7 +371,7 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
 
         case F3:
             processFile();
-        break;
+            break;
         }
         break;
 
@@ -316,37 +412,6 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
 
 }
 
-void processFile(){
-    char Data[254];
-    int numChar;
-
-    char key;
-    bool exit = false;
-    char character;
-    EnviarCaracter(portCOM, '{');
-
-    DataFrame fSend;
-    //Open the in stream
-    inStream.open(fichero-e.txt);
-    if (inStream.is_open()){
-        while(!inStream.eof() && !exit){
-            inStream.read(Data, 254);
-            numChar = inStream.gcount();
-            Data[numChar] = '\0';
-            if(numChar != 0){
-                fSend.setL(numChar);
-                fSend.setBCE(fSend.calculateBCE(Data));
-                //TODO: terminar
-            }
-        }
-        inStream.close();
-        EnviarCaracter(portCOM, '}');
-    }
-    else{
-        printf("No se ha encontrado el fichero.\n");
-    }
-
-}
 
 int main() {
     //  ControFrame controlF = new ControlFrame();

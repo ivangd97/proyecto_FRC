@@ -72,8 +72,24 @@ void DataFrame::sendDataFrame(HANDLE &portCOM) {
             EnviarCaracter(portCOM,L);
             EnviarCadena(portCOM,Data,strlen(Data));
             EnviarCaracter(portCOM,BCE);
+
+
 }
 
+void DataFrame::sendDataFrame2(HANDLE &portCOM,char cadena[]){
+    EnviarCaracter(portCOM, S);
+	EnviarCaracter(portCOM, D);
+	EnviarCaracter(portCOM, C);
+	EnviarCaracter(portCOM, NT);
+	EnviarCaracter(portCOM, L);
+	EnviarCadena(portCOM, cadena, (int) L);
+	EnviarCaracter(portCOM, BCE);
+
+
+
+
+
+}
 unsigned char DataFrame::getS() {
     return this->S; }
 
