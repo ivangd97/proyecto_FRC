@@ -8,7 +8,7 @@
 #include <iostream>
 #include <stdio.h>
 
-
+int titulo=0;
 //Default constructor
 DataFrame::DataFrame() {
     S  = 22;
@@ -125,6 +125,16 @@ unsigned char DataFrame::calculateBCE() {
     }
     return BCE;
 }
+unsigned char DataFrame::calcularBCE_2(char cadena[]){
+	unsigned char BCE = cadena[0];
+		for (int i = 1; i < L; i++) {
+			BCE = BCE ^ cadena[i];
+		}
+		if (BCE == 0 || BCE == 255) {
+			BCE = 1;
+		}
+		return BCE;
+}
 
 //Show in terminal the message in the frame
 void DataFrame::showData(HANDLE pantalla,int colour){
@@ -137,9 +147,24 @@ void DataFrame::showData(HANDLE pantalla,int colour){
 }
 
 //Write data in the output file with a of stream
-void DataFrame::writeFile(ofstream& of){
+void DataFrame::writeFile(ofstream &of){
     if(calculateBCE() == BCE){
-        of << Data;
+        switch(titulo){
+     case 0:
+        printf("Recibiendo fichero de %s \n",Data);
+        titulo++;
+        break;
+     case 1:
+        titulo++;
+        break;
+     case 2:
+        of.open(Data,ios::app);
+        titulo++;
+        break;
+     case 3:
+        of.write(Data,strlen(Data));
+        break;
+    }
     }
     else{
         printf("No se pudo escribir en el fichero\n");

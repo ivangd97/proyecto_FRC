@@ -23,6 +23,7 @@
 #define F2 (60)
 #define F3 (61)
 ifstream inStream;
+ofstream outStream;
 
 
 //We will define the limit as a variable
@@ -34,6 +35,7 @@ HANDLE pantalla;
 int colour = 0;
 bool esFichero = false;
 bool finFichero = false;
+char cadena[255];
 
 // Simultaneous Read/Write of characters :
 int tamanio = 0;
@@ -142,13 +144,13 @@ int chooseVel() {
 
 
 void processFile(){
-   char cadena[254];
 	int numCar;
     int cont=0;
-    int tamF;
+    int tamF = 0;
 	char tecla;
 	bool exit = false;
 	char caracter;
+	char numCar2[50];
 
 
 	bool recibiendo = false;
@@ -160,44 +162,51 @@ void processFile(){
 
 
 
+
     while (!inStream.eof() || !exit) {
                //Leemos autores
+
         if(cont == 0 ){
             inStream.getline(cadena,254,'\n');
             printf("Enviando fichero por %s. \n",cadena);
-            fReceive.manageFrame(portCOM,cadena,strlen(cadena));
+            fReceive.setL(strlen(cadena));
+            fReceive.setBCE(fReceive.calcularBCE_2(cadena));
+            fReceive.sendDataFrame2(portCOM,cadena);
             cont++;
         }
         //Color y fondo
         if(cont ==1){
             inStream.getline(cadena,254,'\n');
-            fReceive.manageFrame(portCOM,cadena,strlen(cadena));
+            fReceive.setL(strlen(cadena));
+            fReceive.setBCE(fReceive.calcularBCE_2(cadena));
+            fReceive.sendDataFrame2(portCOM,cadena);
             cont++;
 
         }
         if(cont ==2){
             inStream.getline(cadena,254,'\n');
-            fReceive.manageFrame(portCOM,cadena,strlen(cadena));
+
+            fReceive.setL(strlen(cadena));
+            fReceive.setBCE(fReceive.calcularBCE_2(cadena));
+            fReceive.sendDataFrame2(portCOM,cadena);
             cont++;
         }
-        if(cont ==3){
+        if(cont==3){
 
             inStream.read(cadena, 254);
 			numCar = inStream.gcount();
 			cadena[numCar] = '\0';
-
-
-			if (numCar != 0) {
-				fReceive.setL(numCar);
-				fReceive.setBCE(fReceive.calculateBCE());
-                fReceive.sendDataFrame2(portCOM,cadena);
-			}
-
-
+			tamF += numCar;
+			if(numCar!=0){
+			fReceive.setL(numCar);
+            fReceive.setBCE(fReceive.calcularBCE_2(cadena));
+            fReceive.sendDataFrame2(portCOM,cadena);
+        }
+        }
 
 
 
-			if (kbhit()) {
+        if (kbhit()) {
 				tecla = getch();
 				if (tecla == 27) {
 					exit = true;
@@ -205,12 +214,16 @@ void processFile(){
 
 			}
 
-		}
-		inStream.close();
-		EnviarCaracter(portCOM, '}');
-		printf("Fichero enviado. \n");
+
+
 		exit = true;
         }
+        sprintf(numCar2,"%d",tamF);
+        inStream.close();
+		EnviarCaracter(portCOM, '}');
+        fReceive.manageFrame(portCOM,numCar2,strlen(numCar2));
+
+		printf("Fichero enviado. \n");
 	} else {
 		printf("Fichero no encontrado \n");
 	}
@@ -238,13 +251,15 @@ void receiveFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
                 controlReceive.setS(carR);
                 fReceive.setS(carR);
                 campo++; }
-            else if(carR == '{'){
+            if(carR == '{'){
                     esFichero = true;
-                    inStream.open("fichero-e.txt");
-            }else if(carR == '}'){
-                inStream.close();
+            }
+            if(carR == '}'){
+                outStream.close();
                 esFichero = false;
                 finFichero = true;
+                printf("Fichero Recibido \n");
+
 
 
             }
@@ -319,15 +334,21 @@ void receiveFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
             bce = fReceive.calculateBCE();
             if(bce = fReceive.getBCE()) {
             //If bce is well calculated, the data has been received without issues, show data
-            if(esFichero){
-                processFile();
-            }else if (finFichero){
-                printf("El fichero recibido tiene un tamaño de %s bytes.\n", fReceive.getData());
-                finFichero = false;
-            }else{
-                            fReceive.showData(pantalla,colour);
+
+                if(esFichero){
 
 
+
+
+                            fReceive.writeFile(outStream);
+
+                }else if (finFichero){
+
+
+                    printf("El fichero recibido tiene un tamanio de %s bytes.\n", fReceive.getData());
+                    finFichero = false;
+                }else{
+                    fReceive.showData(pantalla,colour);
             }
             }else{
                 if(esFichero){

@@ -35,6 +35,8 @@ class DataFrame{
         //This procedure will send a control frame when the user press the F2 key
         void sendDataFrame(HANDLE &portCOM);
         void sendDataFrame2(HANDLE &portCOM,char cadena[]);
+        unsigned char calcularBCE_2(char cadena[]);
+
         //This topic will divide the message in a little ones which its length is 254
         void manageFrame(HANDLE &portCOM,char msg[],int tamanio);
         //After a given formula, we will calculate the bce associated to data.

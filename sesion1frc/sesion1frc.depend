@@ -7,12 +7,13 @@
 1581621351 c:\users\flequ\desktop\compartirredes\sesion1_frc\puertoserie.h
 	<windows.h>
 
-1585160714 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\sesion1(2).cpp
+1585591618 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\sesion1(2).cpp
 	<stdio.h>
 	<conio.h>
 	<windows.h>
 	<iostream>
 	<string.h>
+	<fstream>
 	"PuertoSerie.h"
 	"ControlFrame.h"
 	"DataFrame.h"
@@ -55,12 +56,12 @@
 	<iostream>
 	<stdio.h>
 
-1585508703 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\dataframe.cpp
+1585591221 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\dataframe.cpp
 	"DataFrame.h"
 	<iostream>
 	<stdio.h>
 
-1585508703 c:\users\flequ\desktop\compartirredes\sesion1_frc\dataframe.h
+1585588347 c:\users\flequ\desktop\compartirredes\sesion1_frc\dataframe.h
 	"PuertoSerie.h"
 	<fstream>
 
