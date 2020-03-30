@@ -178,7 +178,7 @@ void processFile(){
             fReceive.sendDataFrame2(portCOM,cadena);
             cont++;
             if(log == true){
-                logStream <<"Enviando fichero por ";
+                logStream <<"Enviando fichero por "<< cadena<< "\n";
 
             }
         }
@@ -233,8 +233,14 @@ void processFile(){
         fReceive.manageFrame(portCOM,numCar2,strlen(numCar2));
 
 		printf("Fichero enviado. \n");
+		if(log == true){
+            logStream << "Fichero enviado. \n";
+		}
+
 	} else {
-		printf("Fichero no encontrado \n");
+		printf("Fichero no encontrado. \n");
+        if(log == true){
+            logStream <<"Fichero no encontrado. \n";        }
 	}
 
 }
@@ -267,7 +273,10 @@ void receiveFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
                 outStream.close();
                 esFichero = false;
                 finFichero = true;
-                printf("Fichero Recibido \n");
+                printf("Fichero Recibido. \n");
+                if(log){
+                    logStream << "Fichero Recibido. \n";
+                }
 
 
 
@@ -308,13 +317,20 @@ void receiveFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
                 campo = 1;
 
                 if(controlReceive.getC() == 05) {
-                    printf("Se ha recibido una trama ENQ\n"); }
+                    printf("Se ha recibido una trama ENQ\n");
+                    if(log){logStream <<"Se ha recibido una trama ENQ\n";}}
+
                 else if (controlReceive.getC()==04) {
-                    printf("Se ha recibido una trama EOT\n"); }
+                    printf("Se ha recibido una trama EOT\n");
+                    if(log){logStream <<"Se ha recibido una trama EOT\n";}}
                 else if (controlReceive.getC()==06) {
-                    printf("Se ha recibido una trama ACK\n"); }
+                    printf("Se ha recibido una trama ACK\n");
+                    if(log){logStream <<"Se ha recibido una trama ACK\n";}}
                 else if  (controlReceive.getC()==21) {
-                    printf("Se ha recibido una trama NACK\n"); }
+                    printf("Se ha recibido una trama NACK\n");
+                    if(log){logStream <<"Se ha recibido una trama NACK\n";}
+
+                    }
 
 
             }
@@ -348,7 +364,7 @@ void receiveFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
 
                 }else if (finFichero){
                     printf("El fichero recibido tiene un tamanio de %s bytes.\n", fReceive.getData());
-
+                    if(log){logStream <<"El fichero recibido tiene un tamanio de "<<fReceive.getData()<<" bytes.\n";}
                     finFichero = false;
 
             }else{
@@ -356,15 +372,18 @@ void receiveFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
             }
             }else{
                 if(esFichero){
-                    printf("Error en la recepción de la trama del fichero. \n");
+                    printf("Error en la recepcion de la trama del fichero. \n");
+                    if(log){logStream <<"Error en la rececpcion del la trama del fichero. \n";}
                 }else{
-            printf("Error en la trama recibida \n");
+                    printf("Error en la trama recibida \n");
+                    if(log){logStream <<"Error en la trama recibida \n";}
                 }
             }
             break;
 
         default:
             printf("Trama no recibida correctamente. \n");
+            if(log){logStream <<"Trama no recibida correctamente.\n";}
             break;
         }
     }
@@ -411,6 +430,7 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
     case INTRO_KEY:
         if (tamanio<limit-2){
             printf ("\n");
+            if(log){logStream <<"\n";}
             msg[tamanio] = '\n';
             tamanio += 1 ;
             }
@@ -424,6 +444,7 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
             pantalla = GetStdHandle(STD_OUTPUT_HANDLE);
             SetConsoleTextAttribute (pantalla, colour);
             printf("\b \b");
+            if(log){logStream <<"\b \b";}
             tamanio = tamanio - 1;
         }
         break;
@@ -436,6 +457,7 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
                 SetConsoleTextAttribute (pantalla, colour);
                 msg[tamanio] = carE;
                 printf("%c",carE);
+                if(log){logStream <<carE; }
                 tamanio = tamanio + 1;
 
         }
