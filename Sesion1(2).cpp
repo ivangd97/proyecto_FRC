@@ -22,8 +22,11 @@
 #define F1 (59)
 #define F2 (60)
 #define F3 (61)
+#define F5 (63)
+
 ifstream inStream;
 ofstream outStream;
+ofstream logStream;
 
 
 //We will define the limit as a variable
@@ -36,6 +39,7 @@ int colour = 0;
 bool esFichero = false;
 bool finFichero = false;
 char cadena[255];
+bool log = false;
 
 // Simultaneous Read/Write of characters :
 int tamanio = 0;
@@ -173,6 +177,10 @@ void processFile(){
             fReceive.setBCE(fReceive.calcularBCE_2(cadena));
             fReceive.sendDataFrame2(portCOM,cadena);
             cont++;
+            if(log == true){
+                logStream <<"Enviando fichero por ";
+
+            }
         }
         //Color y fondo
         if(cont ==1){
@@ -203,6 +211,7 @@ void processFile(){
             fReceive.sendDataFrame2(portCOM,cadena);
         }
         }
+
 
 
 
@@ -334,20 +343,15 @@ void receiveFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
             bce = fReceive.calculateBCE();
             if(bce = fReceive.getBCE()) {
             //If bce is well calculated, the data has been received without issues, show data
-
                 if(esFichero){
-
-
-
-
-                            fReceive.writeFile(outStream);
+                    fReceive.writeFile(outStream,colour,pantalla);
 
                 }else if (finFichero){
-
-
                     printf("El fichero recibido tiene un tamanio de %s bytes.\n", fReceive.getData());
+
                     finFichero = false;
-                }else{
+
+            }else{
                     fReceive.showData(pantalla,colour);
             }
             }else{
@@ -393,7 +397,14 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
         case F3:
             processFile();
             break;
+
+        case F5:
+            logStream.open("log.txt",ios::app);
+            log = true;
+            break;
+
         }
+
         break;
 
     // If intro key is pressed, we will show and end line and continue the input in the next one

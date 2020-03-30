@@ -7,6 +7,7 @@
 #include "DataFrame.h"
 #include <iostream>
 #include <stdio.h>
+    char autor[255];
 
 int titulo=0;
 //Default constructor
@@ -147,15 +148,23 @@ void DataFrame::showData(HANDLE pantalla,int colour){
 }
 
 //Write data in the output file with a of stream
-void DataFrame::writeFile(ofstream &of){
+void DataFrame::writeFile(ofstream &of,int colour,HANDLE pantalla){
     if(calculateBCE() == BCE){
         switch(titulo){
      case 0:
-        printf("Recibiendo fichero de %s \n",Data);
+        strcpy(autor,Data);
         titulo++;
         break;
      case 1:
+
+        colour =atoi(Data) + 0*16;
+        pantalla = GetStdHandle(STD_OUTPUT_HANDLE);
+        SetConsoleTextAttribute (pantalla, colour);
+
+        printf("Recibiendo fichero de %s \n",autor);
+
         titulo++;
+
         break;
      case 2:
         of.open(Data,ios::app);
