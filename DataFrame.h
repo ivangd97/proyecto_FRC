@@ -45,10 +45,10 @@ class DataFrame{
         //After a given formula, we will calculate the bce associated to data.
         unsigned char calculateBCE();
         //Show in terminal the message in the frame
-        void showData(HANDLE pantalla,int colour);
+        void showData(HANDLE pantalla);
 
         //Write Data in a new file
-        void writeFile(ofstream& of,int colour,HANDLE pantalla,bool log,ofstream &logStream);
+        void writeFile(ofstream& of,HANDLE pantalla,bool log,ofstream &logStream,int &colouro);
 
          //Setters
         void setC(unsigned char value);

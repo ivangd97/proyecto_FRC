@@ -125,28 +125,26 @@ unsigned char DataFrame::calcularBCE_2(char cadena[]){
 }
 
 //Show in terminal the message in the frame
-void DataFrame::showData(HANDLE pantalla,int colour){
-    colour =9 + 14*16;
+void DataFrame::showData(HANDLE pantalla){
     pantalla = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute (pantalla, colour);
+    SetConsoleTextAttribute (pantalla, 233);
     for(int x=0;x<this->L;x++){
             printf("%c",Data[x]);
         }
 }
 
 //Write data in the output file with a of stream
-void DataFrame::writeFile(ofstream &of,int colour,HANDLE pantalla,bool log,ofstream &logStream){
-    if(calculateBCE() == BCE){
+void DataFrame::writeFile(ofstream &of,HANDLE pantalla,bool log,ofstream &logStream,int &colouro){
+    if(calculateBCE() == BCE ){
         switch(line){
             case 0:
                 strcpy(author,Data);
                 line++;
                 break;
             case 1:
-
-                colour =atoi(Data) + 0*16;
+                colouro = atoi(Data);
                 pantalla = GetStdHandle(STD_OUTPUT_HANDLE);
-                SetConsoleTextAttribute (pantalla, colour);
+                SetConsoleTextAttribute (pantalla, atoi(Data));
                 printf("Recibiendo fichero de %s \n",author);
 
                 if(log){logStream<<"Recibiendo fichero de "<< author<<"\n";}
@@ -167,11 +165,11 @@ void DataFrame::writeFile(ofstream &of,int colour,HANDLE pantalla,bool log,ofstr
                 break;
 
         }
+    }else{
+    printf("No se pudo escribir en el fichero.\n");
+
     }
-    else{
-        printf("No se pudo escribir en el fichero\n");
-        if(log){logStream<<"No se pudo escribir en el fichero\n";}
-    }
+
 }
 
 //Set C attribute

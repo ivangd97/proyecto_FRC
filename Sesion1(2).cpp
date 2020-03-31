@@ -32,20 +32,24 @@ ofstream logStream;
 //We will define the limit as a variable
 int limit = 802;
 DataFrame fReceive;
+DataFrame fSend;
+
 ControlFrame controlReceive;
-int i = 0;
 HANDLE screen;
-int colour = 0;
+
+int colouro;
 bool isFile = false;
 bool endOfFile = false;
 char stringAux[802];
 bool log = false;
 int field=1;
+int i = 0;
+
 int isControlFrame;
-char cadcolour[20];
-bool recibir = false;
+bool flag = false;
 // Simultaneous Read/Write of characters :
 int size = 0;
+
 
 using namespace std;
 
@@ -233,12 +237,13 @@ void receiveFrame2(int &field,HANDLE &portCOM,int &isControlFrame,bool &recibir)
             bce = fReceive.calculateBCE();
             if(bce = fReceive.getBCE()) {
             //If bce is well calculated, the data has been received without issues, show data
-            fReceive.showData(screen,colour);
-            recibir = false;
+            fReceive.showData(screen);
+
             }else{
             printf("Error al comprobar BCE. \n");
-            recibir = false;
             }
+
+            flag = false;
             break;
 
         default:
@@ -251,7 +256,8 @@ void receiveFrame2(int &field,HANDLE &portCOM,int &isControlFrame,bool &recibir)
 
 
 //We receive the frame and manage it
-void receiveFrame(int &field,HANDLE &portCOM,int &isControlFrame) {
+void receiveFrame(int &field,HANDLE &portCOM,int &isControlFrame,int &colouro) {
+
     char carR = RecibirCaracter(portCOM);
 
     unsigned char bce;
@@ -279,12 +285,9 @@ void receiveFrame(int &field,HANDLE &portCOM,int &isControlFrame) {
                 outStream.close();
                 isFile = false;
                 endOfFile = true;
-
-              /*   colour =atoi(cadcolour) + 0*16;
-                screen = GetStdHandle(STD_OUTPUT_HANDLE);
-                SetConsoleTextAttribute (screen, colour);*/
-
+                SetConsoleTextAttribute (screen, colouro);
                 printf("Fichero Recibido. \n");
+
                 if(log){
                     logStream << "Fichero Recibido. \n";
                 }
@@ -362,9 +365,10 @@ void receiveFrame(int &field,HANDLE &portCOM,int &isControlFrame) {
             bce = fReceive.calculateBCE();
             if(bce = fReceive.getBCE()) {
             //If bce is well calculated, the data has been received without issues, show data
+
                 if(isFile){
                     //if file process is initialized, instead f show data, the file will be written
-                    fReceive.writeFile(outStream,colour,screen,log,logStream);
+                    fReceive.writeFile(outStream,screen,log,logStream,colouro);
 
 
 
@@ -372,13 +376,16 @@ void receiveFrame(int &field,HANDLE &portCOM,int &isControlFrame) {
                 }else if (endOfFile){
                     //If the file process is end, we will send the size of the document
 
-                    printf("El fichero recibido tiene un tamanio de %s bytes.\n", fReceive.getData());
+
+                    SetConsoleTextAttribute (screen, colouro);
+
+		            printf("El fichero recibido tiene un tamanio de %s bytes.\n", fReceive.getData());
 
                     if(log){logStream <<"El fichero recibido tiene un tamanio de "<<fReceive.getData()<<" bytes.\n";}
                     endOfFile = false;
 
             }else{
-                    fReceive.showData(screen,colour);
+                    fReceive.showData(screen);
                     if(log){logStream.write(fReceive.getData(),fReceive.getL());}
             }
             }else{
@@ -386,6 +393,7 @@ void receiveFrame(int &field,HANDLE &portCOM,int &isControlFrame) {
                     printf("Error en la recepcion de la trama del fichero. \n");
                     if(log){logStream <<"Error en la rececpcion del la trama del fichero. \n";}
                 }else{
+
                     printf("Error en la trama recibida \n");
                     if(log){logStream <<"Error en la trama recibida \n";}
                 }
@@ -410,6 +418,7 @@ void processFile(){
 	char key;
 	bool exit = false;
 	char numCar2[200];
+	char cadcolour[200];
 
 	//First of all, we must open the original file
 	inStream.open("fichero-e.txt");
@@ -427,6 +436,7 @@ void processFile(){
 
 
 
+
                 cont++;
                 if(log == true){
                     logStream <<"Enviando fichero por "<< stringAux<< "\n";
@@ -440,6 +450,7 @@ void processFile(){
                 fReceive.setL(strlen(stringAux));
                 fReceive.setBCE(fReceive.calcularBCE_2(stringAux));
                 fReceive.sendDataFrame2(portCOM,stringAux);
+
 
 
 
@@ -482,18 +493,17 @@ void processFile(){
 
 
 
-
                 }
 
                 key = RecibirCaracter(portCOM);
                 if(key==22){
-                    recibir = true;
+                    flag = true;
                     field ++;
 
                 }
-                while(recibir)
-                receiveFrame2(field,portCOM,isControlFrame,recibir);
-
+                while(flag){
+                receiveFrame2(field,portCOM,isControlFrame,flag);
+                }
             }
 
             //ESC key case to cancel the process
@@ -514,26 +524,26 @@ void processFile(){
 
 
         //All works correctly and the file is sent
-       /* colour =atoi(cadcolour) + 0*16;
-        screen = GetStdHandle(STD_OUTPUT_HANDLE);
-        SetConsoleTextAttribute (screen, colour);*/
+        colouro = atoi(cadcolour) + 0*16;
+        SetConsoleTextAttribute (screen, colouro);
 		printf("Fichero enviado. \n");
+
 		if(log == true){
             logStream << "Fichero enviado. \n";
 		}
 
 	} else {
-      /*  colour =atoi(cadcolour) + 0*16;
-        screen = GetStdHandle(STD_OUTPUT_HANDLE);
-        SetConsoleTextAttribute (screen, colour);*/
-		printf("Fichero no encontrado. \n");
+	    colouro = atoi(cadcolour) + 0*16;
+        SetConsoleTextAttribute (screen, colouro);
+        printf("Fichero no encontrado. \n");
         if(log == true){
             logStream <<"Fichero no encontrado. \n";        }
 	}
+
 }
 
 //Send topic, it will send a message msg with size tamanio through the port portCOM
-void send(char carE,char msg[],int &size,HANDLE &portCOM) {
+void send(char carE,char msg[],int &size,HANDLE &portCOM,int &colouro) {
     switch (carE) {
     //if F1 key is pressed, the message will be sent
     case '\0':
@@ -546,12 +556,13 @@ void send(char carE,char msg[],int &size,HANDLE &portCOM) {
             msg[size]='\n';
             size++;
             msg[size]='\0';
-            fReceive.manageFrame(portCOM,msg,size);
+            fSend.manageFrame(portCOM,msg,size);
             if(log){logStream.write(msg,size);}
             printf("\n");
             if(log){logStream <<"\n";}
 
             size = 0;
+
 
             break;
 
@@ -588,11 +599,10 @@ void send(char carE,char msg[],int &size,HANDLE &portCOM) {
     case RETURN_KEY:
 
         if (size > 0) {
-            colour =0 + 0*16;
-            screen = GetStdHandle(STD_OUTPUT_HANDLE);
-            SetConsoleTextAttribute (screen, colour);
+            SetConsoleTextAttribute (screen, 12);
             printf("\b \b");
             size = size - 1;
+
         }
         break;
 
@@ -600,12 +610,12 @@ void send(char carE,char msg[],int &size,HANDLE &portCOM) {
     default:
 
         if (size<limit-2) {
-                colour =12 + 0*16;
-                screen = GetStdHandle(STD_OUTPUT_HANDLE);
-                SetConsoleTextAttribute (screen, colour);
+                SetConsoleTextAttribute (screen, 12);
                 msg[size] = carE;
                 printf("%c",carE);
+                if(log){logStream<<carE;}
                 size = size + 1;
+
 
         }
         break;
@@ -618,6 +628,9 @@ int main() {
     char carE = 0;
     char PSerie[5];
     char msg[limit] ; //two more characters to the line end
+    screen = GetStdHandle(STD_OUTPUT_HANDLE);
+    //int colouro;
+
     //Header
     printf("============================================================================\n");
     printf("----------- PRACTICAS DE FUNDAMENTOS DE REDES DE COMUNICACIONES ------------\n");
@@ -650,7 +663,7 @@ int main() {
 
     //Esc key case to close the program, if esc is not pressed, continue forever
     while(carE != ESC_KEY) {
-            receiveFrame(field,portCOM,isControlFrame);
+            receiveFrame(field,portCOM,isControlFrame,colouro);
 
 
         if (kbhit()) {
@@ -658,8 +671,11 @@ int main() {
             carE = getch();
             //Esc key case, if it isn't pressed, the switch will be displayed
             if (carE != ESC_KEY) {
-                send(carE,msg,size,portCOM);
+                send(carE,msg,size,portCOM,colouro);
+
+
             }
+
         }
     }
     //Te port will be closed and the app will return
