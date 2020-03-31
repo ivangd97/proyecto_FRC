@@ -8,8 +8,8 @@
 #include <iostream>
 #include <stdio.h>
 char author[255];
+int line=0;
 
-int title=0;
 //Default constructor
 DataFrame::DataFrame() {
     S  = 22;
@@ -44,6 +44,7 @@ void DataFrame::manageFrame(HANDLE &portCOM,char msg[],int tamanio){
         BCE = calculateBCE();
 		//Send the little frame
         sendDataFrame(portCOM);
+
 		}
 	}
 
@@ -51,6 +52,7 @@ void DataFrame::manageFrame(HANDLE &portCOM,char msg[],int tamanio){
 	L=(unsigned char) tamanioAux;
     BCE=calculateBCE();
 	sendDataFrame(portCOM);
+
 }
 
 //This procedure will send a control frame when the user press the F2 key
@@ -135,10 +137,10 @@ void DataFrame::showData(HANDLE pantalla,int colour){
 //Write data in the output file with a of stream
 void DataFrame::writeFile(ofstream &of,int colour,HANDLE pantalla,bool log,ofstream &logStream){
     if(calculateBCE() == BCE){
-        switch(title){
+        switch(line){
             case 0:
                 strcpy(author,Data);
-                title++;
+                line++;
                 break;
             case 1:
 
@@ -149,18 +151,19 @@ void DataFrame::writeFile(ofstream &of,int colour,HANDLE pantalla,bool log,ofstr
 
                 if(log){logStream<<"Recibiendo fichero de "<< author<<"\n";}
 
-                title++;
+                line++;
                 break;
 
             case 2:
 
                 of.open(Data,ios::app);
-                title++;
+                line++;
                 break;
 
             case 3:
 
                 of.write(Data,strlen(Data));
+
                 break;
 
         }

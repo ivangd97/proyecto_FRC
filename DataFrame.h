@@ -8,8 +8,8 @@
 #define DATAFRAME_H
 #include "PuertoSerie.h"
 #include <fstream>
-
 class DataFrame{
+
     protected:
         unsigned char S;
         unsigned char D;
@@ -19,8 +19,11 @@ class DataFrame{
         char Data[255];
         unsigned char BCE;
 
+
+
     public:
-        DataFrame();
+            DataFrame();
+
 
 
         //Getters
