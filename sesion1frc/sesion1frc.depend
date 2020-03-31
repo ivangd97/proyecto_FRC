@@ -39,12 +39,13 @@
 1578565142 c:\users\ivang\onedrive\escritorio\frc\sesion1_frc\puertoserie.h
 	<windows.h>
 
-1583401826 source:c:\users\ivang\onedrive\escritorio\frc\sesion1_frc\sesion1(2).cpp
+1585651328 source:c:\users\ivang\onedrive\escritorio\frc\sesion1_frc\sesion1(2).cpp
 	<stdio.h>
 	<conio.h>
 	<windows.h>
 	<iostream>
 	<string.h>
+	<fstream>
 	"PuertoSerie.h"
 	"ControlFrame.h"
 	"DataFrame.h"
@@ -75,7 +76,7 @@
 	"PuertoSerie.h"
 	<fstream>
 
-1585649473 source:c:\users\ivang\onedrive\escritorio\frc\sesion1_frc\dataframe.cpp
+1585652272 source:c:\users\ivang\onedrive\escritorio\frc\sesion1_frc\dataframe.cpp
 	"DataFrame.h"
 	<iostream>
 	<stdio.h>

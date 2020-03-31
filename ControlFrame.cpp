@@ -59,28 +59,23 @@ ControlFrame::ControlFrame(int value)
 void ControlFrame::setC(unsigned char value)
 {
     this->C = value;
-
 }
 
 //Set D attribute
 void ControlFrame::setD(unsigned char value)
 {
     this->D = value;
-
-
 }
 
 //Set S attribute
 void ControlFrame::setS(unsigned char value)
 {
     this->S = value;
-
 }
 
 //Set NT attribute
 void ControlFrame::setNT(unsigned char value)
 {
-
     this->NT = value;
 }
 
@@ -110,6 +105,7 @@ unsigned char ControlFrame::getNT()
 
 
 void ControlFrame::sendControlFrame(HANDLE &portCOM,bool log,ofstream &logStream,HANDLE pantalla) {
+    //Change the color of the screen to not confuse with the color of the file process
     int colour =12 + 0*16;
     pantalla = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute (pantalla, colour);

@@ -7,9 +7,9 @@
 #include "DataFrame.h"
 #include <iostream>
 #include <stdio.h>
-    char autor[255];
+char author[255];
 
-int titulo=0;
+int title=0;
 //Default constructor
 DataFrame::DataFrame() {
     S  = 22;
@@ -51,18 +51,7 @@ void DataFrame::manageFrame(HANDLE &portCOM,char msg[],int tamanio){
 	L=(unsigned char) tamanioAux;
     BCE=calculateBCE();
 	sendDataFrame(portCOM);
-
 }
-
-
-
-
-
-
-
-
-
-
 
 //This procedure will send a control frame when the user press the F2 key
 void DataFrame::sendDataFrame(HANDLE &portCOM) {
@@ -73,8 +62,6 @@ void DataFrame::sendDataFrame(HANDLE &portCOM) {
             EnviarCaracter(portCOM,L);
             EnviarCadena(portCOM,Data,strlen(Data));
             EnviarCaracter(portCOM,BCE);
-
-
 }
 
 void DataFrame::sendDataFrame2(HANDLE &portCOM,char cadena[]){
@@ -85,12 +72,8 @@ void DataFrame::sendDataFrame2(HANDLE &portCOM,char cadena[]){
 	EnviarCaracter(portCOM, L);
 	EnviarCadena(portCOM, cadena, (int) L);
 	EnviarCaracter(portCOM, BCE);
-
-
-
-
-
 }
+
 unsigned char DataFrame::getS() {
     return this->S; }
 
@@ -126,6 +109,8 @@ unsigned char DataFrame::calculateBCE() {
     }
     return BCE;
 }
+
+//Second topic to calculate the bce of the frame
 unsigned char DataFrame::calcularBCE_2(char cadena[]){
 	unsigned char BCE = cadena[0];
 		for (int i = 1; i < L; i++) {
@@ -150,31 +135,35 @@ void DataFrame::showData(HANDLE pantalla,int colour){
 //Write data in the output file with a of stream
 void DataFrame::writeFile(ofstream &of,int colour,HANDLE pantalla,bool log,ofstream &logStream){
     if(calculateBCE() == BCE){
-        switch(titulo){
-     case 0:
-        strcpy(autor,Data);
-        titulo++;
-        break;
-     case 1:
+        switch(title){
+            case 0:
+                strcpy(author,Data);
+                title++;
+                break;
+            case 1:
 
-        colour =atoi(Data) + 0*16;
-        pantalla = GetStdHandle(STD_OUTPUT_HANDLE);
-        SetConsoleTextAttribute (pantalla, colour);
+                colour =atoi(Data) + 0*16;
+                pantalla = GetStdHandle(STD_OUTPUT_HANDLE);
+                SetConsoleTextAttribute (pantalla, colour);
+                printf("Recibiendo fichero de %s \n",author);
 
-        printf("Recibiendo fichero de %s \n",autor);
-        if(log){logStream<<"Recibiendo fichero de "<< autor<<"\n";}
+                if(log){logStream<<"Recibiendo fichero de "<< author<<"\n";}
 
-        titulo++;
+                title++;
+                break;
 
-        break;
-     case 2:
-        of.open(Data,ios::app);
-        titulo++;
-        break;
-     case 3:
-        of.write(Data,strlen(Data));
-        break;
-    }
+            case 2:
+
+                of.open(Data,ios::app);
+                title++;
+                break;
+
+            case 3:
+
+                of.write(Data,strlen(Data));
+                break;
+
+        }
     }
     else{
         printf("No se pudo escribir en el fichero\n");
@@ -186,22 +175,18 @@ void DataFrame::writeFile(ofstream &of,int colour,HANDLE pantalla,bool log,ofstr
 void DataFrame::setC(unsigned char value)
 {
     this->C = value;
-
 }
 
 //Set D attribute
 void DataFrame::setD(unsigned char value)
 {
     this->D = value;
-
-
 }
 
 //Set S attribute
 void DataFrame::setS(unsigned char value)
 {
     this->S = value;
-
 }
 
 //Set NT attribute
@@ -224,6 +209,5 @@ void DataFrame::setBCE(unsigned char value){
 
 void DataFrame::setData(char msg[]){
     strcpy(Data,msg);
-
 }
 
