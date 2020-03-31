@@ -7,6 +7,8 @@
 #ifndef CONTROLFRAME_H
 #define CONTROLFRAME_H
 #include "PuertoSerie.h"
+#include <fstream>
+
 
 
 //This class contains four attributes:
@@ -32,7 +34,7 @@ public:
     void setD(unsigned char value);
     void setS(unsigned char value);
     void setNT(unsigned char value);
-    void sendControlFrame(HANDLE &portCOM);
+    void sendControlFrame(HANDLE &portCOM,bool log,ofstream &logStream,HANDLE pantalla);
     //Getters
     unsigned char getC();
     unsigned char getD();

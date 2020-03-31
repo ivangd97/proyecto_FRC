@@ -148,7 +148,7 @@ void DataFrame::showData(HANDLE pantalla,int colour){
 }
 
 //Write data in the output file with a of stream
-void DataFrame::writeFile(ofstream &of,int colour,HANDLE pantalla){
+void DataFrame::writeFile(ofstream &of,int colour,HANDLE pantalla,bool log,ofstream &logStream){
     if(calculateBCE() == BCE){
         switch(titulo){
      case 0:
@@ -162,6 +162,7 @@ void DataFrame::writeFile(ofstream &of,int colour,HANDLE pantalla){
         SetConsoleTextAttribute (pantalla, colour);
 
         printf("Recibiendo fichero de %s \n",autor);
+        if(log){logStream<<"Recibiendo fichero de "<< autor<<"\n";}
 
         titulo++;
 
@@ -177,6 +178,7 @@ void DataFrame::writeFile(ofstream &of,int colour,HANDLE pantalla){
     }
     else{
         printf("No se pudo escribir en el fichero\n");
+        if(log){logStream<<"No se pudo escribir en el fichero\n";}
     }
 }
 

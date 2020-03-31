@@ -45,7 +45,7 @@ class DataFrame{
         void showData(HANDLE pantalla,int colour);
 
         //Write Data in a new file
-        void writeFile(ofstream& of,int colour,HANDLE pantalla);
+        void writeFile(ofstream& of,int colour,HANDLE pantalla,bool log,ofstream &logStream);
 
          //Setters
         void setC(unsigned char value);

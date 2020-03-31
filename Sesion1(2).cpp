@@ -360,7 +360,7 @@ void receiveFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
             if(bce = fReceive.getBCE()) {
             //If bce is well calculated, the data has been received without issues, show data
                 if(esFichero){
-                    fReceive.writeFile(outStream,colour,pantalla);
+                    fReceive.writeFile(outStream,colour,pantalla,log,logStream);
 
                 }else if (finFichero){
                     printf("El fichero recibido tiene un tamanio de %s bytes.\n", fReceive.getData());
@@ -369,6 +369,7 @@ void receiveFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
 
             }else{
                     fReceive.showData(pantalla,colour);
+                    if(log){logStream.write(fReceive.getData(),fReceive.getL());}
             }
             }else{
                 if(esFichero){
@@ -404,13 +405,16 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
             tamanio++;
             msg[tamanio]='\0';
             fReceive.manageFrame(portCOM,msg,tamanio);
+            if(log){logStream.write(msg,tamanio);}
             printf("\n");
+            if(log){logStream <<"\n";}
+
             tamanio = 0;
 
             break;
 
         case F2:
-            controlReceive.sendControlFrame(portCOM);
+            controlReceive.sendControlFrame(portCOM,log,logStream,pantalla);
             break;
 
         case F3:
@@ -430,7 +434,6 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
     case INTRO_KEY:
         if (tamanio<limit-2){
             printf ("\n");
-            if(log){logStream <<"\n";}
             msg[tamanio] = '\n';
             tamanio += 1 ;
             }
@@ -444,7 +447,6 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
             pantalla = GetStdHandle(STD_OUTPUT_HANDLE);
             SetConsoleTextAttribute (pantalla, colour);
             printf("\b \b");
-            if(log){logStream <<"\b \b";}
             tamanio = tamanio - 1;
         }
         break;
@@ -457,7 +459,6 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
                 SetConsoleTextAttribute (pantalla, colour);
                 msg[tamanio] = carE;
                 printf("%c",carE);
-                if(log){logStream <<carE; }
                 tamanio = tamanio + 1;
 
         }
