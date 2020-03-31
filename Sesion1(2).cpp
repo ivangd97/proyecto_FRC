@@ -34,15 +34,15 @@ int limit = 802;
 DataFrame fReceive;
 ControlFrame controlReceive;
 int i = 0;
-HANDLE pantalla;
+HANDLE screen;
 int colour = 0;
-bool esFichero = false;
-bool finFichero = false;
-char cadena[255];
+bool isFile = false;
+bool endOfFile = false;
+char stringAux[255];
 bool log = false;
 
 // Simultaneous Read/Write of characters :
-int tamanio = 0;
+int size = 0;
 
 using namespace std;
 
@@ -146,92 +146,85 @@ int chooseVel() {
 
 }
 
-
+//This topic will process the file, opening the in stream and getting the data of original file
 void processFile(){
 	int numCar;
     int cont=0;
     int tamF = 0;
-	char tecla;
+	char key;
 	bool exit = false;
-	char caracter;
 	char numCar2[50];
 
-
-	bool recibiendo = false;
-
+	//First of all, we must open the original file
 	inStream.open("fichero-e.txt");
+	//If the opening is correct, program will follow the execution
 	if (inStream.is_open()) {
+        //Character which will tell the receiver that the following frames will be about files
         EnviarCaracter(portCOM, '{');
 
+        while (!inStream.eof() || !exit) {
+            //Reading authors of the file (not practice authors necessary)
+            if(cont == 0 ){
+                inStream.getline(stringAux,254,'\n');
+                printf("Enviando fichero por %s. \n",stringAux);
+                fReceive.setL(strlen(stringAux));
+                fReceive.setBCE(fReceive.calcularBCE_2(stringAux));
+                fReceive.sendDataFrame2(portCOM,stringAux);
+                cont++;
+                if(log == true){
+                    logStream <<"Enviando fichero por "<< stringAux<< "\n";
+                }
+            }
 
-
-
-
-    while (!inStream.eof() || !exit) {
-               //Leemos autores
-
-        if(cont == 0 ){
-            inStream.getline(cadena,254,'\n');
-            printf("Enviando fichero por %s. \n",cadena);
-            fReceive.setL(strlen(cadena));
-            fReceive.setBCE(fReceive.calcularBCE_2(cadena));
-            fReceive.sendDataFrame2(portCOM,cadena);
-            cont++;
-            if(log == true){
-                logStream <<"Enviando fichero por "<< cadena<< "\n";
+            //Color and background
+            if(cont ==1){
+                inStream.getline(stringAux,254,'\n');
+                fReceive.setL(strlen(stringAux));
+                fReceive.setBCE(fReceive.calcularBCE_2(stringAux));
+                fReceive.sendDataFrame2(portCOM,stringAux);
+                cont++;
 
             }
-        }
-        //Color y fondo
-        if(cont ==1){
-            inStream.getline(cadena,254,'\n');
-            fReceive.setL(strlen(cadena));
-            fReceive.setBCE(fReceive.calcularBCE_2(cadena));
-            fReceive.sendDataFrame2(portCOM,cadena);
-            cont++;
 
-        }
-        if(cont ==2){
-            inStream.getline(cadena,254,'\n');
+            //Name of the receiver file
+            if(cont ==2){
+                inStream.getline(stringAux,254,'\n');
+                fReceive.setL(strlen(stringAux));
+                fReceive.setBCE(fReceive.calcularBCE_2(stringAux));
+                fReceive.sendDataFrame2(portCOM,stringAux);
+                cont++;
+            }
 
-            fReceive.setL(strlen(cadena));
-            fReceive.setBCE(fReceive.calcularBCE_2(cadena));
-            fReceive.sendDataFrame2(portCOM,cadena);
-            cont++;
-        }
-        if(cont==3){
+            //Data of the original file to send
+            if(cont==3){
+                inStream.read(stringAux, 254);
+                numCar = inStream.gcount();
+                stringAux[numCar] = '\0';
+                tamF += numCar;
+                if(numCar!=0){
+                    fReceive.setL(numCar);
+                    fReceive.setBCE(fReceive.calcularBCE_2(stringAux));
+                    fReceive.sendDataFrame2(portCOM,stringAux);
+                }
+            }
 
-            inStream.read(cadena, 254);
-			numCar = inStream.gcount();
-			cadena[numCar] = '\0';
-			tamF += numCar;
-			if(numCar!=0){
-			fReceive.setL(numCar);
-            fReceive.setBCE(fReceive.calcularBCE_2(cadena));
-            fReceive.sendDataFrame2(portCOM,cadena);
-        }
-        }
-
-
-
-
-        if (kbhit()) {
-				tecla = getch();
-				if (tecla == 27) {
+            //ESC key case to cancel the process
+            if (kbhit()) {
+				key = getch();
+				if (key == 27) {
 					exit = true;
 				}
-
 			}
-
-
-
-		exit = true;
+            exit = true;
         }
+
         sprintf(numCar2,"%d",tamF);
         inStream.close();
+        //Send the character to tell the receiver that the file process is ending
 		EnviarCaracter(portCOM, '}');
         fReceive.manageFrame(portCOM,numCar2,strlen(numCar2));
 
+        //All works correctly and the file is sent
 		printf("Fichero enviado. \n");
 		if(log == true){
             logStream << "Fichero enviado. \n";
@@ -242,14 +235,13 @@ void processFile(){
         if(log == true){
             logStream <<"Fichero no encontrado. \n";        }
 	}
-
 }
 
 
 
 
 //We receive the frame and manage it
-void receiveFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
+void receiveFrame(int &field,HANDLE &portCOM,int &isControlFrame) {
     char carR = RecibirCaracter(portCOM);
 
     unsigned char bce;
@@ -258,63 +250,57 @@ void receiveFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
         //this switch will save the received attributes of a control frame and will build it
         //it will print a message announcing the type of the control frame received
         //With Data Frame modification, this switch will choose between control and data frame, building it to be sent
-        switch(campo) {
+        switch(field) {
 
         case 1:
 
             if (carR==22) {
                 controlReceive.setS(carR);
                 fReceive.setS(carR);
-                campo++; }
+                field++; }
             if(carR == '{'){
-                    esFichero = true;
+                    //Receiver know that the following frames will be about file process
+                    isFile = true;
             }
+            //Receiver know that the file process is ending
             if(carR == '}'){
                 outStream.close();
-                esFichero = false;
-                finFichero = true;
+                isFile = false;
+                endOfFile = true;
                 printf("Fichero Recibido. \n");
                 if(log){
                     logStream << "Fichero Recibido. \n";
                 }
-
-
-
             }
-
-
             break;
 
         case 2:
 
             controlReceive.setD(carR);
             fReceive.setD(carR);
-            campo++;
+            field++;
             break;
 
         case 3:
 
 
             if(carR == 02) {
-
                 fReceive.setC(carR);
                 isControlFrame = 0;
             }
             if(carR !=02) {
-
                 controlReceive.setC(carR);
                 isControlFrame = 1;
             }
-
-            campo++;
+            field++;
             break;
 
         //Case 4 will print the kind of the control frame received (if it's a control frame, else continue)
         case 4:
-            if(isControlFrame == 1) {
 
+            if(isControlFrame == 1) {
                 controlReceive.setNT(carR);
-                campo = 1;
+                field = 1;
 
                 if(controlReceive.getC() == 05) {
                     printf("Se ha recibido una trama ENQ\n");
@@ -331,48 +317,50 @@ void receiveFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
                     if(log){logStream <<"Se ha recibido una trama NACK\n";}
 
                     }
-
-
             }
             else {
                 fReceive.setNT(carR);
-                campo++;
+                field++;
                  }
             break;
 
         case 5:
+
             fReceive.setL((unsigned char)carR);
-            campo++;
+            field++;
 
         case 6:
 
             RecibirCadena(portCOM,fReceive.getData(),(int)fReceive.getL());
             fReceive.insertData('\0');
-            campo++;
+            field++;
             break;
 
         case 7:
+
             fReceive.setBCE((unsigned char) carR);
-            campo = 1;
+            field = 1;
 
             //Here, bce will be calculated based in the received data
             bce = fReceive.calculateBCE();
             if(bce = fReceive.getBCE()) {
             //If bce is well calculated, the data has been received without issues, show data
-                if(esFichero){
-                    fReceive.writeFile(outStream,colour,pantalla,log,logStream);
+                if(isFile){
+                    //if file process is initialized, instead f show data, the file will be written
+                    fReceive.writeFile(outStream,colour,screen,log,logStream);
 
-                }else if (finFichero){
+                }else if (endOfFile){
+                    //If the file process is end, we will send the size of the document
                     printf("El fichero recibido tiene un tamanio de %s bytes.\n", fReceive.getData());
                     if(log){logStream <<"El fichero recibido tiene un tamanio de "<<fReceive.getData()<<" bytes.\n";}
-                    finFichero = false;
+                    endOfFile = false;
 
             }else{
-                    fReceive.showData(pantalla,colour);
+                    fReceive.showData(screen,colour);
                     if(log){logStream.write(fReceive.getData(),fReceive.getL());}
             }
             }else{
-                if(esFichero){
+                if(isFile){
                     printf("Error en la recepcion de la trama del fichero. \n");
                     if(log){logStream <<"Error en la rececpcion del la trama del fichero. \n";}
                 }else{
@@ -383,15 +371,17 @@ void receiveFrame(int &campo,HANDLE &portCOM,int &isControlFrame) {
             break;
 
         default:
+
             printf("Trama no recibida correctamente. \n");
             if(log){logStream <<"Trama no recibida correctamente.\n";}
             break;
+
         }
     }
 }
 
 //Send topic, it will send a message msg with size tamanio through the port portCOM
-void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
+void send(char carE,char msg[],int &size,HANDLE &portCOM) {
     switch (carE) {
     //if F1 key is pressed, the message will be sent
     case '\0':
@@ -401,70 +391,71 @@ void send(char carE,char msg[],int &tamanio,HANDLE &portCOM) {
         case F1:
             //Manage the Frame which will be sent, this topic will divide the Data if it is too long
             //And send several frames to complete the original message
-            msg[tamanio]='\n';
-            tamanio++;
-            msg[tamanio]='\0';
-            fReceive.manageFrame(portCOM,msg,tamanio);
-            if(log){logStream.write(msg,tamanio);}
+            msg[size]='\n';
+            size++;
+            msg[size]='\0';
+            fReceive.manageFrame(portCOM,msg,size);
+            if(log){logStream.write(msg,size);}
             printf("\n");
             if(log){logStream <<"\n";}
 
-            tamanio = 0;
+            size = 0;
 
             break;
 
         case F2:
-            controlReceive.sendControlFrame(portCOM,log,logStream,pantalla);
+            controlReceive.sendControlFrame(portCOM,log,logStream,screen);
             break;
 
         case F3:
             processFile();
             break;
 
+        //F5 case will write in another file
         case F5:
             logStream.open("log.txt",ios::app);
             log = true;
             break;
 
         }
-
         break;
 
     // If intro key is pressed, we will show and end line and continue the input in the next one
     case INTRO_KEY:
-        if (tamanio<limit-2){
+
+        if (size<limit-2){
             printf ("\n");
-            msg[tamanio] = '\n';
-            tamanio += 1 ;
-            }
+            msg[size] = '\n';
+            size += 1 ;
+        }
         break;
 
     // If backspace key is pressed, we will delete the last character
     case RETURN_KEY:
 
-        if (tamanio > 0) {
+        if (size > 0) {
             colour =0 + 0*16;
-            pantalla = GetStdHandle(STD_OUTPUT_HANDLE);
-            SetConsoleTextAttribute (pantalla, colour);
+            screen = GetStdHandle(STD_OUTPUT_HANDLE);
+            SetConsoleTextAttribute (screen, colour);
             printf("\b \b");
-            tamanio = tamanio - 1;
+            size = size - 1;
         }
         break;
 
     //default case will prevent the exceeding input in the array
     default:
-        if (tamanio<limit-2) {
+
+        if (size<limit-2) {
                 colour =12 + 0*16;
-                pantalla = GetStdHandle(STD_OUTPUT_HANDLE);
-                SetConsoleTextAttribute (pantalla, colour);
-                msg[tamanio] = carE;
+                screen = GetStdHandle(STD_OUTPUT_HANDLE);
+                SetConsoleTextAttribute (screen, colour);
+                msg[size] = carE;
                 printf("%c",carE);
-                tamanio = tamanio + 1;
+                size = size + 1;
 
         }
         break;
     }
-
 }
 
 
@@ -473,7 +464,7 @@ int main() {
     char carE = 0;
     char PSerie[5];
     char msg[limit] ; //two more characters to the line end
-    int campo=1;
+    int field=1;
     int isControlFrame;
     //ControlFrame *fReceive = new ControlFrame();
 
@@ -509,7 +500,7 @@ int main() {
 
     //Esc key case to close the program, if esc is not pressed, continue forever
     while(carE != ESC_KEY) {
-            receiveFrame(campo,portCOM,isControlFrame);
+            receiveFrame(field,portCOM,isControlFrame);
 
 
         if (kbhit()) {
@@ -517,7 +508,7 @@ int main() {
             carE = getch();
             //Esc key case, if it isn't pressed, the switch will be displayed
             if (carE != ESC_KEY) {
-                send(carE,msg,tamanio,portCOM);
+                send(carE,msg,size,portCOM);
             }
         }
     }
