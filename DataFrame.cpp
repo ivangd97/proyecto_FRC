@@ -7,6 +7,7 @@
 #include "DataFrame.h"
 #include <iostream>
 #include <stdio.h>
+#include "Gestor.h"
 char author[255];
 int line=0;
 
@@ -64,6 +65,7 @@ void DataFrame::sendDataFrame(HANDLE &portCOM) {
             EnviarCaracter(portCOM,L);
             EnviarCadena(portCOM,Data,strlen(Data));
             EnviarCaracter(portCOM,BCE);
+
 }
 
 void DataFrame::sendDataFrame2(HANDLE &portCOM,char cadena[]){

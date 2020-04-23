@@ -37,6 +37,8 @@
 		<Unit filename="../ControlFrame.h" />
 		<Unit filename="../DataFrame.cpp" />
 		<Unit filename="../DataFrame.h" />
+		<Unit filename="../Gestor.cpp" />
+		<Unit filename="../Gestor.h" />
 		<Unit filename="../PuertoSerie.cpp" />
 		<Unit filename="../PuertoSerie.h" />
 		<Unit filename="../Sesion1(2).cpp" />
