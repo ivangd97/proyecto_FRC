@@ -515,13 +515,7 @@ void Gestor::send(char &carE,char msg[],int &size,int &colouro) {
 
 
 
-int Gestor::recibir() {
-    char carRec;
-    int resultado = 0;
-    carRec = RecibirCaracter(portCOM);
-    if (carRec) {
-        receiveFrame(field,isControlFrame,colouro); }
-    return resultado; }
+
 
 Gestor::~Gestor() {
     //dtor

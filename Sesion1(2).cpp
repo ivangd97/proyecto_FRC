@@ -17,12 +17,7 @@
 #include "Gestor.h"
 
 #define ESC_KEY (27)
-#define RETURN_KEY (8)
-#define INTRO_KEY (13)
-#define F1 (59)
-#define F2 (60)
-#define F3 (61)
-#define F5 (63)
+
 using namespace std;
 int main() {
     //  ControFrame controlF = new ControlFrame();
@@ -51,15 +46,11 @@ int main() {
     // - Stop bits: (0=1 bit, 1=1.5 bits, 2=2 bits).
 
 
-    //goto doFinish;
+   // Here we will open the port choosed by the user
     g.choosePort();
     g.chooseVel();
 
-        HANDLE puertoCOM = g.getPortCom();
-
-    // Here we will open the port choosed by the user
-
-    //Check if the choosed port is valid or not
+    HANDLE puertoCOM = g.getPortCom();
 
 
     //Esc key case to close the program, if esc is not pressed, continue forever
@@ -80,6 +71,5 @@ int main() {
         }
     }
     //Te port will be closed and the app will return
-    //doFinish:
     CerrarPuerto(puertoCOM);
     return 0; }

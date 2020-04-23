@@ -54,18 +54,6 @@ class Gestor
         HANDLE getPortCom();
 
 
-        int recibir();
-
-
-
-
-
-
-
-
-
-
-
 
 
         virtual ~Gestor();
