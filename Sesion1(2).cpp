@@ -26,9 +26,7 @@
 using namespace std;
 int main() {
     //  ControFrame controlF = new ControlFrame();
-    HANDLE portCOM;
     char carE = 0;
-    char PSerie[5];
     char msg[802] ; //two more characters to the line end
     int colouro;
     int field = 1;
@@ -52,24 +50,21 @@ int main() {
     // - Parity: (0=sin parity, 1=odd, 2=even, 3=mark, 4=space).
     // - Stop bits: (0=1 bit, 1=1.5 bits, 2=2 bits).
 
-    g.choosePort(PSerie);
+
     //goto doFinish;
-    int choosedVel = g.chooseVel();
+    g.choosePort();
+    g.chooseVel();
+
+        HANDLE puertoCOM = g.getPortCom();
 
     // Here we will open the port choosed by the user
-    portCOM = AbrirPuerto(PSerie,choosedVel,8,0,0);
 
     //Check if the choosed port is valid or not
-    if(portCOM == NULL) {
-        printf("Error al abrir el port %s\n",PSerie);
-        getch();
-        return (1); }
-    else
-        printf("port %s abierto correctamente\n",PSerie);
+
 
     //Esc key case to close the program, if esc is not pressed, continue forever
-    while(carE != ESC_KEY) {
-            g.receiveFrame(field,portCOM,isControlFrame,colouro);
+    while(carE != ESC_KEY){
+            g.receiveFrame(field,isControlFrame,colouro);
 
 
         if (kbhit()) {
@@ -77,7 +72,7 @@ int main() {
             carE = getch();
             //Esc key case, if it isn't pressed, the switch will be displayed
             if (carE != ESC_KEY) {
-                g.send(carE,msg,size,portCOM,colouro);
+                g.send(carE,msg,size,colouro);
 
 
             }
@@ -86,5 +81,5 @@ int main() {
     }
     //Te port will be closed and the app will return
     //doFinish:
-    CerrarPuerto(portCOM);
+    CerrarPuerto(puertoCOM);
     return 0; }

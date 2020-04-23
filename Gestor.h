@@ -34,23 +34,27 @@ class Gestor
         bool flag;
         int size;
         HANDLE portCOM;
+        char PSerie[5];
 
     public:
 
         Gestor();
-        void choosePort(char PSerie[]);
+        void choosePort();
 
-        int chooseVel();
+        void chooseVel();
 
-        void receiveFrame2(int &field,HANDLE portCOM,int &isControlFrame,bool &recibir);
-
-        void receiveFrame(int &field,HANDLE portCOM,int &isControlFrame,int &colouro);
+        void receiveFrame2(int &field,int &isControlFrame,bool &recibir);
+;
+        void receiveFrame(int &field,int &isControlFrame,int &colouro);
 
         void processFile();
 
-        void send(char carE,char msg[],int &size,HANDLE &portCOM,int &colouro);
+        void send(char &carE,char msg[],int &size,int &colouro);
+
+        HANDLE getPortCom();
 
 
+        int recibir();
 
 
 
