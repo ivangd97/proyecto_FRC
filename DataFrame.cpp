@@ -182,4 +182,12 @@ char DataFrame::setPartialData(int i, char msg) {
 void DataFrame::setData(char msg[]){
     strcpy(Data,msg);
 }
+void DataFrame::changeNT() {
+	if (NT == '0') {
+		NT = '1';
+	} else {
+		NT = '0';
+	}
+}
+
 

@@ -59,6 +59,8 @@ class DataFrame{
         void setBCE(unsigned char value);
         void setData(char msg[]);
 
+
+        void changeNT();
         void insertData(unsigned char value);
 
 

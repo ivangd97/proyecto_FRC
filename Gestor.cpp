@@ -378,7 +378,15 @@ void Gestor::processFile() {
                     fSend.sendDataFrame2(portCOM,stringAux);
                 }
             }
+            if(master){
+                printf("E %c STX %c %d\n", fSend.getD(), fSend.getNT(),
+						fSend.getBCE());
+                while (receiveFrame()!= 06){
 
+                }
+                fSend.changeNT();
+
+            }
 
             //ESC key case to cancel the process
             if (kbhit()) {
@@ -553,7 +561,7 @@ void Gestor::rol(){
     switch(opcion){
         case '1':
             printf("Has elegido MAESTRO \n");
-           // maestro();
+            rolMaestro();
             break;
         case '2':
             printf("Has elegido ESCLAVO \n");
@@ -577,13 +585,18 @@ void Gestor::rolMaestro(){
     switch(opcion){
     case '1':
         printf("Has elegido la operacion SELECCION \n");
-        //seleccionMaestro();
+        seleccionMaestro();
         break;
     case '2':
         printf("Has eleigo la operacion SONDEO \n");
         //sondeoMaestro();
         break;
+    default:
+        printf("No es valida esa opcion, pruebe otra vez \n");
+        rolMaestro();
+        break;
     }
+
 }
 
 void Gestor::seleccionMaestro(){
@@ -602,22 +615,68 @@ void Gestor::seleccionMaestro(){
     fSend.setD('R');
     processFile();
 
+    //Fase de cierre
+    controlSend.setC(04);
+    controlSend.setNT('0');
+    controlSend.sendControlFrame(portCOM,log,logStream,screen);
+    controlSend.imprimirTramaControl(1);
 
+    while(receiveFrame()!=06){
+
+    }
+    master = false;
+    printf("FIN DE PROTOCOLO \n");
 
 }
 
 void Gestor::sondeoMaestro(){
 
 
+
 }
 void Gestor::rolEsclavo(){
     printf("Has seleccionado ESCLAVO \n");
 
+    while(receiveFrame()!=5){
+
+    }
+    switch(controlReceive.getD()){
+
+    case 'R':
+        seleccionEsclavo();
+        break;
+    case 'T':
+        sondeoEsclavo();
+        break;
+    default:
+        printf("Trama incorrecta \n");
+        break;
+    }
+
+}
+
+void Gestor::seleccionEsclavo(){
+ //Fase Establecimiento
+ controlSend.setD(controlReceive.getD());
+ controlSend.setC(06);
+ controlSend.setNT(controlReceive.getNT());
+ controlSend.sendControlFrame(portCOM,log,logStream,screen)();
+ controlSend.imprimirTramaControl(1);
+
+
+
+
+
 
 
 
 
 }
+
+
+
+
+
 
 
 
