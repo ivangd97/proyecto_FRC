@@ -35,6 +35,8 @@ class Gestor
         int size;
         HANDLE portCOM;
         char PSerie[5];
+        bool master;
+
 
     public:
 
@@ -43,17 +45,30 @@ class Gestor
 
         void chooseVel();
 
-        void receiveFrame2(int &field,int &isControlFrame,bool &recibir);
 ;
-        void receiveFrame(int &field,int &isControlFrame,int &colouro);
+        int receiveFrame();
 
         void processFile();
 
         void send(char &carE,char msg[],int &size,int &colouro);
+                //This topic will divide the message in a little ones which its length is 254
+
+        void manageFrame(HANDLE &portCOM,char msg[],int tamanio,int &field,int &isControlframe,int &colouro,DataFrame fSend);
+        void imprimirFrame();
+
 
         HANDLE getPortCom();
 
+        void rol();
 
+        void rolMaestro();
+        void seleccionMaestro();
+        void sondeoMaestro();
+
+
+        void rolEsclavo();
+        void seleccionEsclavo();
+        void sondeoEsclavo();
 
 
         virtual ~Gestor();

@@ -101,6 +101,59 @@ unsigned char ControlFrame::getS()
 unsigned char ControlFrame::getNT()
 {
     return this->NT;
+
+}
+
+
+void ControlFrame::imprimirTramaControl(int opcion){
+    switch(opcion){
+	case 1:
+		switch (C) {
+			case 05:
+				printf("E %c ENQ %c\n",D,NT);
+				break;
+			case 04:
+				printf("E %c EOT %c\n",D,NT);
+				break;
+			case 06:
+				printf("E %c ACK %c\n",D,NT);
+				break;
+			case 21:
+				printf("E %c NACK %c\n",D,NT);
+				break;
+			default:
+
+				printf("Trama incorrecta\n");
+				break;
+			}
+		break;
+		case 2:
+			switch (C) {
+				case 05:
+					printf("R %c ENQ %c\n",D,NT);
+					break;
+				case 04:
+					printf("R %c EOT %c\n",D,NT);
+					break;
+				case 06:
+					printf("R %c ACK %c\n",D,NT);
+					break;
+				case 21:
+					printf("R %c NACK %c\n",D,NT);
+					break;
+				default:
+
+					printf("Trama incorrecta\n");
+					break;
+				}
+
+	}
+
+
+
+
+
+
 }
 
 

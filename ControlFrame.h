@@ -28,6 +28,7 @@ protected:
 public:
     ControlFrame();
     ControlFrame(int value);
+    void imprimirTramaControl(int opcion);
 
     //Setters
     void setC(unsigned char value);

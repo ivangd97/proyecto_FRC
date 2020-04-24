@@ -55,7 +55,7 @@ int main() {
 
     //Esc key case to close the program, if esc is not pressed, continue forever
     while(carE != ESC_KEY){
-            g.receiveFrame(field,isControlFrame,colouro);
+            g.receiveFrame();
 
 
         if (kbhit()) {

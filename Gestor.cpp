@@ -7,6 +7,7 @@
 #define F2 (60)
 #define F3 (61)
 #define F5 (63)
+#define F6 (64)
 
 ifstream inStream;
 ofstream outStream;
@@ -21,7 +22,10 @@ Gestor::Gestor() {
     i = 0;
     flag = false;
     size = 0;
-    screen = GetStdHandle(STD_OUTPUT_HANDLE); }
+    screen = GetStdHandle(STD_OUTPUT_HANDLE);
+    master = false;
+
+}
 
 
 
@@ -68,6 +72,32 @@ void Gestor::choosePort() {
 
 
     }
+
+
+}
+
+void Gestor::imprimirFrame(){
+                SetConsoleTextAttribute (screen, 12);
+
+                if(controlReceive.getC() == 05) {
+                    printf("Se ha recibido una trama ENQ\n");
+                    if(log) {
+                        logStream <<"Se ha recibido una trama ENQ\n"; } }
+
+                else if (controlReceive.getC()==04) {
+                    printf("Se ha recibido una trama EOT\n");
+                    if(log) {
+                        logStream <<"Se ha recibido una trama EOT\n"; } }
+                else if (controlReceive.getC()==06) {
+                    printf("Se ha recibido una trama ACK\n");
+                    if(log) {
+                        logStream <<"Se ha recibido una trama ACK\n"; } }
+                else if  (controlReceive.getC()==21) {
+                    printf("Se ha recibido una trama NACK\n");
+                    if(log) {
+                        logStream <<"Se ha recibido una trama NACK\n"; }
+
+                }
 
 
 }
@@ -139,7 +169,8 @@ HANDLE Gestor::getPortCom() {
 
     return portCOM; }
 
-void Gestor::receiveFrame(int &field,int &isControlFrame,int &colouro) {
+int Gestor::receiveFrame() {
+    int tipoTrama = 0;
     char carR = RecibirCaracter(portCOM);
     unsigned char bce;
     // If our string have any character, it will be shown
@@ -202,25 +233,14 @@ void Gestor::receiveFrame(int &field,int &isControlFrame,int &colouro) {
                 controlReceive.setNT(carR);
                 field = 1;
 
-                if(controlReceive.getC() == 05) {
-                    printf("Se ha recibido una trama ENQ\n");
-                    if(log) {
-                        logStream <<"Se ha recibido una trama ENQ\n"; } }
-
-                else if (controlReceive.getC()==04) {
-                    printf("Se ha recibido una trama EOT\n");
-                    if(log) {
-                        logStream <<"Se ha recibido una trama EOT\n"; } }
-                else if (controlReceive.getC()==06) {
-                    printf("Se ha recibido una trama ACK\n");
-                    if(log) {
-                        logStream <<"Se ha recibido una trama ACK\n"; } }
-                else if  (controlReceive.getC()==21) {
-                    printf("Se ha recibido una trama NACK\n");
-                    if(log) {
-                        logStream <<"Se ha recibido una trama NACK\n"; }
-
-                } }
+                if(master == true){
+                    controlReceive.imprimirTramaControl(2);
+                    tipoTrama = (int) controlReceive.getC();
+                }else{
+                    imprimirFrame();
+                }
+                isControlFrame = 0;
+ }
             else {
                 fReceive.setNT(carR);
                 field++; }
@@ -294,6 +314,8 @@ void Gestor::receiveFrame(int &field,int &isControlFrame,int &colouro) {
         }
     }
 
+    return tipoTrama;
+
 }
 
 
@@ -314,19 +336,13 @@ void Gestor::processFile() {
         //Character which will tell the receiver that the following frames will be about files
         EnviarCaracter(portCOM, '{');
 
+        while (!inStream.eof() && !exit) {
         if(cont == 0 ) {
             inStream.getline(stringAux,254,'\n');
             printf("Enviando fichero por %s. \n",stringAux);
             fSend.setL(strlen(stringAux));
             fSend.setBCE(fSend.calcularBCE_2(stringAux));
             fSend.sendDataFrame2(portCOM,stringAux);
-            receiveFrame(field,isControlFrame,colouro);
-
-
-
-
-
-
             cont++;
             if(log == true) {
                 logStream <<"Enviando fichero por "<< stringAux<< "\n"; } }
@@ -338,19 +354,7 @@ void Gestor::processFile() {
             fSend.setL(strlen(stringAux));
             fSend.setBCE(fSend.calcularBCE_2(stringAux));
             fSend.sendDataFrame2(portCOM,stringAux);
-            receiveFrame(field,isControlFrame,colouro);
-
-
-
-
-
-
-
-
-
-
             cont++;
-
         }
 
         //Name of the receiver file
@@ -359,15 +363,7 @@ void Gestor::processFile() {
             fSend.setL(strlen(stringAux));
             fSend.setBCE(fSend.calcularBCE_2(stringAux));
             fSend.sendDataFrame2(portCOM,stringAux);
-            receiveFrame(field,isControlFrame,colouro);
-
-
-
-
             cont++; }
-
-
-        while (!inStream.eof() && !exit) {
             //Reading authors of the file (not practice authors necessary)
 
             //Data of the original file to send
@@ -380,16 +376,7 @@ void Gestor::processFile() {
                     fSend.setL(numCar);
                     fSend.setBCE(fSend.calcularBCE_2(stringAux));
                     fSend.sendDataFrame2(portCOM,stringAux);
-                    receiveFrame(field,isControlFrame,colouro);
-
-
-
-
                 }
-
-
-
-
             }
 
 
@@ -398,19 +385,13 @@ void Gestor::processFile() {
                 key = getch();
                 if (key == 27) {
                     exit = true; } }
-
-            receiveFrame(field,isControlFrame,colouro);
-
+            receiveFrame();
         }
-
-
         sprintf(numCar2,"%d",tamF);
         inStream.close();
         //Send the character to tell the receiver that the file process is ending
         EnviarCaracter(portCOM, '}');
-        fSend.manageFrame(portCOM,numCar2,strlen(numCar2));
-
-
+        manageFrame(portCOM,numCar2,strlen(numCar2),field,isControlFrame,colouro,fSend);
         //All works correctly and the file is sent
         colouro = atoi(cadcolour) + 0*16;
         SetConsoleTextAttribute (screen, colouro);
@@ -428,7 +409,48 @@ void Gestor::processFile() {
             logStream <<"Fichero no encontrado. \n";        } }
 
 }
+//This topic will divide the message in a little ones which its length is 254
 
+void Gestor::manageFrame(HANDLE &portCOM,char msg[],int tamanio,int &field,int &isControlframe,int &colouro,DataFrame fSend){
+
+    int tamanioAux=0;
+	int cutPoint = 0;
+
+	while (tamanio > 0) {
+		if (tamanio > 254) {
+			tamanio -= 254;
+			tamanioAux = 254;
+		} else {
+			tamanioAux = tamanio;
+			tamanio = 0;
+		}
+		fSend.setL((unsigned char) tamanioAux);
+		for (int j = 0; j < tamanioAux; j++) {
+			//fSend.getPartialData[j] = msg[j + cutPoint];
+			fSend.setPartialData(j,msg[j+cutPoint]);
+		}
+		if(tamanio!=0){
+		cutPoint += 254;
+        //Calculate the bce associated to the new little frame
+        fSend.setBCE(fSend.calculateBCE()) ;
+		//Send the little frame
+        fSend.sendDataFrame(portCOM);
+        receiveFrame();
+
+
+
+		}
+	}
+
+    //Last frame char adding
+	fSend.setL((unsigned char) tamanioAux);
+    fSend.setBCE(fSend.calculateBCE()) ;
+	fSend.sendDataFrame(portCOM);
+	receiveFrame();
+
+
+
+}
 
 void Gestor::send(char &carE,char msg[],int &size,int &colouro) {
 
@@ -445,7 +467,9 @@ void Gestor::send(char &carE,char msg[],int &size,int &colouro) {
             msg[size]='\n';
             size++;
             msg[size]='\0';
-            fSend.manageFrame(portCOM,msg,size);
+            manageFrame(portCOM,msg,size,field,isControlFrame,colouro,fSend);
+
+
 
 
             if(log) {
@@ -474,6 +498,10 @@ void Gestor::send(char &carE,char msg[],int &size,int &colouro) {
             logStream.open("log.txt",ios::app);
             log = true;
             break;
+
+        case F6:
+            rol();
+
 
         }
         break;
@@ -513,6 +541,83 @@ void Gestor::send(char &carE,char msg[],int &size,int &colouro) {
         }
         break; } }
 
+
+void Gestor::rol(){
+
+    printf("Seleccione MAESTRO o ESCLAVO \n");
+    printf("Pulse 1 para MAESTRO \n");
+    printf("Pulse 2 para ESCLAVO \n");
+
+
+    char opcion = getch();
+    switch(opcion){
+        case '1':
+            printf("Has elegido MAESTRO \n");
+           // maestro();
+            break;
+        case '2':
+            printf("Has elegido ESCLAVO \n");
+           // esclavo();
+            break;
+        default:
+            printf("Entrada no validad. Introduzca de nuevo una opcion \n");
+            rol();
+            break;
+    }
+
+}
+
+void Gestor::rolMaestro(){
+    master = true;
+    printf("Has seleccionado MAESTRO \n");
+    printf("Selecciona la operacion a realizar \n");
+    printf("1.SELECCION \n");
+    printf("2.SONDEO \n");
+    char opcion = getch();
+    switch(opcion){
+    case '1':
+        printf("Has elegido la operacion SELECCION \n");
+        //seleccionMaestro();
+        break;
+    case '2':
+        printf("Has eleigo la operacion SONDEO \n");
+        //sondeoMaestro();
+        break;
+    }
+}
+
+void Gestor::seleccionMaestro(){
+    //TramaEstablecimiento
+    controlSend.setD('R');
+    controlSend.setC(05);
+    controlSend.setNT('0');
+    controlSend.sendControlFrame(portCOM,log,logStream,screen);
+    controlSend.imprimirTramaControl(1);
+
+    //Esperar
+    while(receiveFrame()!=06){
+
+    }
+    //Fase Transferencia
+    fSend.setD('R');
+    processFile();
+
+
+
+}
+
+void Gestor::sondeoMaestro(){
+
+
+}
+void Gestor::rolEsclavo(){
+    printf("Has seleccionado ESCLAVO \n");
+
+
+
+
+
+}
 
 
 

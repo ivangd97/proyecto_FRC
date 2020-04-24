@@ -7,7 +7,7 @@
 #include "DataFrame.h"
 #include <iostream>
 #include <stdio.h>
-#include "Gestor.h"
+
 char author[255];
 int line=0;
 
@@ -22,39 +22,6 @@ DataFrame::DataFrame() {
     BCE = 0; }
 
 
-//This topic will divide the message in a little ones which its length is 254
-void DataFrame::manageFrame(HANDLE &portCOM,char msg[],int tamanio){
-    int tamanioAux=0;
-	int cutPoint = 0;
-
-	while (tamanio > 0) {
-		if (tamanio > 254) {
-			tamanio -= 254;
-			tamanioAux = 254;
-		} else {
-			tamanioAux = tamanio;
-			tamanio = 0;
-		}
-		L = (unsigned char) tamanioAux;
-		for (int j = 0; j < tamanioAux; j++) {
-			Data[j] = msg[j + cutPoint];
-		}
-		if(tamanio!=0){
-		cutPoint += 254;
-        //Calculate the bce associated to the new little frame
-        BCE = calculateBCE();
-		//Send the little frame
-        sendDataFrame(portCOM);
-
-		}
-	}
-
-    //Last frame char adding
-	L=(unsigned char) tamanioAux;
-    BCE=calculateBCE();
-	sendDataFrame(portCOM);
-
-}
 
 //This procedure will send a control frame when the user press the F2 key
 void DataFrame::sendDataFrame(HANDLE &portCOM) {
@@ -209,7 +176,9 @@ void DataFrame::insertData(unsigned char value){
 void DataFrame::setBCE(unsigned char value){
     this->BCE = value;
 }
-
+char DataFrame::setPartialData(int i, char msg) {
+     this->Data[i] = msg;
+}
 void DataFrame::setData(char msg[]){
     strcpy(Data,msg);
 }

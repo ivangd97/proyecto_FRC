@@ -1,0 +1,35 @@
+Holatodo bien?Hola
+todo bien?
+
+si?si?
+
+
+
+Trama de control a enviar :
+ 0: Salir 
+ 1: Trama ENQ. 
+ 2: Trama EOT. 
+ 3: Trama ACK. 
+ 4: Trama NACK. 
+Has enviado Trama ENQ 
+Trama de control a enviar :
+ 0: Salir 
+ 1: Trama ENQ. 
+ 2: Trama EOT. 
+ 3: Trama ACK. 
+ 4: Trama NACK. 
+Has enviado Trama ACK 
+Trama de control a enviar :
+ 0: Salir 
+ 1: Trama ENQ. 
+ 2: Trama EOT. 
+ 3: Trama ACK. 
+ 4: Trama NACK. 
+Has enviado Trama ENQ 
+Trama de control a enviar :
+ 0: Salir 
+ 1: Trama ENQ. 
+ 2: Trama EOT. 
+ 3: Trama ACK. 
+ 4: Trama NACK. 
+Has enviado Trama EOT 

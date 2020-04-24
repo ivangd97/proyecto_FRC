@@ -7,6 +7,7 @@
 #ifndef DATAFRAME_H
 #define DATAFRAME_H
 #include "PuertoSerie.h"
+
 #include <fstream>
 class DataFrame{
 
@@ -33,6 +34,7 @@ class DataFrame{
         unsigned char getNT();
         unsigned char getL();
         char *getData();
+        char setPartialData(int i,char msg);
         unsigned char getBCE();
 
         //This procedure will send a control frame when the user press the F2 key
@@ -40,8 +42,6 @@ class DataFrame{
         void sendDataFrame2(HANDLE &portCOM,char cadena[]);
         unsigned char calcularBCE_2(char cadena[]);
 
-        //This topic will divide the message in a little ones which its length is 254
-        void manageFrame(HANDLE &portCOM,char msg[],int tamanio);
         //After a given formula, we will calculate the bce associated to data.
         unsigned char calculateBCE();
         //Show in terminal the message in the frame
