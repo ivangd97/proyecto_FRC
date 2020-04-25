@@ -155,6 +155,23 @@ void ControlFrame::imprimirTramaControl(int opcion){
 
 
 }
+void ControlFrame::changeNT() {
+	if (NT == '0') {
+		NT = '1';
+	} else {
+		NT = '0';
+	}
+}
+
+
+void ControlFrame::sendControl(HANDLE &portCOM){
+    EnviarCaracter(portCOM,S);
+    EnviarCaracter(portCOM,D);
+    EnviarCaracter(portCOM,C);
+    EnviarCaracter(portCOM,NT);
+
+
+}
 
 
 void ControlFrame::sendControlFrame(HANDLE &portCOM,bool log,ofstream &logStream,HANDLE pantalla) {

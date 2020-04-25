@@ -23,7 +23,8 @@ Gestor::Gestor() {
     flag = false;
     size = 0;
     screen = GetStdHandle(STD_OUTPUT_HANDLE);
-    master = false;
+    protocolo = false;
+
 
 }
 
@@ -191,20 +192,27 @@ int Gestor::receiveFrame() {
                 //Receiver know that the following frames will be about file process
                 isFile = true;
 
+
                 //Receiver know that the file process is ending
             } if(carR == '}') {
                 outStream.close();
                 isFile = false;
                 endOfFile = true;
-
-
-                SetConsoleTextAttribute (screen, colouro);
-                printf("Fichero Recibido. \n");
+                 if(protocolo==false){
+                    SetConsoleTextAttribute (screen, colouro);
+                    printf("Fichero Recibido. \n");
 
 
                 if(log) {
-                    logStream << "Fichero Recibido. \n"; } }
+                    logStream << "Fichero Recibido. \n"; }
 
+                    }
+            } if(carR == 'E'){
+                rolEsclavo();
+            }else if (carR == 'M'){
+
+                rolMaestro();
+            }
             break;
 
         case 2:
@@ -233,7 +241,7 @@ int Gestor::receiveFrame() {
                 controlReceive.setNT(carR);
                 field = 1;
 
-                if(master == true){
+                if(protocolo == true){
                     controlReceive.imprimirTramaControl(2);
                     tipoTrama = (int) controlReceive.getC();
                 }else{
@@ -271,11 +279,18 @@ int Gestor::receiveFrame() {
                 if(isFile) {
                     //if file process is initialized, instead f show data, the file will be written
                     fReceive.writeFile(outStream,screen,log,logStream,colouro);
+                    if(protocolo){
+                        printf("R %c STX %c %d %d\n", fReceive.getD(),fReceive.getNT(), fReceive.getBCE(),fReceive.calculateBCE());
+						controlSend.setNT(fReceive.getNT());
+						controlSend.setD(fReceive.getD());
+                        controlSend.setC(06);
+                        controlSend.sendControl(portCOM);
+                        controlSend.imprimirTramaControl(1);
+
+                    }
 
 
-
-                }
-                else if (endOfFile) {
+                }else if (endOfFile) {
                     //If the file process is end, we will send the size of the document
 
 
@@ -287,13 +302,39 @@ int Gestor::receiveFrame() {
                         logStream <<"El fichero recibido tiene un tamanio de "<<fReceive.getData()<<" bytes.\n"; }
                     endOfFile = false;
 
-                }
-                else {
+                     if(protocolo){
+                        printf("R %c STX %c %d %d\n", fReceive.getD(),fReceive.getNT(), fReceive.getBCE(),fReceive.calculateBCE());
+						controlSend.setNT(fReceive.getNT());
+						controlSend.setD(fReceive.getD());
+                        controlSend.setC(06);
+                        controlSend.sendControl(portCOM);
+                        controlSend.imprimirTramaControl(1);
+
+                    }
+
+
+                }else {
                     fReceive.showData(screen);
                     if(log) {
-                        logStream.write(fReceive.getData(),fReceive.getL()); } } }
-            else {
-                if(isFile) {
+                        logStream.write(fReceive.getData(),fReceive.getL()); }
+                }
+
+
+            }else {
+
+                if(protocolo==true){
+
+                    printf("R %c STX %c %d %d \n",fReceive.getD(),fReceive.getNT(),fReceive.getBCE(),fReceive.calculateBCE());
+                    controlSend.setNT(fReceive.getNT());
+                    controlSend.setD(fReceive.getD());
+                    controlSend.setC(21);
+                    controlSend.sendControl(portCOM);
+                    controlSend.imprimirTramaControl(1);
+
+
+
+
+                }if(isFile) {
                     printf("Error en la recepcion de la trama del fichero. \n");
                     if(log) {
                         logStream <<"Error en la rececpcion del la trama del fichero. \n"; } }
@@ -328,9 +369,11 @@ void Gestor::processFile() {
     bool exit = false;
     char numCar2[200];
     char cadcolour[200];
+    char autoress[802];
+
 
     //First of all, we must open the original file
-    inStream.open("fichero-e.txt");
+    inStream.open("EProtoc.txt");
     //If the opening is correct, program will follow the execution
     if (inStream.is_open()) {
         //Character which will tell the receiver that the following frames will be about files
@@ -338,14 +381,23 @@ void Gestor::processFile() {
 
         while (!inStream.eof() && !exit) {
         if(cont == 0 ) {
-            inStream.getline(stringAux,254,'\n');
-            printf("Enviando fichero por %s. \n",stringAux);
-            fSend.setL(strlen(stringAux));
-            fSend.setBCE(fSend.calcularBCE_2(stringAux));
-            fSend.sendDataFrame2(portCOM,stringAux);
+            inStream.getline(autoress,254,'\n');
+            fSend.setL(strlen(autoress));
+            fSend.setBCE(fSend.calcularBCE_2(autoress));
+            fSend.sendDataFrame2(portCOM,autoress);
             cont++;
-            if(log == true) {
-                logStream <<"Enviando fichero por "<< stringAux<< "\n"; } }
+
+              if(protocolo){
+                printf("E %c STX %c %d\n", fSend.getD(), fSend.getNT(),fSend.getBCE());
+                while (receiveFrame()!= 06){
+
+                }
+                fSend.changeNT();
+
+            }
+        }
+
+
 
         //Color and background
         if(cont ==1) {
@@ -354,7 +406,18 @@ void Gestor::processFile() {
             fSend.setL(strlen(stringAux));
             fSend.setBCE(fSend.calcularBCE_2(stringAux));
             fSend.sendDataFrame2(portCOM,stringAux);
+
             cont++;
+         if(protocolo){
+                printf("E %c STX %c %d\n", fSend.getD(), fSend.getNT(),
+						fSend.getBCE());
+                while (receiveFrame()!= 06){
+
+                }
+                fSend.changeNT();
+
+            }
+
         }
 
         //Name of the receiver file
@@ -363,10 +426,25 @@ void Gestor::processFile() {
             fSend.setL(strlen(stringAux));
             fSend.setBCE(fSend.calcularBCE_2(stringAux));
             fSend.sendDataFrame2(portCOM,stringAux);
-            cont++; }
+            cont++;
+             if(protocolo){
+                printf("E %c STX %c %d\n", fSend.getD(), fSend.getNT(),
+						fSend.getBCE());
+                while (receiveFrame()!= 06){
+
+                }
+                fSend.changeNT();
+
+            }
+                        printf("Enviando fichero por %s. \n",autoress);
+
+        }
+
             //Reading authors of the file (not practice authors necessary)
 
             //Data of the original file to send
+
+
             if(cont==3) {
                 inStream.read(stringAux, 254);
                 numCar = inStream.gcount();
@@ -377,8 +455,8 @@ void Gestor::processFile() {
                     fSend.setBCE(fSend.calcularBCE_2(stringAux));
                     fSend.sendDataFrame2(portCOM,stringAux);
                 }
-            }
-            if(master){
+
+                if(protocolo && inStream.gcount()>0){
                 printf("E %c STX %c %d\n", fSend.getD(), fSend.getNT(),
 						fSend.getBCE());
                 while (receiveFrame()!= 06){
@@ -386,7 +464,10 @@ void Gestor::processFile() {
                 }
                 fSend.changeNT();
 
+                }
             }
+
+
 
             //ESC key case to cancel the process
             if (kbhit()) {
@@ -399,14 +480,28 @@ void Gestor::processFile() {
         inStream.close();
         //Send the character to tell the receiver that the file process is ending
         EnviarCaracter(portCOM, '}');
-        manageFrame(portCOM,numCar2,strlen(numCar2),field,isControlFrame,colouro,fSend);
+      //  manageFrame(portCOM,numCar2,strlen(numCar2),field,isControlFrame,colouro,fSend);
+        fSend.setL(strlen(numCar2));
+        fSend.setData(numCar2);
+        fSend.setBCE(fSend.calculateBCE());
+        fSend.sendDataFrame2(portCOM,numCar2);
+        printf("El fichero enviado tiene un tamanio de %s bytes.\n", fSend.getData());
+        if(protocolo ){
+                printf("E %c STX %c %d\n", fSend.getD(), fSend.getNT(),
+						fSend.getBCE());
+                while (receiveFrame()!= 06){
+
+                }
+                fSend.changeNT();
+
+                }
         //All works correctly and the file is sent
         colouro = atoi(cadcolour) + 0*16;
         SetConsoleTextAttribute (screen, colouro);
-        printf("Fichero enviado. \n");
+
 
         if(log == true) {
-            logStream << "Fichero enviado. \n"; }
+             logStream <<"El fichero enviado tiene un tamanio de "<<fSend.getData()<<" bytes.\n"; }
 
     }
     else {
@@ -414,7 +509,9 @@ void Gestor::processFile() {
         SetConsoleTextAttribute (screen, colouro);
         printf("Fichero no encontrado. \n");
         if(log == true) {
-            logStream <<"Fichero no encontrado. \n";        } }
+            logStream <<"Fichero no encontrado. \n";        }
+
+    }
 
 }
 //This topic will divide the message in a little ones which its length is 254
@@ -551,7 +648,7 @@ void Gestor::send(char &carE,char msg[],int &size,int &colouro) {
 
 
 void Gestor::rol(){
-
+    protocolo = true;
     printf("Seleccione MAESTRO o ESCLAVO \n");
     printf("Pulse 1 para MAESTRO \n");
     printf("Pulse 2 para ESCLAVO \n");
@@ -561,11 +658,14 @@ void Gestor::rol(){
     switch(opcion){
         case '1':
             printf("Has elegido MAESTRO \n");
+            EnviarCaracter(portCOM,'E');
             rolMaestro();
+
             break;
         case '2':
             printf("Has elegido ESCLAVO \n");
-           // esclavo();
+            EnviarCaracter(portCOM,'M');
+            rolEsclavo();
             break;
         default:
             printf("Entrada no validad. Introduzca de nuevo una opcion \n");
@@ -576,7 +676,7 @@ void Gestor::rol(){
 }
 
 void Gestor::rolMaestro(){
-    master = true;
+    protocolo = true;
     printf("Has seleccionado MAESTRO \n");
     printf("Selecciona la operacion a realizar \n");
     printf("1.SELECCION \n");
@@ -585,11 +685,12 @@ void Gestor::rolMaestro(){
     switch(opcion){
     case '1':
         printf("Has elegido la operacion SELECCION \n");
+
         seleccionMaestro();
         break;
     case '2':
         printf("Has eleigo la operacion SONDEO \n");
-        //sondeoMaestro();
+        sondeoMaestro();
         break;
     default:
         printf("No es valida esa opcion, pruebe otra vez \n");
@@ -604,7 +705,7 @@ void Gestor::seleccionMaestro(){
     controlSend.setD('R');
     controlSend.setC(05);
     controlSend.setNT('0');
-    controlSend.sendControlFrame(portCOM,log,logStream,screen);
+    controlSend.sendControl(portCOM);
     controlSend.imprimirTramaControl(1);
 
     //Esperar
@@ -618,26 +719,82 @@ void Gestor::seleccionMaestro(){
     //Fase de cierre
     controlSend.setC(04);
     controlSend.setNT('0');
-    controlSend.sendControlFrame(portCOM,log,logStream,screen);
+    controlSend.sendControl(portCOM);
     controlSend.imprimirTramaControl(1);
 
     while(receiveFrame()!=06){
 
     }
-    master = false;
+    protocolo = false;;
     printf("FIN DE PROTOCOLO \n");
 
 }
 
+void Gestor::cierre(){
+    controlSend.setC(controlReceive.getC());
+    controlSend.setD(controlReceive.getD());
+    printf("Liberacion del esclavo\n");
+	printf("1-LIBERARLO\n");
+	printf("2-NO LIBERARLO\n");
+	char opcion = getch();
+	switch(opcion){
+
+	case '1':
+	    controlSend.setNT(controlReceive.getNT());
+	    controlSend.setC(06);
+	    controlSend.sendControl(portCOM);
+	    controlSend.imprimirTramaControl(1);
+	    break;
+
+    case '2':
+        controlSend.setNT(controlReceive.getNT());
+	    controlSend.setC(21);
+	    controlSend.sendControl(portCOM);
+	    controlSend.imprimirTramaControl(1);
+	    while(receiveFrame()!=4){
+
+	    }
+        cierre();
+        break;
+
+    default:
+        printf("Fallo \n");
+        cierre();
+        break;
+
+
+	}
+}
+
 void Gestor::sondeoMaestro(){
 
+    //Fase de establecimiento
+    controlSend.setD('T');
+    controlSend.setC(05);
+    controlSend.setNT('0');
+    controlSend.sendControl(portCOM);
+    controlSend.imprimirTramaControl(1);
+
+    while (receiveFrame()!= 06){
+
+    }
+    //Fase de trasnferencia
+    while (receiveFrame()!=04){
+
+    }
+    //Fase de cierre
+    cierre();
+    while(receiveFrame() !=04){
+    }
+    protocolo = false;
 
 
 }
 void Gestor::rolEsclavo(){
+    protocolo = true;
     printf("Has seleccionado ESCLAVO \n");
 
-    while(receiveFrame()!=5){
+    while(receiveFrame()!=05){
 
     }
     switch(controlReceive.getD()){
@@ -646,39 +803,75 @@ void Gestor::rolEsclavo(){
         seleccionEsclavo();
         break;
     case 'T':
-        sondeoEsclavo();
+       sondeoEsclavo();
         break;
     default:
         printf("Trama incorrecta \n");
         break;
     }
+    protocolo = false;
 
 }
 
+void Gestor::sondeoEsclavo(){
+    controlSend.setD(controlReceive.getD());
+    controlSend.setC(06);
+    controlSend.setNT(controlReceive.getNT());
+    controlSend.sendControl(portCOM);
+    controlSend.imprimirTramaControl(1);
+
+ //Fase de transferencia
+    fSend.setD('T');
+    fSend.setNT('0');
+    processFile();
+
+    //Fase de cierre
+	controlSend.setC(04);
+	controlSend.setD('T');
+	controlSend.setNT('0');
+	controlReceive.setC(21);
+	int resultado = 0;
+
+	while (controlReceive.getC() != 06) {
+		controlSend.sendControl(portCOM);
+		controlSend.imprimirTramaControl(1);
+		controlSend.changeNT();
+		resultado = 0;
+		while (resultado != 6 && resultado != 21) {
+			resultado = receiveFrame();
+
+		}
+
+	}
+	if(controlReceive.getC()==06){
+        controlSend.sendControl(portCOM);
+		controlSend.imprimirTramaControl(1);
+		controlSend.changeNT();
+    }
+
+
+}
 void Gestor::seleccionEsclavo(){
- //Fase Establecimiento
- controlSend.setD(controlReceive.getD());
+    controlSend.setD(controlReceive.getD());
+    controlSend.setC(06);
+    controlSend.setNT(controlReceive.getNT());
+    controlSend.sendControl(portCOM);
+    controlSend.imprimirTramaControl(1);
+
+
+ //Transferencia
+ while(receiveFrame()!= 04){
+
+ }
+
+ //Fase de cierre
  controlSend.setC(06);
+ controlSend.setD(controlReceive.getD());
  controlSend.setNT(controlReceive.getNT());
- controlSend.sendControlFrame(portCOM,log,logStream,screen)();
+ controlSend.sendControl(portCOM);
  controlSend.imprimirTramaControl(1);
 
-
-
-
-
-
-
-
-
 }
-
-
-
-
-
-
-
 
 
 Gestor::~Gestor() {

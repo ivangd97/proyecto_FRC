@@ -33,3 +33,4 @@ Trama de control a enviar :
  3: Trama ACK. 
  4: Trama NACK. 
 Has enviado Trama EOT 
+Enviando fichero por Belinda Soto & Mario Borrego

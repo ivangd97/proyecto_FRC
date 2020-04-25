@@ -35,7 +35,7 @@ class Gestor
         int size;
         HANDLE portCOM;
         char PSerie[5];
-        bool master;
+        bool protocolo;
 
 
     public:
@@ -70,6 +70,8 @@ class Gestor
         void seleccionEsclavo();
         void sondeoEsclavo();
 
+
+        void cierre();
 
         virtual ~Gestor();
 

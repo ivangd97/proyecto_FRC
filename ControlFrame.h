@@ -36,6 +36,9 @@ public:
     void setS(unsigned char value);
     void setNT(unsigned char value);
     void sendControlFrame(HANDLE &portCOM,bool log,ofstream &logStream,HANDLE pantalla);
+    void sendControl(HANDLE &portCOM);
+    void changeNT();
+
     //Getters
     unsigned char getC();
     unsigned char getD();

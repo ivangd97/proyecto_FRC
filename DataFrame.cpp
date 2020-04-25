@@ -10,6 +10,7 @@
 
 char author[255];
 int line=0;
+int cont=0;
 
 //Default constructor
 DataFrame::DataFrame() {
@@ -104,6 +105,13 @@ void DataFrame::showData(HANDLE pantalla){
 
 //Write data in the output file with a of stream
 void DataFrame::writeFile(ofstream &of,HANDLE pantalla,bool log,ofstream &logStream,int &colouro){
+
+    if(cont!=0){
+        printf("Recibiendo fichero de %s \n",author);
+        if(log){logStream<<"Recibiendo fichero de "<< author<<"\n";}
+
+    }
+
     if(calculateBCE() == BCE ){
         switch(line){
             case 0:
@@ -114,9 +122,8 @@ void DataFrame::writeFile(ofstream &of,HANDLE pantalla,bool log,ofstream &logStr
                 colouro = atoi(Data);
                 pantalla = GetStdHandle(STD_OUTPUT_HANDLE);
                 SetConsoleTextAttribute (pantalla, atoi(Data));
-                printf("Recibiendo fichero de %s \n",author);
 
-                if(log){logStream<<"Recibiendo fichero de "<< author<<"\n";}
+
 
                 line++;
                 break;
@@ -124,11 +131,14 @@ void DataFrame::writeFile(ofstream &of,HANDLE pantalla,bool log,ofstream &logStr
             case 2:
 
                 of.open(Data,ios::app);
+
                 line++;
+                cont++;
+
                 break;
 
             case 3:
-
+                cont =0;
                 of.write(Data,strlen(Data));
 
                 break;
