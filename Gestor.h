@@ -38,6 +38,8 @@ class Gestor
         bool protocolo;
         int cont;
         char cadcolour[200];
+        bool sondeo;
+        int line;
 
 
 

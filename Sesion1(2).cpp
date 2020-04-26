@@ -34,8 +34,8 @@ int main() {
     printf("============================================================================\n");
     printf("----------- PRACTICAS DE FUNDAMENTOS DE REDES DE COMUNICACIONES ------------\n");
     printf("---------------------------- CURSO 2019/20 ---------------------------------\n");
-    printf("----------------------------- SESION3.CPP ----------------------------------\n");
-    printf("--------Autores: Rubén Costa Barriga e Iván Gonzalez Dominguez--------------\n");
+    printf("----------------------------- SESION5.CPP ----------------------------------\n");
+    printf("--------Autores: Ruben Costa Barriga e Ivan Gonzalez Dominguez--------------\n");
     printf("============================================================================\n\n");
 
     //We will open the port. For it we need to define the following parameters:

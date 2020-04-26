@@ -105,25 +105,31 @@ unsigned char ControlFrame::getNT()
 }
 
 
-void ControlFrame::imprimirTramaControl(int opcion){
+void ControlFrame::imprimirTramaControl(int opcion,ofstream &pStream){
     switch(opcion){
 	case 1:
 		switch (C) {
 			case 05:
 				printf("E %c ENQ %c\n",D,NT);
+				pStream<<"E "<<D<<" ENQ "<<NT<< "\n";
+
 				break;
 			case 04:
 				printf("E %c EOT %c\n",D,NT);
+				pStream<<"E "<<D<<" EOT "<< NT<<"\n";
 				break;
 			case 06:
 				printf("E %c ACK %c\n",D,NT);
+				pStream<<"E "<<D<<" ACK "<<NT<<"\n";
 				break;
 			case 21:
 				printf("E %c NACK %c\n",D,NT);
+				pStream<<"E "<<D<<" NACK "<<NT<<"\n";
 				break;
 			default:
 
 				printf("Trama incorrecta\n");
+				pStream<<"Trama incorrecta\n";
 				break;
 			}
 		break;
@@ -131,19 +137,30 @@ void ControlFrame::imprimirTramaControl(int opcion){
 			switch (C) {
 				case 05:
 					printf("R %c ENQ %c\n",D,NT);
+				pStream<<"R "<<D<<" ENQ "<<NT<<"\n";
+
 					break;
 				case 04:
 					printf("R %c EOT %c\n",D,NT);
-					break;
+                    pStream<<"R "<<D<<" EOT "<<NT<<"\n";
+
+
+                    break;
 				case 06:
 					printf("R %c ACK %c\n",D,NT);
+                    pStream<<"R "<<D<<" ACK "<<NT<<"\n";
+
+
+
 					break;
 				case 21:
 					printf("R %c NACK %c\n",D,NT);
+                    pStream<<"R "<<D<<" NACK "<<NT<<"\n";
 					break;
 				default:
 
 					printf("Trama incorrecta\n");
+					pStream<<"Trama incorrecta\n";
 					break;
 				}
 
@@ -154,6 +171,57 @@ void ControlFrame::imprimirTramaControl(int opcion){
 
 
 
+}
+void ControlFrame::imprimirTramaControl2(int opcion,ofstream &pStream){
+    switch(opcion){
+	case 1:
+		switch (C) {
+			case 05:
+				pStream<<"E "<<D<<" ENQ "<<NT<< "\n";
+
+				break;
+			case 04:
+				pStream<<"E "<<D<<" EOT "<< NT<<"\n";
+				break;
+			case 06:
+				pStream<<"E "<<D<<" ACK "<<NT<<"\n";
+				break;
+			case 21:
+				pStream<<"E "<<D<<" NACK "<<NT<<"\n";
+				break;
+			default:
+
+				pStream<<"Trama incorrecta\n";
+				break;
+			}
+		break;
+		case 2:
+			switch (C) {
+				case 05:
+				pStream<<"R "<<D<<" ENQ "<<NT<<"\n";
+
+					break;
+				case 04:
+                    pStream<<"R "<<D<<" EOT "<<NT<<"\n";
+
+
+                    break;
+				case 06:
+                    pStream<<"R "<<D<<" ACK "<<NT<<"\n";
+
+
+
+					break;
+				case 21:
+                    pStream<<"R "<<D<<" NACK "<<NT<<"\n";
+					break;
+				default:
+
+					pStream<<"Trama incorrecta\n";
+					break;
+				}
+
+	}
 }
 void ControlFrame::changeNT() {
 	if (NT == '0') {
