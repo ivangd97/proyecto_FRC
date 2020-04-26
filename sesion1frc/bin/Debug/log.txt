@@ -1,9 +1,4 @@
-Holatodo bien?Hola
-todo bien?
-
-si?si?
-
-
+hola
 
 Trama de control a enviar :
  0: Salir 
@@ -12,25 +7,7 @@ Trama de control a enviar :
  3: Trama ACK. 
  4: Trama NACK. 
 Has enviado Trama ENQ 
-Trama de control a enviar :
- 0: Salir 
- 1: Trama ENQ. 
- 2: Trama EOT. 
- 3: Trama ACK. 
- 4: Trama NACK. 
-Has enviado Trama ACK 
-Trama de control a enviar :
- 0: Salir 
- 1: Trama ENQ. 
- 2: Trama EOT. 
- 3: Trama ACK. 
- 4: Trama NACK. 
-Has enviado Trama ENQ 
-Trama de control a enviar :
- 0: Salir 
- 1: Trama ENQ. 
- 2: Trama EOT. 
- 3: Trama ACK. 
- 4: Trama NACK. 
-Has enviado Trama EOT 
-Enviando fichero por Belinda Soto & Mario Borrego
+Enviando fichero por Belinda Soto & Mario Borrego. 
+El fichero enviado tiene un tamanio de 2540 bytes.
+adios
+

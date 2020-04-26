@@ -464,3 +464,957 @@ E R ACK 1
 R R EOT 0
 E R ACK 0
 FIN DE PROTOCOLO 
+Seleccione Maestro o ESCLAVO 
+Pulse 1 para MAESTRO 
+Pulse 2 para ESCLAVO 
+Has elegido ESCLAVO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+R R STX 0 80 80
+E R ACK 0
+R R STX 1 55 55
+E R ACK 1
+R R STX 0 14 14
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 37 37
+E R ACK 1
+R R STX 0 51 51
+E R ACK 0
+R R STX 1 107 107
+E R ACK 1
+R R STX 0 46 46
+E R ACK 0
+R R STX 1 6 6
+E R ACK 1
+R R STX 0 120 120
+E R ACK 0
+R R STX 1 87 87
+E R ACK 1
+R R STX 0 33 33
+E R ACK 0
+R R STX 1 94 94
+E R ACK 1
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+R R STX 0 80 80
+E R ACK 0
+R R STX 1 55 55
+E R ACK 1
+R R STX 0 14 14
+E R ACK 0
+R R STX 1 37 37
+E R ACK 1
+R R STX 0 51 51
+E R ACK 0
+R R STX 1 107 107
+E R ACK 1
+R R STX 0 46 46
+E R ACK 0
+R R STX 1 6 6
+E R ACK 1
+R R STX 0 120 120
+E R ACK 0
+R R STX 1 87 87
+E R ACK 1
+R R STX 0 33 33
+E R ACK 0
+R R STX 1 94 94
+E R ACK 1
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R T ENQ 0
+E T ACK 0
+E T STX 0 80
+R T ACK 0
+E T STX 1 55
+R T ACK 1
+E T STX 0 14
+Enviando fichero por Belinda Soto & Mario Borrego. 
+R T ACK 0
+E T STX 1 37
+R T ACK 1
+E T STX 0 51
+R T ACK 0
+E T STX 1 107
+R T ACK 1
+E T STX 0 46
+R T ACK 0
+E T STX 1 6
+R T ACK 1
+E T STX 0 120
+R T ACK 0
+E T STX 1 87
+R T ACK 1
+E T STX 0 33
+R T ACK 0
+E T STX 1 94
+R T ACK 1
+E T STX 0 26
+R T ACK 0
+El fichero enviado tiene un tamanio de 2540 bytes.
+E T STX 1 3
+R T ACK 1
+E T EOT 0
+R T ACK 0
+E T EOT 1
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+R R STX 0 80 80
+E R ACK 0
+R R STX 1 55 55
+E R ACK 1
+R R STX 0 14 14
+E R ACK 0
+R R STX 1 37 37
+E R ACK 1
+R R STX 0 51 51
+E R ACK 0
+R R STX 1 107 107
+E R ACK 1
+R R STX 0 46 46
+E R ACK 0
+R R STX 1 6 6
+E R ACK 1
+R R STX 0 120 120
+E R ACK 0
+R R STX 1 87 87
+E R ACK 1
+R R STX 0 33 33
+E R ACK 0
+R R STX 1 94 94
+E R ACK 1
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 80 80
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 55 55
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 14 14
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 37 37
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 51 51
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 107 107
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 46 46
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 6 6
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 120 120
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 87 87
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 33 33
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 94 94
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 80 80
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 55 55
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 14 14
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 37 37
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 51 51
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 107 107
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 46 46
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 6 6
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 120 120
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 87 87
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 33 33
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 94 94
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 80 80
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 55 55
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 14 14
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 37 37
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 51 51
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 107 107
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 46 46
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 6 6
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 120 120
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 87 87
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 33 33
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 94 94
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 80 80
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 55 55
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 14 14
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 37 37
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 51 51
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 107 107
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 46 46
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 6 6
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 120 120
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 87 87
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 33 33
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 94 94
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+R R STX 0 80 80
+E R ACK 0
+R R STX 1 55 55
+E R ACK 1
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 0 14 14
+E R ACK 0
+R R STX 1 37 37
+E R ACK 1
+R R STX 0 51 51
+E R ACK 0
+R R STX 1 107 107
+E R ACK 1
+R R STX 0 46 46
+E R ACK 0
+R R STX 1 6 6
+E R ACK 1
+R R STX 0 120 120
+E R ACK 0
+R R STX 1 87 87
+E R ACK 1
+R R STX 0 33 33
+E R ACK 0
+R R STX 1 94 94
+E R ACK 1
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+R R STX 0 80 80
+E R ACK 0
+R R STX 1 55 55
+E R ACK 1
+R R STX 0 14 14
+E R ACK 0
+R R STX 1 37 37
+E R ACK 1
+R R STX 0 51 51
+E R ACK 0
+R R STX 1 107 107
+E R ACK 1
+R R STX 0 46 46
+E R ACK 0
+R R STX 1 6 6
+E R ACK 1
+R R STX 0 120 120
+E R ACK 0
+R R STX 1 87 87
+E R ACK 1
+R R STX 0 33 33
+E R ACK 0
+R R STX 1 94 94
+E R ACK 1
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+R R STX 0 80 80
+E R ACK 0
+R R STX 1 55 55
+E R ACK 1
+R R STX 0 14 14
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 37 37
+E R ACK 1
+R R STX 0 51 51
+E R ACK 0
+R R STX 1 107 107
+E R ACK 1
+R R STX 0 46 46
+E R ACK 0
+R R STX 1 6 6
+E R ACK 1
+R R STX 0 120 120
+E R ACK 0
+R R STX 1 87 87
+E R ACK 1
+R R STX 0 33 33
+E R ACK 0
+R R STX 1 94 94
+E R ACK 1
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+R R STX 0 80 80
+E R ACK 0
+R R STX 1 55 55
+E R ACK 1
+R R STX 0 14 14
+E R ACK 0
+R R STX 1 37 37
+E R ACK 1
+R R STX 0 51 51
+E R ACK 0
+R R STX 1 107 107
+E R ACK 1
+R R STX 0 46 46
+E R ACK 0
+R R STX 1 6 6
+E R ACK 1
+R R STX 0 120 120
+E R ACK 0
+R R STX 1 87 87
+E R ACK 1
+R R STX 0 33 33
+E R ACK 0
+R R STX 1 94 94
+E R ACK 1
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+R R STX 0 80 80
+E R ACK 0
+R R STX 1 55 55
+E R ACK 1
+R R STX 0 14 14
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 37 37
+E R ACK 1
+R R STX 0 51 51
+E R ACK 0
+R R STX 1 107 107
+E R ACK 1
+R R STX 0 46 46
+E R ACK 0
+R R STX 1 6 6
+E R ACK 1
+R R STX 0 120 120
+E R ACK 0
+R R STX 1 87 87
+E R ACK 1
+R R STX 0 33 33
+E R ACK 0
+R R STX 1 94 94
+E R ACK 1
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+R R STX 0 80 80
+E R ACK 0
+R R STX 1 55 55
+E R ACK 1
+R R STX 0 14 14
+E R ACK 0
+R R STX 1 37 37
+E R ACK 1
+R R STX 0 51 51
+E R ACK 0
+R R STX 1 107 107
+E R ACK 1
+R R STX 0 46 46
+E R ACK 0
+R R STX 1 6 6
+E R ACK 1
+R R STX 0 120 120
+E R ACK 0
+R R STX 1 87 87
+E R ACK 1
+R R STX 0 33 33
+E R ACK 0
+R R STX 1 94 94
+E R ACK 1
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+R R STX 0 80 80
+E R ACK 0
+R R STX 1 55 55
+E R ACK 1
+R R STX 0 14 14
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 37 37
+E R ACK 1
+R R STX 0 51 51
+E R ACK 0
+R R STX 1 107 107
+E R ACK 1
+R R STX 0 46 46
+E R ACK 0
+R R STX 1 6 6
+E R ACK 1
+R R STX 0 120 120
+E R ACK 0
+R R STX 1 87 87
+E R ACK 1
+R R STX 0 33 33
+E R ACK 0
+R R STX 1 94 94
+E R ACK 1
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+R R STX 0 80 80
+E R ACK 0
+R R STX 1 55 55
+E R ACK 1
+R R STX 0 14 14
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 37 37
+E R ACK 1
+R R STX 0 51 51
+E R ACK 0
+R R STX 1 107 107
+E R ACK 1
+R R STX 0 46 46
+E R ACK 0
+R R STX 1 6 6
+E R ACK 1
+R R STX 0 120 120
+E R ACK 0
+R R STX 1 87 87
+E R ACK 1
+R R STX 0 33 33
+E R ACK 0
+R R STX 1 94 94
+E R ACK 1
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R T ENQ 0
+E T ACK 0
+E T STX 0 80
+R T ACK 0
+E T STX 1 55
+R T ACK 1
+E T STX 0 14
+Enviando fichero por Belinda Soto & Mario Borrego. 
+R T ACK 0
+E T STX 1 37
+R T ACK 1
+E T STX 0 51
+R T ACK 0
+E T STX 1 107
+R T ACK 1
+E T STX 0 46
+R T ACK 0
+E T STX 1 6
+R T ACK 1
+E T STX 0 120
+R T ACK 0
+E T STX 1 87
+R T ACK 1
+E T STX 0 33
+R T ACK 0
+E T STX 1 94
+R T ACK 1
+E T STX 0 26
+R T ACK 0
+El fichero enviado tiene un tamanio de 2540 bytes.
+E T STX 1 3
+R T ACK 1
+E T EOT 0
+R T ACK 0
+E T EOT 1
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R T ENQ 0
+E T ACK 0
+E T STX 0 80
+R T ACK 0
+E T STX 1 55
+R T ACK 1
+E T STX 0 14
+Enviando fichero por Belinda Soto & Mario Borrego. 
+R T ACK 0
+E T STX 1 37
+R T ACK 1
+E T STX 0 51
+R T ACK 0
+E T STX 1 107
+R T ACK 1
+E T STX 0 46
+R T ACK 0
+E T STX 1 6
+R T ACK 1
+E T STX 0 120
+R T ACK 0
+E T STX 1 87
+R T ACK 1
+E T STX 0 33
+R T ACK 0
+E T STX 1 94
+R T ACK 1
+E T STX 0 26
+R T ACK 0
+El fichero enviado tiene un tamanio de 2540 bytes.
+E T STX 1 3
+R T ACK 1
+E T EOT 0
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+R R STX 0 80 80
+E R ACK 0
+R R STX 1 55 55
+E R ACK 1
+R R STX 0 14 14
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 37 37
+E R ACK 1
+R R STX 0 51 51
+E R ACK 0
+R R STX 1 107 107
+E R ACK 1
+R R STX 0 46 46
+E R ACK 0
+R R STX 1 6 6
+E R ACK 1
+R R STX 0 120 120
+E R ACK 0
+R R STX 1 87 87
+E R ACK 1
+R R STX 0 33 33
+E R ACK 0
+R R STX 1 94 94
+E R ACK 1
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R T ENQ 0
+E T ACK 0
+E T STX 0 80
+R T ACK 0
+E T STX 1 55
+R T ACK 1
+E T STX 0 14
+Enviando fichero por Belinda Soto & Mario Borrego. 
+R T ACK 0
+E T STX 1 37
+R T ACK 1
+E T STX 0 51
+R T ACK 0
+E T STX 1 107
+R T ACK 1
+E T STX 0 46
+R T ACK 0
+E T STX 1 6
+R T ACK 1
+E T STX 0 120
+R T ACK 0
+E T STX 1 87
+R T ACK 1
+E T STX 0 33
+R T ACK 0
+E T STX 1 94
+R T ACK 1
+E T STX 0 26
+R T ACK 0
+El fichero enviado tiene un tamanio de 2540 bytes.
+E T STX 1 3
+R T ACK 1
+E T EOT 0
+R T NACK 0
+E T EOT 1
+R T ACK 1
+E T EOT 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+R R STX 0 80 80
+E R ACK 0
+R R STX 1 55 55
+E R ACK 1
+R R STX 0 14 14
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 37 37
+E R ACK 1
+R R STX 0 51 51
+E R ACK 0
+R R STX 1 107 107
+E R ACK 1
+R R STX 0 46 46
+E R ACK 0
+R R STX 1 6 6
+E R ACK 1
+R R STX 0 120 120
+E R ACK 0
+R R STX 1 87 87
+E R ACK 1
+R R STX 0 33 33
+E R ACK 0
+R R STX 1 94 94
+E R ACK 1
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+R R STX 0 80 80
+E R ACK 0
+R R STX 1 55 55
+E R ACK 1
+R R STX 0 14 14
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 37 37
+E R ACK 1
+R R STX 0 51 51
+E R ACK 0
+R R STX 1 107 107
+E R ACK 1
+R R STX 0 46 46
+E R ACK 0
+R R STX 1 6 6
+E R ACK 1
+R R STX 0 120 120
+E R ACK 0
+R R STX 1 87 87
+E R ACK 1
+R R STX 0 33 33
+E R ACK 0
+R R STX 1 94 94
+E R ACK 1
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+R R STX 0 80 80
+E R ACK 0
+R R STX 1 55 55
+E R ACK 1
+R R STX 0 14 14
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 37 37
+E R ACK 1
+R R STX 0 51 51
+E R ACK 0
+R R STX 1 107 107
+E R ACK 1
+R R STX 0 46 46
+E R ACK 0
+R R STX 1 6 6
+E R ACK 1
+R R STX 0 120 120
+E R ACK 0
+R R STX 1 87 87
+E R ACK 1
+R R STX 0 33 33
+E R ACK 0
+R R STX 1 94 94
+E R ACK 1
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Seleccione Maestro o ESCLAVO 
+Pulse 1 para MAESTRO 
+Pulse 2 para ESCLAVO 
+Has elegido ESCLAVO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+R R STX 0 80 80
+E R ACK 0
+R R STX 1 55 55
+E R ACK 1
+R R STX 0 14 14
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 37 37
+E R ACK 1
+R R STX 0 51 51
+E R ACK 0
+R R STX 1 107 107
+E R ACK 1
+R R STX 0 46 46
+E R ACK 0
+R R STX 1 6 6
+E R ACK 1
+R R STX 0 120 120
+E R ACK 0
+R R STX 1 87 87
+E R ACK 1
+R R STX 0 33 33
+E R ACK 0
+R R STX 1 94 94
+E R ACK 1
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado ESCLAVO 
+R R ENQ 0
+E R ACK 0
+R R STX 0 80 80
+E R ACK 0
+R R STX 1 1 1
+E R ACK 1
+R R STX 0 14 14
+E R ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R R STX 1 37 37
+E R ACK 1
+R R STX 0 51 51
+E R ACK 0
+R R STX 1 107 107
+E R ACK 1
+R R STX 0 46 46
+E R ACK 0
+R R STX 1 6 6
+E R ACK 1
+R R STX 0 120 120
+E R ACK 0
+R R STX 1 87 87
+E R ACK 1
+R R STX 0 33 33
+E R ACK 0
+R R STX 1 94 94
+E R ACK 1
+R R STX 0 26 26
+E R ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R R STX 1 3 3
+E R ACK 1
+R R EOT 0
+E R ACK 0
+FIN DE PROTOCOLO 

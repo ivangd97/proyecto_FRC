@@ -1,6 +1,0 @@
-Se ha recibido una trama ENQ
-Se ha recibido una trama EOT
-Recibiendo fichero de Belinda Soto & Mario Borrego
-El fichero recibido tiene un tamanio de 2540 bytes.
-saalalaalal
-

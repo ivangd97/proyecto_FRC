@@ -42,7 +42,6 @@ class Gestor
         int line;
 
 
-
     public:
 
         Gestor();

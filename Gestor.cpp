@@ -342,9 +342,10 @@ int Gestor::receiveFrame() {
 
 
                 }else if (endOfFile) {
+                    i =0;
+                    line = 0;
                     //If the file process is end, we will send the size of the document
 
-                    line = 0;
                     SetConsoleTextAttribute (screen, colouro);
 
                     printf("El fichero recibido tiene un tamanio de %s bytes.\n", fReceive.getData());
@@ -536,6 +537,10 @@ void Gestor::processFile() {
             }
                 SetConsoleTextAttribute (screen,atoi(cadcolour));
                 printf("Enviando fichero por %s. \n",autoress);
+                if(log){
+
+                    logStream<<"Enviando fichero por "<< autoress <<". \n";
+                }
 
         }
 
@@ -585,6 +590,7 @@ void Gestor::processFile() {
         }
         sprintf(numCar2,"%d",tamF);
         inStream.close();
+
         //Send the character to tell the receiver that the file process is ending
         EnviarCaracter(portCOM, '}');
       //  manageFrame(portCOM,numCar2,strlen(numCar2),field,isControlFrame,colouro,fSend);
@@ -757,8 +763,6 @@ void Gestor::send(char &carE,char msg[],int &size,int &colouro) {
             SetConsoleTextAttribute (screen, 12);
             msg[size] = carE;
             printf("%c",carE);
-            if(log) {
-                logStream<<carE; }
             size = size + 1;
 
 
@@ -768,6 +772,8 @@ void Gestor::send(char &carE,char msg[],int &size,int &colouro) {
 
 void Gestor::rol(){
     protocolo = true;
+
+    SetConsoleTextAttribute (screen, 10);
 
     printf("Seleccione MAESTRO o ESCLAVO \n");
 
@@ -808,6 +814,11 @@ void Gestor::rol(){
             EnviarCaracter(portCOM,'M');
             rolEsclavo();
             break;
+
+        case ESC_KEY:
+            printf("Saliendo del protocolo\n");
+            mStream<<"Saliendo del protocolo\n";
+            break;
         default:
             printf("Entrada no valida. Introduzca de nuevo una opcion \n");
             mStream<<"Entrada no valida. Introduzca de nuevo una opcion \n";
@@ -819,7 +830,7 @@ void Gestor::rol(){
 
 void Gestor::rolMaestro(){
     mStream.open("Prolog-m.txt",ios::app);
-
+    SetConsoleTextAttribute (screen, 10);
 
     protocolo = true;
     printf("Has seleccionado MAESTRO \n");
@@ -849,6 +860,9 @@ void Gestor::rolMaestro(){
         mStream.close();
         sondeo = true;
         sondeoMaestro();
+        break;
+    case ESC_KEY:
+        rol();
         break;
     default:
         printf("No es valida esa opcion, pruebe otra vez \n");
@@ -893,7 +907,9 @@ void Gestor::seleccionMaestro(){
 
     }
 
-    protocolo = false;;
+    protocolo = false;
+    SetConsoleTextAttribute (screen, 10);
+
     printf("FIN DE PROTOCOLO \n");
     mStream<<"FIN DE PROTOCOLO \n";
 
@@ -902,7 +918,9 @@ void Gestor::seleccionMaestro(){
 }
 
 void Gestor::cierre(){
-   // mStream.open("Prolog-m.txt",ios::app);
+
+    SetConsoleTextAttribute (screen, 10);
+
     controlSend.setC(controlReceive.getC());
     controlSend.setD(controlReceive.getD());
     printf("Liberar el esclavo?\n");
@@ -972,6 +990,8 @@ void Gestor::sondeoMaestro(){
     }
     protocolo = false;
 
+
+    SetConsoleTextAttribute (screen, 10);
     printf("FIN DE PROTOCOLO \n");
     mStream<<"FIN DE PROTOCOLO \n";
     mStream.close();
@@ -983,6 +1003,7 @@ void Gestor::sondeoMaestro(){
 void Gestor::rolEsclavo(){
 
     eStream.open("Prolog-e.txt",ios::app);
+        SetConsoleTextAttribute (screen, 13);
 
     protocolo = true;
 
@@ -1060,6 +1081,7 @@ void Gestor::sondeoEsclavo(){
 		controlSend.changeNT();
     }
 
+     SetConsoleTextAttribute (screen, 13);
      printf("FIN DE PROTOCOLO \n");
      eStream<<"FIN DE PROTOCOLO \n";
      eStream.close();
@@ -1094,9 +1116,12 @@ void Gestor::seleccionEsclavo(){
  SetConsoleTextAttribute (screen, 11);
  controlSend.imprimirTramaControl(1,eStream);
 
- printf("FIN DE PROTOCOLO \n");
- eStream<<"FIN DE PROTOCOLO \n";
- eStream.close();
+
+
+    SetConsoleTextAttribute (screen, 13);
+    printf("FIN DE PROTOCOLO \n");
+    eStream<<"FIN DE PROTOCOLO \n";
+    eStream.close();
 
 
 }
