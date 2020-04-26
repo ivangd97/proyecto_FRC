@@ -958,7 +958,6 @@ void Gestor::closeComunication(){
 
 	}
 
-	mStream.close();
 }
 
 void Gestor::masterSounding(){
