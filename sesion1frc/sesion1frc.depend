@@ -64,7 +64,7 @@
 	<iostream>
 	<stdio.h>
 
-1587841017 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\dataframe.cpp
+1587900973 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\dataframe.cpp
 	"DataFrame.h"
 	<iostream>
 	<stdio.h>
@@ -96,10 +96,10 @@
 	"ControlFrame.h"
 	"DataFrame.h"
 
-1587843953 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\gestor.cpp
+1587902771 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\gestor.cpp
 	"Gestor.h"
 
-1587844887 c:\users\flequ\desktop\compartirredes\sesion1_frc\gestor.h
+1587902329 c:\users\flequ\desktop\compartirredes\sesion1_frc\gestor.h
 	<stdio.h>
 	<conio.h>
 	<windows.h>

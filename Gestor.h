@@ -36,6 +36,9 @@ class Gestor
         HANDLE portCOM;
         char PSerie[5];
         bool protocolo;
+        int cont;
+        char cadcolour[200];
+
 
 
     public:

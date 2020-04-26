@@ -107,6 +107,7 @@ void DataFrame::showData(HANDLE pantalla){
 void DataFrame::writeFile(ofstream &of,HANDLE pantalla,bool log,ofstream &logStream,int &colouro){
 
     if(cont!=0){
+        SetConsoleTextAttribute (pantalla,colouro);
         printf("Recibiendo fichero de %s \n",author);
         if(log){logStream<<"Recibiendo fichero de "<< author<<"\n";}
 
@@ -121,7 +122,6 @@ void DataFrame::writeFile(ofstream &of,HANDLE pantalla,bool log,ofstream &logStr
             case 1:
                 colouro = atoi(Data);
                 pantalla = GetStdHandle(STD_OUTPUT_HANDLE);
-                SetConsoleTextAttribute (pantalla, atoi(Data));
 
 
 
