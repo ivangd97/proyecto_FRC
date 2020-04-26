@@ -1,13 +1,12 @@
 //============================================================================
 //----------- PRACTICAS DE FUNDAMENTOS DE REDES DE COMUNICACIONES ------------
 //---------------------------- CURSO 2019/20 ---------------------------------
-//--------Autores: Rubén Costa Barriga e Iván Gonzalez Dominguez--------------
+//--------Autores: Rubï¿½n Costa Barriga e Ivï¿½n Gonzalez Dominguez--------------
 //============================================================================
 
 #ifndef DATAFRAME_H
 #define DATAFRAME_H
 #include "PuertoSerie.h"
-
 #include <fstream>
 class DataFrame{
 
@@ -20,12 +19,8 @@ class DataFrame{
         char Data[255];
         unsigned char BCE;
 
-
-
     public:
-            DataFrame();
-
-
+        DataFrame();
 
         //Getters
         unsigned char getS();
@@ -50,7 +45,7 @@ class DataFrame{
         //Write Data in a new file
         void writeFile(ofstream& of,HANDLE pantalla,bool log,ofstream &logStream,int &colouro,ofstream &pStream,int &line);
 
-         //Setters
+        //Setters
         void setC(unsigned char value);
         void setD(unsigned char value);
         void setS(unsigned char value);
@@ -58,13 +53,8 @@ class DataFrame{
         void setL(unsigned char value);
         void setBCE(unsigned char value);
         void setData(char msg[]);
-
-
         void changeNT();
         void insertData(unsigned char value);
-
-
-
 };
 
 #endif // DATAFRAME_H

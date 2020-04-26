@@ -15,7 +15,7 @@ ofstream logStream,mStream,eStream;
 
 
 Gestor::Gestor() {
-    sondeo = false;
+    sounding = false;
     cont = 0;
     limit = 802;
     isFile = false;
@@ -26,7 +26,7 @@ Gestor::Gestor() {
     flag = false;
     size = 0;
     screen = GetStdHandle(STD_OUTPUT_HANDLE);
-    protocolo = false;
+    protocol = false;
     line = 0;
 
 }
@@ -80,7 +80,7 @@ void Gestor::choosePort() {
 
 }
 
-void Gestor::imprimirFrame(){
+void Gestor::printFrame(){
                 SetConsoleTextAttribute (screen, 12);
 
                 if(controlReceive.getC() == 05) {
@@ -201,7 +201,7 @@ int Gestor::receiveFrame() {
                 outStream.close();
                 isFile = false;
                 endOfFile = true;
-                 if(protocolo==false){
+                 if(protocol==false){
                     SetConsoleTextAttribute (screen, colouro);
                     printf("Fichero Recibido. \n");
 
@@ -211,10 +211,10 @@ int Gestor::receiveFrame() {
 
                     }
             } if(carR == 'E'){
-                rolEsclavo();
+                slaveRol();
             }else if (carR == 'M'){
 
-                rolMaestro();
+                masterRol();
             }
             break;
 
@@ -244,14 +244,14 @@ int Gestor::receiveFrame() {
                 controlReceive.setNT(carR);
                 field = 1;
 
-                if(protocolo == true){
+                if(protocol == true){
 
-                    controlReceive.imprimirTramaControl(2,eStream);
-                    controlReceive.imprimirTramaControl2(2,mStream);
+                    controlReceive.printControlFrame(2,eStream);
+                    controlReceive.printControlFrame2(2,mStream);
                     tipoTrama = (int) controlReceive.getC();
 
                 }else{
-                    imprimirFrame();
+                    printFrame();
                 }
                 isControlFrame = 0;
  }
@@ -285,7 +285,7 @@ int Gestor::receiveFrame() {
                 if(isFile) {
                     //if file process is initialized, instead f show data, the file will be written
 
-                    if(!sondeo){
+                    if(!sounding){
                     fReceive.writeFile(outStream,screen,log,logStream,colouro,eStream,line);
                     }else{
                     fReceive.writeFile(outStream,screen,log,logStream,colouro,mStream,line);
@@ -294,7 +294,7 @@ int Gestor::receiveFrame() {
 
 
 
-                    if(protocolo){
+                    if(protocol){
 
                         if(i<3){
 
@@ -305,13 +305,13 @@ int Gestor::receiveFrame() {
 						controlSend.setD(fReceive.getD());
                         controlSend.setC(06);
                         controlSend.sendControl(portCOM);
-                        if(!sondeo){
+                        if(!sounding){
                             eStream<<"R "<<fReceive.getD()<<" STX "<<fReceive.getNT()<<" "<<(unsigned int)fReceive.getBCE()<<" "<<(unsigned int)fReceive.calculateBCE()<<"\n";
-                            controlSend.imprimirTramaControl(1,eStream);
+                            controlSend.printControlFrame(1,eStream);
 
                         }else{
                             mStream<<"R "<<fReceive.getD()<<" STX "<<fReceive.getNT()<<" "<<(unsigned int)fReceive.getBCE()<<" "<<(unsigned int)fReceive.calculateBCE()<<"\n";
-                            controlSend.imprimirTramaControl(1,mStream);
+                            controlSend.printControlFrame(1,mStream);
 
                         }
                         i++;
@@ -328,13 +328,13 @@ int Gestor::receiveFrame() {
                         controlSend.sendControl(portCOM);
 
 
-                        if(!sondeo){
+                        if(!sounding){
                             eStream<<"R "<<fReceive.getD()<<" STX "<<fReceive.getNT()<<" "<<(unsigned int)fReceive.getBCE()<<" "<<(unsigned int)fReceive.calculateBCE()<<"\n";
-                            controlSend.imprimirTramaControl(1,eStream);
+                            controlSend.printControlFrame(1,eStream);
 
                         }else{
                             mStream<<"R "<<fReceive.getD()<<" STX "<<fReceive.getNT()<<" "<<(unsigned int)fReceive.getBCE()<<" "<<(unsigned int)fReceive.calculateBCE()<<"\n";
-                            controlSend.imprimirTramaControl(1,mStream);
+                            controlSend.printControlFrame(1,mStream);
 
                         }
                         }
@@ -355,22 +355,22 @@ int Gestor::receiveFrame() {
                     }
                     endOfFile = false;
 
-                     if(protocolo){
+                     if(protocol){
                         SetConsoleTextAttribute (screen, 8);
                         printf("R %c STX %c %d %d\n", fReceive.getD(),fReceive.getNT(), fReceive.getBCE(),fReceive.calculateBCE());
 						controlSend.setNT(fReceive.getNT());
 						controlSend.setD(fReceive.getD());
                         controlSend.setC(06);
                         controlSend.sendControl(portCOM);
-                          if(!sondeo){
+                          if(!sounding){
                             eStream<<"El fichero recibido tiene un tamanio de "<<fReceive.getData()<<" bytes.\n";
                             eStream<<"R "<<fReceive.getD()<<" STX "<<fReceive.getNT()<<" "<<(unsigned int)fReceive.getBCE()<<" "<<(unsigned int)fReceive.calculateBCE()<<"\n";
-                            controlSend.imprimirTramaControl(1,eStream);
+                            controlSend.printControlFrame(1,eStream);
 
                         }else{
                             mStream<<"El fichero recibido tiene un tamanio de "<<fReceive.getData()<<" bytes.\n";
                             mStream<<"R "<<fReceive.getD()<<" STX "<<fReceive.getNT()<<" "<<(unsigned int)fReceive.getBCE()<<" "<<(unsigned int)fReceive.calculateBCE()<<"\n";
-                            controlSend.imprimirTramaControl(1,mStream);
+                            controlSend.printControlFrame(1,mStream);
 
                         }
 
@@ -388,20 +388,20 @@ int Gestor::receiveFrame() {
 
             }else {
 
-                if(protocolo==true){
+                if(protocol==true){
                     SetConsoleTextAttribute (screen, 12);
                     printf("R %c STX %c %d %d \n",fReceive.getD(),fReceive.getNT(),fReceive.getBCE(),fReceive.calculateBCE());
                     controlSend.setNT(fReceive.getNT());
                     controlSend.setD(fReceive.getD());
                     controlSend.setC(21);
                     controlSend.sendControl(portCOM);
-                      if(!sondeo){
+                      if(!sounding){
                             eStream<<"R "<<fReceive.getD()<<" STX "<<fReceive.getNT()<<" "<<(unsigned int)fReceive.getBCE()<<" "<<(unsigned int)fReceive.calculateBCE()<<"\n";
-                            controlSend.imprimirTramaControl(1,eStream);
+                            controlSend.printControlFrame(1,eStream);
 
                         }else{
                             mStream<<"R "<<fReceive.getD()<<" STX "<<fReceive.getNT()<<" "<<(unsigned int)fReceive.getBCE()<<" "<<(unsigned int)fReceive.calculateBCE()<<"\n";
-                            controlSend.imprimirTramaControl(1,mStream);
+                            controlSend.printControlFrame(1,mStream);
 
                         }
 
@@ -463,10 +463,10 @@ void Gestor::processFile() {
             fSend.sendDataFrame2(portCOM,autoress);
             cont++;
 
-              if(protocolo){
+              if(protocol){
                 SetConsoleTextAttribute (screen, 12);
                 printf("E %c STX %c %d\n", fSend.getD(), fSend.getNT(),fSend.getBCE());
-                if (!sondeo){
+                if (!sounding){
                 mStream<<"E "<<fSend.getD()<<" STX " <<fSend.getNT()<<" "<<(unsigned int)fSend.getBCE()<<"\n";
                 }else{
                 eStream<<"E "<<fSend.getD()<<" STX " <<fSend.getNT()<<" "<<(unsigned int)fSend.getBCE()<<"\n";
@@ -490,10 +490,10 @@ void Gestor::processFile() {
             fSend.sendDataFrame2(portCOM,stringAux);
 
             cont++;
-         if(protocolo){
+         if(protocol){
                 SetConsoleTextAttribute (screen, 12);
                 printf("E %c STX %c %d\n", fSend.getD(), fSend.getNT(),fSend.getBCE());
-               if (!sondeo){
+               if (!sounding){
                 mStream<<"E "<<fSend.getD()<<" STX " <<fSend.getNT()<<" "<<(unsigned int)fSend.getBCE()<<"\n";
                 }else{
                 eStream<<"E "<<fSend.getD()<<" STX " <<fSend.getNT()<<" "<<(unsigned int)fSend.getBCE()<<"\n";
@@ -514,10 +514,10 @@ void Gestor::processFile() {
             fSend.setBCE(fSend.calcularBCE_2(stringAux));
             fSend.sendDataFrame2(portCOM,stringAux);
             cont++;
-             if(protocolo){
+             if(protocol){
                 SetConsoleTextAttribute (screen, 12);
                 printf("E %c STX %c %d\n", fSend.getD(), fSend.getNT(),fSend.getBCE());
-                if (!sondeo){
+                if (!sounding){
 
                 mStream<<"E "<<fSend.getD()<<" STX " <<fSend.getNT()<<" "<<(unsigned int)fSend.getBCE()<<"\n";
                 mStream<<"Enviando fichero por "<< autoress <<". \n";
@@ -560,10 +560,10 @@ void Gestor::processFile() {
                     fSend.sendDataFrame2(portCOM,stringAux);
                 }
 
-                if(protocolo && inStream.gcount()>0){
+                if(protocol && inStream.gcount()>0){
                 SetConsoleTextAttribute (screen,2);
                 printf("E %c STX %c %d\n", fSend.getD(), fSend.getNT(),fSend.getBCE());
-                if (!sondeo){
+                if (!sounding){
 
                 mStream<<"E "<<fSend.getD()<<" STX " <<fSend.getNT()<<" "<<(unsigned int)fSend.getBCE()<<"\n";
                 }else{
@@ -600,10 +600,10 @@ void Gestor::processFile() {
         fSend.sendDataFrame2(portCOM,numCar2);
         SetConsoleTextAttribute (screen,atoi(cadcolour));
         printf("El fichero enviado tiene un tamanio de %s bytes.\n", fSend.getData());
-        if(protocolo ){
+        if(protocol ){
                 SetConsoleTextAttribute (screen, 8);
                 printf("E %c STX %c %d\n", fSend.getD(), fSend.getNT(),fSend.getBCE());
-                if (!sondeo){
+                if (!sounding){
                 mStream<<"El fichero enviado tiene un tamanio de "<<fSend.getData() <<" bytes.\n";
 
                 mStream<<"E "<<fSend.getD()<<" STX " <<fSend.getNT()<<" "<<(unsigned int)fSend.getBCE()<<"\n";
@@ -771,7 +771,7 @@ void Gestor::send(char &carE,char msg[],int &size,int &colouro) {
 
 
 void Gestor::rol(){
-    protocolo = true;
+    protocol = true;
 
     SetConsoleTextAttribute (screen, 10);
 
@@ -799,7 +799,7 @@ void Gestor::rol(){
 
 
             EnviarCaracter(portCOM,'E');
-            rolMaestro();
+            masterRol();
             break;
         case '2':
             printf("Has elegido ESCLAVO \n");
@@ -812,7 +812,7 @@ void Gestor::rol(){
             eStream.close();
 
             EnviarCaracter(portCOM,'M');
-            rolEsclavo();
+            slaveRol();
             break;
 
         case ESC_KEY:
@@ -828,11 +828,11 @@ void Gestor::rol(){
 
 }
 
-void Gestor::rolMaestro(){
+void Gestor::masterRol(){
     mStream.open("Prolog-m.txt",ios::app);
     SetConsoleTextAttribute (screen, 10);
 
-    protocolo = true;
+    protocol = true;
     printf("Has seleccionado MAESTRO \n");
     mStream<<"Has seleccionado MAESTRO \n";
 
@@ -852,14 +852,14 @@ void Gestor::rolMaestro(){
         mStream<<"Has elegido la operacion SELECCION \n";
         mStream.close();
 
-        seleccionMaestro();
+        masterSelection();
         break;
     case '2':
         printf("Has elegido la operacion SONDEO \n");
         mStream<<"Has elegido la operacion SONDEO \n";
         mStream.close();
-        sondeo = true;
-        sondeoMaestro();
+        sounding = true;
+        masterSounding();
         break;
     case ESC_KEY:
         rol();
@@ -869,14 +869,14 @@ void Gestor::rolMaestro(){
         mStream<<"No es valida esa opcion, pruebe otra vez \n";
         mStream.close();
 
-        rolMaestro();
+        masterRol();
         break;
     }
-    sondeo = false;
+    sounding = false;
 
 }
 
-void Gestor::seleccionMaestro(){
+void Gestor::masterSelection(){
     mStream.open("Prolog-m.txt",ios::app);
 
 
@@ -886,7 +886,7 @@ void Gestor::seleccionMaestro(){
     controlSend.setNT('0');
     controlSend.sendControl(portCOM);
     SetConsoleTextAttribute (screen, 1);
-    controlSend.imprimirTramaControl(1,mStream);
+    controlSend.printControlFrame(1,mStream);
 
     //Esperar
     while(receiveFrame()!=06){
@@ -901,23 +901,23 @@ void Gestor::seleccionMaestro(){
     controlSend.setNT('0');
     controlSend.sendControl(portCOM);
     SetConsoleTextAttribute (screen, 11);
-    controlSend.imprimirTramaControl(1,mStream);
+    controlSend.printControlFrame(1,mStream);
 
     while(receiveFrame()!=06){
 
     }
 
-    protocolo = false;
+    protocol = false;
     SetConsoleTextAttribute (screen, 10);
 
     printf("FIN DE PROTOCOLO \n");
     mStream<<"FIN DE PROTOCOLO \n";
 
     mStream.close();
-    sondeo = false;
+    sounding = false;
 }
 
-void Gestor::cierre(){
+void Gestor::closeComunication(){
 
     SetConsoleTextAttribute (screen, 10);
 
@@ -936,23 +936,23 @@ void Gestor::cierre(){
 	    controlSend.setNT(controlReceive.getNT());
 	    controlSend.setC(06);
 	    controlSend.sendControl(portCOM);
-	    controlSend.imprimirTramaControl(1,mStream);
+	    controlSend.printControlFrame(1,mStream);
 	    break;
 
     case '2':
         controlSend.setNT(controlReceive.getNT());
 	    controlSend.setC(21);
 	    controlSend.sendControl(portCOM);
-	    controlSend.imprimirTramaControl(1,mStream);
+	    controlSend.printControlFrame(1,mStream);
 	    while(receiveFrame()!=4){
 
 	    }
-        cierre();
+        closeComunication();
         break;
 
     default:
         printf("Fallo \n");
-        cierre();
+        closeComunication();
         break;
 
 
@@ -961,8 +961,8 @@ void Gestor::cierre(){
 	mStream.close();
 }
 
-void Gestor::sondeoMaestro(){
-    sondeo= true;
+void Gestor::masterSounding(){
+    sounding= true;
     mStream.open("Prolog-m.txt",ios::app);
 
 
@@ -973,7 +973,7 @@ void Gestor::sondeoMaestro(){
     controlSend.setNT('0');
     controlSend.sendControl(portCOM);
     SetConsoleTextAttribute (screen, 1);
-    controlSend.imprimirTramaControl(1,mStream);
+    controlSend.printControlFrame(1,mStream);
 
     while (receiveFrame()!= 06){
 
@@ -985,27 +985,27 @@ void Gestor::sondeoMaestro(){
     }
 
     //Fase de cierre
-    cierre();
+    closeComunication();
     while(receiveFrame() !=04){
     }
-    protocolo = false;
+    protocol = false;
 
 
     SetConsoleTextAttribute (screen, 10);
     printf("FIN DE PROTOCOLO \n");
     mStream<<"FIN DE PROTOCOLO \n";
     mStream.close();
-    sondeo = false;
+    sounding = false;
 
 
 
 }
-void Gestor::rolEsclavo(){
+void Gestor::slaveRol(){
 
     eStream.open("Prolog-e.txt",ios::app);
         SetConsoleTextAttribute (screen, 13);
 
-    protocolo = true;
+    protocol = true;
 
     printf("Has seleccionado ESCLAVO \n");
     eStream<<"Has seleccionado ESCLAVO \n";
@@ -1021,23 +1021,23 @@ void Gestor::rolEsclavo(){
 
     case 'R':
         eStream.close();
-        seleccionEsclavo();
+        slaveSelection();
         break;
     case 'T':
         eStream.close();
-        sondeoEsclavo();
+        slaveSounding();
         break;
     default:
         printf("Trama incorrecta \n");
         eStream<<"Trama incorrecta \n";
         break;
     }
-    protocolo = false;
+    protocol = false;
     eStream.close();
 }
 
-void Gestor::sondeoEsclavo(){
-    sondeo = true;
+void Gestor::slaveSounding(){
+    sounding = true;
     eStream.open("Prolog-e.txt",ios::app);
 
     controlSend.setD(controlReceive.getD());
@@ -1045,7 +1045,7 @@ void Gestor::sondeoEsclavo(){
     controlSend.setNT(controlReceive.getNT());
     controlSend.sendControl(portCOM);
     SetConsoleTextAttribute (screen, 1);
-    controlSend.imprimirTramaControl(1,eStream);
+    controlSend.printControlFrame(1,eStream);
 
 
 
@@ -1065,7 +1065,7 @@ void Gestor::sondeoEsclavo(){
 	while (controlReceive.getC() != 06) {
         SetConsoleTextAttribute (screen, 11);
         controlSend.sendControl(portCOM);
-        controlSend.imprimirTramaControl(1,eStream);
+        controlSend.printControlFrame(1,eStream);
 		controlSend.changeNT();
 		resultado = 0;
 		while (resultado != 6 && resultado != 21) {
@@ -1077,7 +1077,7 @@ void Gestor::sondeoEsclavo(){
 	if(controlReceive.getC()==06){
         SetConsoleTextAttribute (screen, 11);
         controlSend.sendControl(portCOM);
-        controlSend.imprimirTramaControl(1,eStream);
+        controlSend.printControlFrame(1,eStream);
 		controlSend.changeNT();
     }
 
@@ -1085,9 +1085,9 @@ void Gestor::sondeoEsclavo(){
      printf("FIN DE PROTOCOLO \n");
      eStream<<"FIN DE PROTOCOLO \n";
      eStream.close();
-     sondeo = false;
+     sounding = false;
 }
-void Gestor::seleccionEsclavo(){
+void Gestor::slaveSelection(){
 
     eStream.open("Prolog-e.txt",ios::app);
 
@@ -1096,7 +1096,7 @@ void Gestor::seleccionEsclavo(){
     controlSend.setNT(controlReceive.getNT());
     controlSend.sendControl(portCOM);
     SetConsoleTextAttribute (screen, 1);
-    controlSend.imprimirTramaControl(1,eStream);
+    controlSend.printControlFrame(1,eStream);
 
         SetConsoleTextAttribute (screen, 1);
 
@@ -1114,7 +1114,7 @@ void Gestor::seleccionEsclavo(){
  controlSend.setNT(controlReceive.getNT());
  controlSend.sendControl(portCOM);
  SetConsoleTextAttribute (screen, 11);
- controlSend.imprimirTramaControl(1,eStream);
+ controlSend.printControlFrame(1,eStream);
 
 
 

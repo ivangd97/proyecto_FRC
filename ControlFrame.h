@@ -1,7 +1,7 @@
 //============================================================================
 //----------- PRACTICAS DE FUNDAMENTOS DE REDES DE COMUNICACIONES ------------
 //---------------------------- CURSO 2019/20 ---------------------------------
-//--------Autores: Rubén Costa Barriga e Iván Gonzalez Dominguez--------------
+//--------Autores: Rubï¿½n Costa Barriga e Ivï¿½n Gonzalez Dominguez--------------
 //============================================================================
 
 #ifndef CONTROLFRAME_H
@@ -28,8 +28,8 @@ protected:
 public:
     ControlFrame();
     ControlFrame(int value);
-    void imprimirTramaControl(int opcion,ofstream &pStream);
-    void imprimirTramaControl2(int opcion,ofstream &pStream);
+    void printControlFrame(int option,ofstream &pStream);
+    void printControlFrame2(int option,ofstream &pStream);
 
 
     //Setters

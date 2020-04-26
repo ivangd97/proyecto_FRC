@@ -1,7 +1,7 @@
 //============================================================================
 //----------- PRACTICAS DE FUNDAMENTOS DE REDES DE COMUNICACIONES ------------
 //---------------------------- CURSO 2019/20 ---------------------------------
-//--------Autores: Rubén Costa Barriga e Iván Gonzalez Dominguez--------------
+//--------Autores: Rubï¿½n Costa Barriga e Ivï¿½n Gonzalez Dominguez--------------
 //============================================================================
 #include <stdio.h>
 #include <conio.h>
@@ -104,15 +104,14 @@ unsigned char ControlFrame::getNT()
 
 }
 
-
-void ControlFrame::imprimirTramaControl(int opcion,ofstream &pStream){
-    switch(opcion){
+//Prints the control frame which is used
+void ControlFrame::printControlFrame(int option,ofstream &pStream){
+    switch(option){
 	case 1:
 		switch (C) {
 			case 05:
 				printf("E %c ENQ %c\n",D,NT);
 				pStream<<"E "<<D<<" ENQ "<<NT<< "\n";
-
 				break;
 			case 04:
 				printf("E %c EOT %c\n",D,NT);
@@ -127,7 +126,6 @@ void ControlFrame::imprimirTramaControl(int opcion,ofstream &pStream){
 				pStream<<"E "<<D<<" NACK "<<NT<<"\n";
 				break;
 			default:
-
 				printf("Trama incorrecta\n");
 				pStream<<"Trama incorrecta\n";
 				break;
@@ -137,21 +135,15 @@ void ControlFrame::imprimirTramaControl(int opcion,ofstream &pStream){
 			switch (C) {
 				case 05:
 					printf("R %c ENQ %c\n",D,NT);
-				pStream<<"R "<<D<<" ENQ "<<NT<<"\n";
-
+				    pStream<<"R "<<D<<" ENQ "<<NT<<"\n";
 					break;
 				case 04:
 					printf("R %c EOT %c\n",D,NT);
                     pStream<<"R "<<D<<" EOT "<<NT<<"\n";
-
-
                     break;
 				case 06:
 					printf("R %c ACK %c\n",D,NT);
                     pStream<<"R "<<D<<" ACK "<<NT<<"\n";
-
-
-
 					break;
 				case 21:
 					printf("R %c NACK %c\n",D,NT);
@@ -163,17 +155,12 @@ void ControlFrame::imprimirTramaControl(int opcion,ofstream &pStream){
 					pStream<<"Trama incorrecta\n";
 					break;
 				}
-
 	}
-
-
-
-
-
-
 }
-void ControlFrame::imprimirTramaControl2(int opcion,ofstream &pStream){
-    switch(opcion){
+
+
+void ControlFrame::printControlFrame2(int option,ofstream &pStream){
+    switch(option){
 	case 1:
 		switch (C) {
 			case 05:
@@ -203,26 +190,21 @@ void ControlFrame::imprimirTramaControl2(int opcion,ofstream &pStream){
 					break;
 				case 04:
                     pStream<<"R "<<D<<" EOT "<<NT<<"\n";
-
-
                     break;
 				case 06:
                     pStream<<"R "<<D<<" ACK "<<NT<<"\n";
-
-
-
 					break;
 				case 21:
                     pStream<<"R "<<D<<" NACK "<<NT<<"\n";
 					break;
 				default:
-
 					pStream<<"Trama incorrecta\n";
 					break;
 				}
-
 	}
 }
+
+//Changes NT for master/slave protocol
 void ControlFrame::changeNT() {
 	if (NT == '0') {
 		NT = '1';
@@ -231,17 +213,15 @@ void ControlFrame::changeNT() {
 	}
 }
 
-
+//Sends the control frame throught the port
 void ControlFrame::sendControl(HANDLE &portCOM){
     EnviarCaracter(portCOM,S);
     EnviarCaracter(portCOM,D);
     EnviarCaracter(portCOM,C);
     EnviarCaracter(portCOM,NT);
-
-
 }
 
-
+//Control frame menu
 void ControlFrame::sendControlFrame(HANDLE &portCOM,bool log,ofstream &logStream,HANDLE pantalla) {
     //Change the color of the screen to not confuse with the color of the file process
     int colour =12 + 0*16;
@@ -272,36 +252,28 @@ void ControlFrame::sendControlFrame(HANDLE &portCOM,bool log,ofstream &logStream
             EnviarCaracter(portCOM,D);
             EnviarCaracter(portCOM,C);
             EnviarCaracter(portCOM,NT);
-
-
             break;
 
         case '2':
             printf("Has enviado Trama EOT \n");
             if(log){logStream<<"Has enviado Trama EOT \n";}
             exit = true;
-
             setC(04);
-
             EnviarCaracter(portCOM,S);
             EnviarCaracter(portCOM,D);
             EnviarCaracter(portCOM,C);
             EnviarCaracter(portCOM,NT);
-
             break;
 
         case '3':
             printf("Has enviado Trama ACK \n");
             if(log){logStream<<"Has enviado Trama ACK \n";}
             exit = true;
-
             setC(06);
-
             EnviarCaracter(portCOM,S);
             EnviarCaracter(portCOM,D);
             EnviarCaracter(portCOM,C);
             EnviarCaracter(portCOM,NT);
-
             break;
 
         case '4':
@@ -309,18 +281,16 @@ void ControlFrame::sendControlFrame(HANDLE &portCOM,bool log,ofstream &logStream
             if(log){logStream<<"Has enviado Trama NACK \n";}
             exit = true;
             setC(21);
-
             EnviarCaracter(portCOM,S);
             EnviarCaracter(portCOM,D);
             EnviarCaracter(portCOM,C);
             EnviarCaracter(portCOM,NT);
-
             break;
 
         default:
             printf("Trama incorrecta, seleccione de nuevo.\n");
             if(log){logStream<<"Trama incorrecta, seleccione de nuevo.\n";}
-            break; }
-
+            break; 
+        }
     }
 }

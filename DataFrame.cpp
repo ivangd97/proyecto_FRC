@@ -1,7 +1,7 @@
 //============================================================================
 //----------- PRACTICAS DE FUNDAMENTOS DE REDES DE COMUNICACIONES ------------
 //---------------------------- CURSO 2019/20 ---------------------------------
-//--------Autores: Rubén Costa Barriga e Iván Gonzalez Dominguez--------------
+//--------Autores: Rubï¿½n Costa Barriga e Ivï¿½n Gonzalez Dominguez--------------
 //============================================================================
 
 #include "DataFrame.h"
@@ -122,35 +122,24 @@ void DataFrame::writeFile(ofstream &of,HANDLE pantalla,bool log,ofstream &logStr
             case 1:
                 colouro = atoi(Data);
                 pantalla = GetStdHandle(STD_OUTPUT_HANDLE);
-
-
-
                 line++;
                 break;
 
             case 2:
-
                 of.open(Data,ios::app);
-
                 line++;
                 cont++;
-
                 break;
 
             case 3:
                 cont =0;
-
                 of.write(Data,strlen(Data));
-
                 break;
 
         }
     }else{
     printf("No se pudo escribir en el fichero.\n");
-
     }
-
-
 }
 
 //Set C attribute
@@ -188,12 +177,18 @@ void DataFrame::insertData(unsigned char value){
 void DataFrame::setBCE(unsigned char value){
     this->BCE = value;
 }
+
+//Sets char of a message
 char DataFrame::setPartialData(int i, char msg) {
      this->Data[i] = msg;
 }
+
+//Sets data message
 void DataFrame::setData(char msg[]){
     strcpy(Data,msg);
 }
+
+//master/slave procedure
 void DataFrame::changeNT() {
 	if (NT == '0') {
 		NT = '1';
