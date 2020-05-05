@@ -34,6 +34,7 @@ class Gestor
         char cadcolour[200];
         bool sounding;
         int line;
+        bool errorA;
 
     public:
         Gestor();

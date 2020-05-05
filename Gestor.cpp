@@ -8,6 +8,7 @@
 #define F3 (61)
 #define F5 (63)
 #define F6 (64)
+#define F7 (65)
 
 ifstream inStream;
 ofstream outStream;
@@ -28,6 +29,7 @@ Gestor::Gestor()
     screen = GetStdHandle(STD_OUTPUT_HANDLE);
     protocol = false;
     line = 0;
+     errorA = false;
 }
 
 void Gestor::choosePort()
@@ -269,10 +271,9 @@ int Gestor::receiveFrame()
 
                 if (protocol == true)
                 {
-
+                    tipoTrama = (int)controlReceive.getC();
                     controlReceive.printControlFrame(2, eStream);
                     controlReceive.printControlFrame2(2, mStream);
-                    tipoTrama = (int)controlReceive.getC();
                 }
                 else
                 {
@@ -301,12 +302,14 @@ int Gestor::receiveFrame()
 
         case 7:
 
+
             fReceive.setBCE((unsigned char)carR);
             field = 1;
+            bce = fReceive.calculateBCE();
+
 
             //Here, bce will be calculated based in the received data
-            bce = fReceive.calculateBCE();
-            if (bce = fReceive.getBCE())
+            if (bce == fReceive.getBCE())
             {
                 //If bce is well calculated, the data has been received without issues, show data
 
@@ -419,18 +422,17 @@ int Gestor::receiveFrame()
                         logStream.write(fReceive.getData(), fReceive.getL());
                     }
                 }
-            }
-            else
-            {
+            }else{
 
-                if (protocol == true)
-                {
-                    SetConsoleTextAttribute(screen, 12);
-                    printf("R %c STX %c %d %d \n", fReceive.getD(), fReceive.getNT(), fReceive.getBCE(), fReceive.calculateBCE());
-                    controlSend.setNT(fReceive.getNT());
-                    controlSend.setD(fReceive.getD());
-                    controlSend.setC(21);
-                    controlSend.sendControl(portCOM);
+                    if (protocol)
+                    {
+                        SetConsoleTextAttribute(screen, 2);
+                        printf("R %c STX %c %d %d \n", fReceive.getD(), fReceive.getNT(), fReceive.getBCE(), fReceive.calculateBCE());
+                        controlSend.setNT(fReceive.getNT());
+                        controlSend.setD(fReceive.getD());
+                        controlSend.setC(21);
+                        controlSend.sendControl(portCOM);
+
                     if (!sounding)
                     {
                         eStream << "R " << fReceive.getD() << " STX " << fReceive.getNT() << " " << (unsigned int)fReceive.getBCE() << " " << (unsigned int)fReceive.calculateBCE() << "\n";
@@ -442,24 +444,20 @@ int Gestor::receiveFrame()
                         controlSend.printControlFrame(1, mStream);
                     }
 
-                    printf("ERROR\n");
-                }
-                if (isFile)
-                {
+                }else{
+                if (isFile){
                     printf("Error en la recepcion de la trama del fichero. \n");
-                    if (log)
-                    {
+                    if (log){
                         logStream << "Error en la rececpcion del la trama del fichero. \n";
                     }
                 }
-                else
-                {
+                else{
 
                     printf("Error en la trama recibida \n");
-                    if (log)
-                    {
+                    if (log){
                         logStream << "Error en la trama recibida \n";
                     }
+                }
                 }
             }
             break;
@@ -487,10 +485,11 @@ void Gestor::processFile()
     bool exit = false;
     char numCar2[200];
     char autoress[802];
+    char caracter;
 
     //First of all, we must open the original file
 
-    inStream.open("EProtoc.txt");
+    inStream.open("EProtoc2.txt");
     //If the opening is correct, program will follow the execution
     if (inStream.is_open())
     {
@@ -609,6 +608,35 @@ void Gestor::processFile()
                 {
                     fSend.setL(numCar);
                     fSend.setBCE(fSend.calcularBCE_2(stringAux));
+
+                    if(errorA){
+                        errorA = false;
+
+                        caracter = stringAux[0];
+                        stringAux[0] = 'Ç';
+
+                        SetConsoleTextAttribute(screen, 2);
+                        printf("E %c STX %c %d\n", fSend.getD(), fSend.getNT(), fSend.getBCE());
+                        if (!sounding){
+                            mStream << "E " << fSend.getD() << " STX " << fSend.getNT() << " " << (unsigned int)fSend.getBCE() << "\n";
+                        }
+                        else{
+
+                            eStream << "E " << fSend.getD() << " STX " << fSend.getNT() << " " << (unsigned int)fSend.getBCE() << "\n";
+                        }
+
+                        fSend.sendDataFrame2(portCOM, stringAux);
+
+                        while(receiveFrame()!=21){
+                        }
+
+                        stringAux[0]=caracter;
+
+
+
+
+                    }
+
                     fSend.sendDataFrame2(portCOM, stringAux);
                 }
 
@@ -641,6 +669,15 @@ void Gestor::processFile()
                 if (key == 27)
                 {
                     exit = true;
+                }else{
+                    if(protocol){
+                        if(key == '\0'){
+                            key = getch();
+                            if(key == F7){
+                                errorA = true;
+                            }
+                        }
+                    }
                 }
             }
             receiveFrame();

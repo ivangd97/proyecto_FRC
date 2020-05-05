@@ -1240,3 +1240,87 @@ Liberar el esclavo?
 1-LIBERARLO
 2-NO LIBERARLO 
 E T ACK 0
+Has seleccionado MAESTRO 
+Seleccciona la operacion a realizar 
+1.SELECCION 
+2.SONDEO 
+Has elegido la operacion SELECCION 
+E R ENQ 0
+R R ACK 0
+E R STX 0 80
+R R ACK 0
+E R STX 1 55
+R R ACK 1
+E R STX 0 14
+Enviando fichero por Belinda Soto & Mario Borrego. 
+R R ACK 0
+E R STX 1 37
+R R ACK 1
+E R STX 0 51
+R R ACK 0
+E R STX 1 107
+R R ACK 1
+E R STX 0 46
+R R ACK 0
+E R STX 1 6
+R R ACK 1
+E R STX 0 120
+R R ACK 0
+E R STX 1 87
+R R ACK 1
+E R STX 0 33
+R R ACK 0
+E R STX 1 94
+R R ACK 1
+E R STX 0 26
+R R ACK 0
+El fichero enviado tiene un tamanio de 2540 bytes.
+E R STX 1 3
+R R ACK 1
+E R EOT 0
+R R ACK 0
+FIN DE PROTOCOLO 
+Has seleccionado MAESTRO 
+Seleccciona la operacion a realizar 
+1.SELECCION 
+2.SONDEO 
+Has elegido la operacion SONDEO 
+E T ENQ 0
+R T ACK 0
+R T STX 0 80 80
+E T ACK 0
+R T STX 1 55 55
+E T ACK 1
+R T STX 0 14 14
+E T ACK 0
+Recibiendo fichero de Belinda Soto & Mario Borrego
+R T STX 1 37 37
+E T ACK 1
+R T STX 0 51 51
+E T ACK 0
+R T STX 1 107 107
+E T ACK 1
+R T STX 0 46 46
+E T ACK 0
+R T STX 1 6 6
+E T ACK 1
+R T STX 0 120 120
+E T ACK 0
+R T STX 1 87 87
+E T ACK 1
+R T STX 0 33 33
+E T ACK 0
+R T STX 1 94 94
+E T ACK 1
+R T STX 0 26 26
+E T ACK 0
+El fichero recibido tiene un tamanio de 2540 bytes.
+R T STX 1 3 3
+E T ACK 1
+R T EOT 0
+Liberar el esclavo?
+1-LIBERARLO
+2-NO LIBERARLO 
+E T ACK 0
+R T EOT 1
+FIN DE PROTOCOLO 

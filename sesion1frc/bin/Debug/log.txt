@@ -7,7 +7,7 @@ Trama de control a enviar :
  3: Trama ACK. 
  4: Trama NACK. 
 Has enviado Trama ENQ 
-Enviando fichero por Belinda Soto & Mario Borrego. 
-El fichero enviado tiene un tamanio de 2540 bytes.
+adios
+
 adios
 
