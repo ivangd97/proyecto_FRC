@@ -42,6 +42,7 @@ class DataFrame{
         //Show in terminal the message in the frame
         void showData(HANDLE pantalla);
 
+
         //Write Data in a new file
         void writeFile(ofstream& of,HANDLE pantalla,bool log,ofstream &logStream,int &colouro,ofstream &pStream,int &line);
 

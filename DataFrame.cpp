@@ -18,7 +18,6 @@ DataFrame::DataFrame() {
     C  = 02;
     NT = '0';
     L = 0;
-   // Data[]=NULL;
     BCE = 0; }
 
 
@@ -73,11 +72,12 @@ unsigned char DataFrame::getBCE() {
 unsigned char DataFrame::calculateBCE() {
     unsigned char BCE = Data[0] ;
     for(int i=1 ; i< L; i++) {
-        BCE = BCE ^ Data[i];
+        BCE = (BCE ^ Data[i]);
     }
-    if(BCE ==255 || BCE == 0) {
+    if(BCE ==0 || BCE == 255) {
         BCE = 1;
     }
+
     return BCE;
 }
 
@@ -187,6 +187,8 @@ char DataFrame::setPartialData(int i, char msg) {
 void DataFrame::setData(char msg[]){
     strcpy(Data,msg);
 }
+
+
 
 //master/slave procedure
 void DataFrame::changeNT() {

@@ -64,12 +64,12 @@
 	<iostream>
 	<stdio.h>
 
-1587937925 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\dataframe.cpp
+1588785322 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\dataframe.cpp
 	"DataFrame.h"
 	<iostream>
 	<stdio.h>
 
-1587937925 c:\users\flequ\desktop\compartirredes\sesion1_frc\dataframe.h
+1588785322 c:\users\flequ\desktop\compartirredes\sesion1_frc\dataframe.h
 	"PuertoSerie.h"
 	<fstream>
 
@@ -96,7 +96,7 @@
 	"ControlFrame.h"
 	"DataFrame.h"
 
-1588697348 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\gestor.cpp
+1588786359 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\gestor.cpp
 	"Gestor.h"
 
 1588696071 c:\users\flequ\desktop\compartirredes\sesion1_frc\gestor.h

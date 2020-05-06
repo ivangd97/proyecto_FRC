@@ -29,7 +29,8 @@ Gestor::Gestor()
     screen = GetStdHandle(STD_OUTPUT_HANDLE);
     protocol = false;
     line = 0;
-     errorA = false;
+    errorA = false;
+
 }
 
 void Gestor::choosePort()
@@ -228,6 +229,7 @@ int Gestor::receiveFrame()
                     }
                 }
             }
+
             if (carR == 'E')
             {
                 slaveRol();
@@ -237,6 +239,7 @@ int Gestor::receiveFrame()
 
                 masterRol();
             }
+
             break;
 
         case 2:
@@ -304,13 +307,14 @@ int Gestor::receiveFrame()
 
 
             fReceive.setBCE((unsigned char)carR);
+
+
+
             field = 1;
-            bce = fReceive.calculateBCE();
-
-
+            bce = fReceive.getBCE();
             //Here, bce will be calculated based in the received data
-            if (bce == fReceive.getBCE())
-            {
+            if (bce == fReceive.calculateBCE())
+                {
                 //If bce is well calculated, the data has been received without issues, show data
 
                 if (isFile)
@@ -488,8 +492,11 @@ void Gestor::processFile()
     char caracter;
 
     //First of all, we must open the original file
-
+    if(protocol){
     inStream.open("EProtoc2.txt");
+    }else{
+    inStream.open("fichero-e.txt");
+    }
     //If the opening is correct, program will follow the execution
     if (inStream.is_open())
     {
@@ -743,6 +750,7 @@ void Gestor::manageFrame(HANDLE &portCOM, char msg[], int tamanio, int &field, i
     int tamanioAux = 0;
     int cutPoint = 0;
 
+
     while (tamanio > 0)
     {
         if (tamanio > 254)
@@ -765,15 +773,19 @@ void Gestor::manageFrame(HANDLE &portCOM, char msg[], int tamanio, int &field, i
         {
             cutPoint += 254;
             //Calculate the bce associated to the new little frame
+            fSend.setPartialData(tamanioAux,'\0');
             fSend.setBCE(fSend.calculateBCE());
             //Send the little frame
             fSend.sendDataFrame(portCOM);
-            receiveFrame();
+            //receiveFrame();
         }
     }
 
     //Last frame char adding
-    fSend.setL((unsigned char)tamanioAux);
+    fSend.setL((unsigned char)tamanioAux+1);
+    fSend.setPartialData(tamanioAux,'\n');
+    fSend.setPartialData(tamanioAux+1,'\0');
+
     fSend.setBCE(fSend.calculateBCE());
     fSend.sendDataFrame(portCOM);
     receiveFrame();
@@ -793,10 +805,8 @@ void Gestor::send(char &carE, char msg[], int &size, int &colouro)
         case F1:
             //Manage the Frame which will be sent, this topic will divide the Data if it is too long
             //And send several frames to complete the original message
-            msg[size] = '\n';
-            size++;
-            msg[size] = '\0';
             manageFrame(portCOM, msg, size, field, isControlFrame, colouro, fSend);
+            size = 0;
 
             if (log)
             {
@@ -808,7 +818,6 @@ void Gestor::send(char &carE, char msg[], int &size, int &colouro)
                 logStream << "\n";
             }
 
-            size = 0;
 
             break;
 
@@ -884,7 +893,7 @@ void Gestor::rol()
     {
     case '1':
         printf("Has elegido MAESTRO \n");
-        mStream.open("Prolog-m.txt", ios::app);
+        mStream.open("Prolog-m.txt", ios::trunc);
         mStream << "Seleccione Maestro o ESCLAVO \n";
         mStream << "Pulse 1 para MAESTRO \n";
         mStream << "Pulse 2 para ESCLAVO \n";
@@ -895,7 +904,7 @@ void Gestor::rol()
         break;
     case '2':
         printf("Has elegido ESCLAVO \n");
-        eStream.open("Prolog-e.txt", ios::app);
+        eStream.open("Prolog-e.txt", ios::trunc);
         eStream << "Seleccione Maestro o ESCLAVO \n";
         eStream << "Pulse 1 para MAESTRO \n";
         eStream << "Pulse 2 para ESCLAVO \n";
@@ -921,10 +930,11 @@ void Gestor::rol()
 //Choosing options of master terminal
 void Gestor::masterRol()
 {
-    mStream.open("Prolog-m.txt", ios::app);
+    protocol = true;
+
+    mStream.open("Prolog-m.txt", ios::trunc);
     SetConsoleTextAttribute(screen, 10);
 
-    protocol = true;
     printf("Has seleccionado MAESTRO \n");
     mStream << "Has seleccionado MAESTRO \n";
 
@@ -971,7 +981,7 @@ void Gestor::masterRol()
 //Selection option of master terminal
 void Gestor::masterSelection()
 {
-    mStream.open("Prolog-m.txt", ios::app);
+    mStream.open("Prolog-m.txt", ios::trunc);
     //stablishing connection
     controlSend.setD('R');
     controlSend.setC(05);
@@ -999,14 +1009,16 @@ void Gestor::masterSelection()
     {
     }
 
-    protocol = false;
     SetConsoleTextAttribute(screen, 10);
 
     printf("FIN DE PROTOCOLO \n");
     mStream << "FIN DE PROTOCOLO \n";
+    protocol = false;
+
 
     mStream.close();
     sounding = false;
+
 }
 
 //Close the comunication between slave and master, free the slave (if the master choose it)
@@ -1031,6 +1043,7 @@ void Gestor::closeComunication()
         controlSend.setNT(controlReceive.getNT());
         controlSend.setC(06);
         controlSend.sendControl(portCOM);
+        SetConsoleTextAttribute(screen, 11);
         controlSend.printControlFrame(1, mStream);
         break;
 
@@ -1038,6 +1051,7 @@ void Gestor::closeComunication()
         controlSend.setNT(controlReceive.getNT());
         controlSend.setC(21);
         controlSend.sendControl(portCOM);
+        SetConsoleTextAttribute(screen, 11);
         controlSend.printControlFrame(1, mStream);
         while (receiveFrame() != 4)
         {
@@ -1056,7 +1070,7 @@ void Gestor::closeComunication()
 void Gestor::masterSounding()
 {
     sounding = true;
-    mStream.open("Prolog-m.txt", ios::app);
+    mStream.open("Prolog-m.txt", ios::trunc);
     //Initial phase
     controlSend.setD('T');
     controlSend.setC(05);
@@ -1075,23 +1089,25 @@ void Gestor::masterSounding()
 
     //Close phase
     closeComunication();
-    while (receiveFrame() != 04)
+   /* while (receiveFrame() != 04)
     {
-    }
-    protocol = false;
+    }*/
     SetConsoleTextAttribute(screen, 10);
     printf("FIN DE PROTOCOLO \n");
     mStream << "FIN DE PROTOCOLO \n";
     mStream.close();
+        protocol = false;
+
     sounding = false;
 }
 
 //Topic which do the slave rol and its out stream
 void Gestor::slaveRol()
 {
-    eStream.open("Prolog-e.txt", ios::app);
-    SetConsoleTextAttribute(screen, 13);
     protocol = true;
+
+    eStream.open("Prolog-e.txt", ios::trunc);
+    SetConsoleTextAttribute(screen, 13);
     printf("Has seleccionado ESCLAVO \n");
     eStream << "Has seleccionado ESCLAVO \n";
     SetConsoleTextAttribute(screen, 1);
@@ -1122,7 +1138,7 @@ void Gestor::slaveRol()
 void Gestor::slaveSounding()
 {
     sounding = true;
-    eStream.open("Prolog-e.txt", ios::app);
+    eStream.open("Prolog-e.txt", ios::trunc);
     controlSend.setD(controlReceive.getD());
     controlSend.setC(06);
     controlSend.setNT(controlReceive.getNT());
@@ -1154,25 +1170,26 @@ void Gestor::slaveSounding()
             resultado = receiveFrame();
         }
     }
-    if (controlReceive.getC() == 06)
+   /* if (controlReceive.getC() == 06)
     {
         SetConsoleTextAttribute(screen, 11);
         controlSend.sendControl(portCOM);
         controlSend.printControlFrame(1, eStream);
         controlSend.changeNT();
-    }
+    }*/
 
     SetConsoleTextAttribute(screen, 13);
     printf("FIN DE PROTOCOLO \n");
     eStream << "FIN DE PROTOCOLO \n";
     eStream.close();
+    protocol = false;
     sounding = false;
 }
 
 //Slave selection protocol
 void Gestor::slaveSelection()
 {
-    eStream.open("Prolog-e.txt", ios::app);
+    eStream.open("Prolog-e.txt", ios::trunc);
     controlSend.setD(controlReceive.getD());
     controlSend.setC(06);
     controlSend.setNT(controlReceive.getNT());
@@ -1196,7 +1213,9 @@ void Gestor::slaveSelection()
     SetConsoleTextAttribute(screen, 13);
     printf("FIN DE PROTOCOLO \n");
     eStream << "FIN DE PROTOCOLO \n";
+    protocol = false;
     eStream.close();
+
 }
 
 Gestor::~Gestor()
