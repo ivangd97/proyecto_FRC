@@ -232,11 +232,12 @@ int Gestor::receiveFrame()
 
             if (carR == 'E')
             {
-                slaveRol();
+              logStream.close();
+              slaveRol();
             }
             else if (carR == 'M')
             {
-
+                logStream.close();
                 masterRol();
             }
 
@@ -733,7 +734,7 @@ void Gestor::processFile()
     }
     else
     {
-        colouro = atoi(cadcolour) + 0 * 16;
+        colouro = 5 + 0 * 16;
         SetConsoleTextAttribute(screen, colouro);
         printf("Fichero no encontrado. \n");
         if (log == true)
@@ -832,6 +833,7 @@ void Gestor::send(char &carE, char msg[], int &size, int &colouro)
 
         //F5 case will write in another file
         case F5:
+            printf("Activado el modo log\n");
             logStream.open("log.txt", ios::app);
             log = true;
             break;
@@ -875,6 +877,11 @@ void Gestor::send(char &carE, char msg[], int &size, int &colouro)
             msg[size] = carE;
             printf("%c", carE);
             size = size + 1;
+            if(log){
+
+                logStream<<carE;
+            }
+
         }
         break;
     }
