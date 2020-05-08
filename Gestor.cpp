@@ -125,7 +125,7 @@ void Gestor::chooseVel()
     while (!velocityFlag)
     {
 
-        printf("Seleccione la velocidad de transmision :  \n 1. 1400 \n 2. 2400 \n 3. 4800 \n 4. 9600 \n 5. 19200 \n");
+        printf("Seleccione la velocidad de transmision :  \n 1. 1200 \n 2. 2400 \n 3. 4800 \n 4. 9600 \n 5. 19200 \n");
 
         option = getch();
         //Screen will be cleaned
@@ -134,9 +134,9 @@ void Gestor::chooseVel()
         {
 
         case '1':
-            printf("Velocidad elegida 1: 1400\n");
+            printf("Velocidad elegida 1: 1200\n");
             velocityFlag = true;
-            velocity = 1400;
+            velocity = 1200;
             break;
         case '2':
             printf("Velocidad elegida 2: 2400\n");
@@ -494,7 +494,7 @@ void Gestor::processFile()
 
     //First of all, we must open the original file
     if(protocol){
-    inStream.open("EProtoc2.txt");
+    inStream.open("EProtoc.txt");
     }else{
     inStream.open("fichero-e.txt");
     }
@@ -988,7 +988,7 @@ void Gestor::masterRol()
 //Selection option of master terminal
 void Gestor::masterSelection()
 {
-    mStream.open("Prolog-m.txt", ios::trunc);
+    mStream.open("Prolog-m.txt", ios::app);
     //stablishing connection
     controlSend.setD('R');
     controlSend.setC(05);
@@ -1077,7 +1077,7 @@ void Gestor::closeComunication()
 void Gestor::masterSounding()
 {
     sounding = true;
-    mStream.open("Prolog-m.txt", ios::trunc);
+    mStream.open("Prolog-m.txt", ios::app);
     //Initial phase
     controlSend.setD('T');
     controlSend.setC(05);
@@ -1088,6 +1088,7 @@ void Gestor::masterSounding()
     while (receiveFrame() != 06)
     {
     }
+    SetConsoleTextAttribute(screen, 11);
 
     //Transfer phase
     while (receiveFrame() != 04)
@@ -1096,9 +1097,8 @@ void Gestor::masterSounding()
 
     //Close phase
     closeComunication();
-   /* while (receiveFrame() != 04)
-    {
-    }*/
+
+
     SetConsoleTextAttribute(screen, 10);
     printf("FIN DE PROTOCOLO \n");
     mStream << "FIN DE PROTOCOLO \n";
@@ -1145,7 +1145,7 @@ void Gestor::slaveRol()
 void Gestor::slaveSounding()
 {
     sounding = true;
-    eStream.open("Prolog-e.txt", ios::trunc);
+    eStream.open("Prolog-e.txt", ios::app);
     controlSend.setD(controlReceive.getD());
     controlSend.setC(06);
     controlSend.setNT(controlReceive.getNT());
@@ -1196,7 +1196,7 @@ void Gestor::slaveSounding()
 //Slave selection protocol
 void Gestor::slaveSelection()
 {
-    eStream.open("Prolog-e.txt", ios::trunc);
+    eStream.open("Prolog-e.txt", ios::app);
     controlSend.setD(controlReceive.getD());
     controlSend.setC(06);
     controlSend.setNT(controlReceive.getNT());
@@ -1206,6 +1206,8 @@ void Gestor::slaveSelection()
     SetConsoleTextAttribute(screen, 1);
 
     //Transfer
+        SetConsoleTextAttribute(screen, 11);
+
     while (receiveFrame() != 04)
     {
     }

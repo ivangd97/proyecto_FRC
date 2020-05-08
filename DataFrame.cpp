@@ -126,7 +126,7 @@ void DataFrame::writeFile(ofstream &of,HANDLE pantalla,bool log,ofstream &logStr
                 break;
 
             case 2:
-                of.open(Data,ios::app);
+                of.open(Data,ios::trunc);
                 line++;
                 cont++;
                 break;

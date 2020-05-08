@@ -7,7 +7,7 @@
 1581621351 c:\users\flequ\desktop\compartirredes\sesion1_frc\puertoserie.h
 	<windows.h>
 
-1587904829 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\sesion1(2).cpp
+1588941625 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\sesion1(2).cpp
 	<stdio.h>
 	<conio.h>
 	<windows.h>
@@ -64,7 +64,7 @@
 	<iostream>
 	<stdio.h>
 
-1588785322 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\dataframe.cpp
+1588942961 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\dataframe.cpp
 	"DataFrame.h"
 	<iostream>
 	<stdio.h>
@@ -96,7 +96,7 @@
 	"ControlFrame.h"
 	"DataFrame.h"
 
-1588873570 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\gestor.cpp
+1588941076 source:c:\users\flequ\desktop\compartirredes\sesion1_frc\gestor.cpp
 	"Gestor.h"
 
 1588696071 c:\users\flequ\desktop\compartirredes\sesion1_frc\gestor.h
