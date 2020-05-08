@@ -997,7 +997,7 @@ void Gestor::masterSelection()
     SetConsoleTextAttribute(screen, 1);
     controlSend.printControlFrame(1, mStream);
 
-    //wait until 6 frame
+    //wait until ACK frame
     while (receiveFrame() != 06)
     {
     }
@@ -1177,13 +1177,8 @@ void Gestor::slaveSounding()
             resultado = receiveFrame();
         }
     }
-   /* if (controlReceive.getC() == 06)
-    {
-        SetConsoleTextAttribute(screen, 11);
-        controlSend.sendControl(portCOM);
-        controlSend.printControlFrame(1, eStream);
-        controlSend.changeNT();
-    }*/
+
+
 
     SetConsoleTextAttribute(screen, 13);
     printf("FIN DE PROTOCOLO \n");

@@ -29,7 +29,7 @@ class DataFrame{
         unsigned char getNT();
         unsigned char getL();
         char *getData();
-        char setPartialData(int i,char msg);
+        void setPartialData(int i,char msg);
         unsigned char getBCE();
 
         //This procedure will send a control frame when the user press the F2 key

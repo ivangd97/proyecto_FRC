@@ -179,7 +179,7 @@ void DataFrame::setBCE(unsigned char value){
 }
 
 //Sets char of a message
-char DataFrame::setPartialData(int i, char msg) {
+void DataFrame::setPartialData(int i, char msg) {
      this->Data[i] = msg;
 }
 

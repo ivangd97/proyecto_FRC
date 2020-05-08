@@ -12,8 +12,6 @@
 #include <string.h>
 #include <fstream>
 #include "PuertoSerie.h"
-#include "ControlFrame.h"
-#include "DataFrame.h"
 #include "Gestor.h"
 
 #define ESC_KEY (27)
@@ -24,8 +22,6 @@ int main() {
     char carE = 0;
     char msg[802] ; //two more characters to the line end
     int colouro;
-    int field = 1;
-    int isControlFrame;
     int size = 0;
     Gestor g;
 
